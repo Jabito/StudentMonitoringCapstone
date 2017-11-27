@@ -21,30 +21,38 @@
                 <h1 class="page-header">Monitoring</h1>
             </div>
             <div class="row">
-                <form class="col-md-6" th:action="@{/monitorStudent}" th:method="POST">
+                <form class="col-md-6" th:object="${student}" th:action="@{/monitorStudent}" th:method="POST">
+                    Please tap the rfid: <input id="rfidTag" th:field="*{rfid}" class="form-control" th:autofocus="true" hidden="true"/>
 
-
-                    <img id="img" src="../static/images/school_logo.png" height="100px" width="100px"
-                         style="padding: -10px"/>
-
-
-                    Please tap the rfid:
-                    <input id="rfidTag" th:value="*{rfid}" class="form-control" th:autofocus="true" hidden="true"/>
-
-                    <div id="firstStud" class="row">
-                        <label>FIRST NAME</label>
-                        FRANCISCO
-                    </div>
-                    <input type="submit" id="submit" hidden="true" />
+                    <input type="submit" id="submit"/>
                 </form>
             </div>
+        </div>
 
-            <div class="col-md-6">
+        <div class="panel-body">
+            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Middle Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="odd gradeX">
+                    <td th:text="${stud.firstName}"></td>
+                    <td th:text="${stud.lastName}"></td>
+                    <td th:text="${stud.middleName}"></td>
 
+                </tr>
+                </tbody>
+                <thead>
 
-            </div>
+                </thead>
+            </table>
+            <!-- /.table-responsive -->
 
-
+            <!-- /.panel-body -->
         </div>
         <!-- /.col-lg-12 -->
     </div>
@@ -53,11 +61,8 @@
 
 
     $('#img').hide();
+    $('#submit').hide();
     $("#rfidTag").keyup(function () {
-        if(this.value == 0016287793){
-            $('#img').show();
-            return;
-        }
         if (this.value.length >= 10)
             $('#submit').click();
     });

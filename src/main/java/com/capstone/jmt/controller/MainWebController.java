@@ -99,13 +99,13 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
-    public String addStudent(@Valid Student student , BindingResult bindingResult, Model model){
+    public String addStudent(@ModelAttribute("appUSer") User appUser, @Valid Student student , BindingResult bindingResult, Model model){
 
 
         System.out.println("student first name: " + student.getFirstName());
         System.out.println("student last name: " + student.getLastName());
         try{
-            student.setCreatedBy("admin");
+            student.setCreatedBy(appUser.getUsername());
             mainService.addStudent(student);
             System.out.println("TRYING TO SAVE!");
             System.out.println("SUCCESS!!");
@@ -173,23 +173,23 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/monitor", method = RequestMethod.GET)
-    public String shopMonitor(@Valid String rfid, Model model){
-
+    public String shopMonitor(@RequestParam(value = "rfid", required = false) String rfid, Model model){
+        Student student = mainService.getStudentByRfid(rfid);
+        model.addAttribute("student", new Student());
+        model.addAttribute("stud", null != student?student: new Student());
 
         return "monitor";
     }
 
     @RequestMapping(value = "/monitorStudent", method = RequestMethod.POST)
-    public String monitorStudent(@RequestParam(value="rfid", required = false) String rfid, Model model){
-        Student student = new Student();
-        if(null != rfid && !"".equals(rfid)) {
-            System.out.println("RFID" + rfid);
-            student = mainService.getStudentByRfid(rfid);
-        }
+    public String monitorStudent(@ModelAttribute("student") Student student,BindingResult bindingResult,  Model model){
+        System.out.println("STUDENT RFID: " + student.getRfid());
 
-        System.out.println("STUDENT IN MONITOR: " + student.getFirstName());
+        Student student1 = mainService.getStudentByRfid(student.getRfid());
+        System.out.println("STUDENT RETRIEVED: " + student1.getFirstName());
+        model.addAttribute("student", student1);
 
-        return "monitor";
+        return "redirect:/monitor?rfid=" +student.getRfid();
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
