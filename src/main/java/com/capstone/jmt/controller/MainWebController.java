@@ -2,6 +2,7 @@ package com.capstone.jmt.controller;
 
 import com.capstone.jmt.data.AddUserJson;
 import com.capstone.jmt.data.ShopLogin;
+import com.capstone.jmt.data.TapLog;
 import com.capstone.jmt.entity.Guidance;
 import com.capstone.jmt.entity.Parent;
 import com.capstone.jmt.entity.Student;
@@ -175,19 +176,23 @@ public class MainWebController {
     @RequestMapping(value = "/monitor", method = RequestMethod.GET)
     public String shopMonitor(@RequestParam(value = "rfid", required = false) String rfid, Model model){
         Student student = mainService.getStudentByRfid(rfid);
+        TapLog tap = new TapLog();
+        if(null != rfid)
+             tap = (TapLog) mainService.getLastTapEntry(student.getId()).get("tapDetails");
         model.addAttribute("student", new Student());
         model.addAttribute("stud", null != student?student: new Student());
-
+        model.addAttribute("tapType", tap != null? tap.getLogType(): "");
+        System.out.println("TAPTYPE: " + tap != null? tap.getLogType():"NONE");
         return "monitor";
     }
 
     @RequestMapping(value = "/monitorStudent", method = RequestMethod.POST)
     public String monitorStudent(@ModelAttribute("student") Student student,BindingResult bindingResult,  Model model){
         System.out.println("STUDENT RFID: " + student.getRfid());
-
-        Student student1 = mainService.getStudentByRfid(student.getRfid());
-        System.out.println("STUDENT RETRIEVED: " + student1.getFirstName());
-        model.addAttribute("student", student1);
+//            mainService.processRfidTap(student.getRfid());
+//        Student student1 = mainService.getStudentByRfid(student.getRfid());
+//        System.out.println("STUDENT RETRIEVED: " + student1.getFirstName());
+//        model.addAttribute("student", student1);
 
         return "redirect:/monitor?rfid=" +student.getRfid();
     }

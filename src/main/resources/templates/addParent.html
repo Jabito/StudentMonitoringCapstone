@@ -34,7 +34,7 @@
                             <div class="col-lg-6">
                                 <form  role="form" th:object="${parent}" th:action="@{/addNewParent}" method="post">
                                     <br/>
-                                    <div class="form-group">
+                                    <div class=" pgit form-group">
                                         <label>Parent Of</label>
                                         <select >
                                             <option th:each="student : ${students}" th:text="${student.firstName + '  ' + student.lastName}" th:value="${student.id}"></option>

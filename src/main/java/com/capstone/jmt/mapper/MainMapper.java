@@ -58,7 +58,7 @@ public interface MainMapper {
 
     List<Parent> getParentsByGradeLevelId(@Param("gradeLevelId") Integer gradeLevelId);
 
-    void processRfidTap(@Param("rfid")String rfid);
+    void processRfidTap(@Param("tapLog") TapLog tapLog);
 
     void toggleSMS(@Param("parentId") String parentId, @Param("mode") boolean mode);
 

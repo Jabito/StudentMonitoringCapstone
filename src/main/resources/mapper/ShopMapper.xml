@@ -142,6 +142,8 @@
         )
     </insert>
 
+
+
     <update id="updateShopLogin" flushCache="true">
         UPDATE shop_login
         SET

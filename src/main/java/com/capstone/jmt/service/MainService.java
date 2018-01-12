@@ -124,6 +124,7 @@ public class MainService {
             response.put("responseCode", 200);
             response.put("responseDesc", "Last tap entry retrieved.");
         } else {
+            response.put("tapDetails", new TapLog());
             response.put("responseCode", 404);
             response.put("responseDesc", "No logs yet.");
         }
@@ -218,7 +219,6 @@ public class MainService {
 
     public HashMap<String, Object> processRfidTap(String rfid) {
         HashMap<String, Object> response = new HashMap<>();
-        mainMapper.processRfidTap(rfid);
         response.put("responseCode", 200);
         response.put("responseDesc", "Success.");
         return response;
@@ -261,6 +261,10 @@ public class MainService {
     }
 
     public Student getStudentByRfid(String rfid){
+        TapLog tapLog = new TapLog();
+        tapLog.setRfid(rfid);
+        tapLog.setLogType("IN");
+        mainMapper.processRfidTap(tapLog);
         return mainMapper.getStudentByRfid(rfid);
     }
 

@@ -289,7 +289,12 @@
     </update>
 
     <insert id="processRfidTap" flushCache="true">
-
+      INSERT INTO log_taps(
+  rfid, log_type) VALUES (
+  #{tapLog.rfid, jdbcType=VARCHAR},
+  (SELECT CASE WHEN (SELECT log_type FROM log_taps WHERE rfid = #{tapLog.rfid, jdbcType=VARCHAR}
+                     ORDER BY log_datetime desc LIMIT 1)
+  = 'IN' THEN 'OUT' ELSE 'IN' END))
     </insert>
 
     <select id="getStudentByRfid" resultMap="StudentMap" resultType="com.capstone.jmt.entity.Student">
@@ -297,11 +302,12 @@
     </select>
 
     <select id="getLastTapDetailsByStudentId" resultMap="TapLogMap" resultType="com.capstone.jmt.data.TapLog">
-        SELECT TOP 1 * FROM log_taps
+        SELECT * FROM log_taps
         WHERE rfid =
         (SELECT rfid FROM data_students
         WHERE id = #{studentId})
         ORDER BY log_datetime DESC
+        LIMIT 1
     </select>
 
     <select id="getTapListDetailsByStudentId" resultMap="TapLogMap" resultType="java.util.List">
