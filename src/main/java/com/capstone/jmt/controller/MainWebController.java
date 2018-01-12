@@ -100,13 +100,13 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
-    public String addStudent(@Valid Student student , BindingResult bindingResult, Model model){
+    public String addStudent(@ModelAttribute("appUSer") User appUser, @Valid Student student , BindingResult bindingResult, Model model){
 
 
         System.out.println("student first name: " + student.getFirstName());
         System.out.println("student last name: " + student.getLastName());
         try{
-            student.setCreatedBy("admin");
+            student.setCreatedBy(appUser.getUsername());
             mainService.addStudent(student);
             System.out.println("TRYING TO SAVE!");
             System.out.println("SUCCESS!!");
