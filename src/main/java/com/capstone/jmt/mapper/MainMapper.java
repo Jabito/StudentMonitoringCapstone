@@ -69,5 +69,5 @@ public interface MainMapper {
 
     void addGuidanceRecord(@Param("gr")GuidanceRecord gr);
 
-    void getGuidanceRecord(@Param("studentId")String studentId);
+    List<GuidanceRecord> getGuidanceRecord(@Param("studentId")String studentId);
 }

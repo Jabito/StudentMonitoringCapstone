@@ -326,7 +326,7 @@ public class MainService {
         mainMapper.addGuidanceRecord(gr);
     }
 
-    public void getGuidanceRecord(String studentId){
+    public List<GuidanceRecord> getGuidanceRecord(String studentId){
         return mainMapper.getGuidanceRecord(studentId);
     }
 }
