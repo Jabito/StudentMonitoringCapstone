@@ -34,6 +34,8 @@ public class Parent implements Serializable{
     private String createdBy;
     @JsonProperty("updatedBy")
     private String updatedBy;
+    @JsonProperty("email")
+    private String email;
 
     public Boolean getSmsNotif() {
         return smsNotif;
@@ -122,5 +124,13 @@ public class Parent implements Serializable{
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
