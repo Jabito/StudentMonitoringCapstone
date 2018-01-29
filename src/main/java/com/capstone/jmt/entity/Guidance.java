@@ -1,6 +1,7 @@
 package com.capstone.jmt.entity;
 
 import com.capstone.jmt.data.AddGuidanceJson;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -22,8 +23,10 @@ public class Guidance implements Serializable {
     @JsonProperty("contactNo")
     private String contactNo;
     @JsonProperty("createdOn")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date createdOn;
     @JsonProperty("updatedOn")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date updatedOn;
     @JsonProperty("createdBy")
     private String createdBy;

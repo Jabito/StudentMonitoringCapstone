@@ -1,5 +1,6 @@
 package com.capstone.jmt.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
@@ -25,10 +26,12 @@ public class Parent implements Serializable{
     @JsonProperty("occupation")
     private String occupation;
     @JsonProperty("createdOn")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date createdOn;
     @JsonProperty("smsNotif")
     private Boolean smsNotif;
     @JsonProperty("updatedOn")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date updatedOn;
     @JsonProperty("createdBy")
     private String createdBy;

@@ -1,5 +1,6 @@
 package com.capstone.jmt.data;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -19,6 +20,7 @@ public class MessageJson implements Serializable{
     @JsonProperty("postedBy")
     private String postedBy;
     @JsonProperty("datePosted")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date datePosted;
     @JsonProperty("messageTarget")
     private String messageTarget;

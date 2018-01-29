@@ -341,4 +341,33 @@
         #{guidance.createdBy, jdbcType=VARCHAR}
         )
     </insert>
+
+    <resultMap id="GuidanceLogMap" type="com.capstone.jmt.data.GuidanceRecord">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="student_id" property="studentId" jdbcType="VARCHAR"/>
+        <result column="reason" property="reason" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="created_on" property="createdOn" jdbcType="TIMESTAMP"/>
+        <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
+        <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="addGuidanceRecord">
+        INSERT INTO log_guidance(id, student_id, reason, title, created_on, created_by)
+        VALUES
+        (
+        #{gr.id, jdbcType=VARCHAR},
+        #{gr.studentId, jdbcType=VARCHAR},
+        #{gr.reason, jdbcType=VARCHAR},
+        #{gr.title, jdbcType=VARCHAR},
+        #{gr.created_on, jdbcType=TIMESTAMP},
+        #{gr.created_by, jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <select id="getGuidanceRecord" resultMap="GuidanceLogMap" resultType="java.util.List">
+        SELECT * FROM log_guidance
+        WHERE student_id = #{studentId}
+    </select>
 </mapper>

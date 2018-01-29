@@ -1,5 +1,6 @@
 package com.capstone.jmt.mapper;
 
+import com.capstone.jmt.data.GuidanceRecord;
 import com.capstone.jmt.data.MessageJson;
 import com.capstone.jmt.data.RefGradeLevel;
 import com.capstone.jmt.data.TapLog;
@@ -65,4 +66,8 @@ public interface MainMapper {
     List<Student> getAllStudents();
 
     Student getStudentByRfid(@Param("rfid") String rfid);
+
+    void addGuidanceRecord(@Param("gr")GuidanceRecord gr);
+
+    void getGuidanceRecord(@Param("studentId")String studentId);
 }
