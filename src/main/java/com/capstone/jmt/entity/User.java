@@ -1,6 +1,7 @@
 package com.capstone.jmt.entity;
 
 import com.capstone.jmt.data.AddUserJson;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
@@ -26,12 +27,15 @@ public class User implements Serializable {
     @JsonProperty("email")
     private String email;
     @JsonProperty("lastLogin")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date lastLogin;
     @JsonProperty("isLocked")
     private Boolean isLocked;
     @JsonProperty("createdOn")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date createdOn;
     @JsonProperty("updatedOn")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date updatedOn;
     @JsonProperty("createdBy")
     private String createdBy;

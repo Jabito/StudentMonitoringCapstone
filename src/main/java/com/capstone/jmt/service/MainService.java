@@ -329,4 +329,13 @@ public class MainService {
     public List<Student> getAllStudents() {
        return mainMapper.getAllStudents();
     }
+
+    public void addGuidanceRecord(GuidanceRecord gr){
+        gr.setId("GR" + mainMapper.getLastId(5));
+        mainMapper.addGuidanceRecord(gr);
+    }
+
+    public List<GuidanceRecord> getGuidanceRecord(String studentId){
+        return mainMapper.getGuidanceRecord(studentId);
+    }
 }

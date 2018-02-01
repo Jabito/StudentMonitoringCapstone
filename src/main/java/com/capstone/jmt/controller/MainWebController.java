@@ -108,7 +108,6 @@ public class MainWebController {
         try{
             student.setCreatedBy(appUser.getUsername());
             mainService.addStudent(student);
-            System.out.println("TRYING TO SAVE!");
             System.out.println("SUCCESS!!");
             return "redirect:/login";
         }catch (Exception e){
@@ -127,10 +126,10 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/addNewParent", method = RequestMethod.POST)
-    public String addNewParent(@Valid Parent parent, BindingResult bindingResult, Model model){
+    public String addNewParent(@ModelAttribute("appUSer") User appUser, @Valid Parent parent, BindingResult bindingResult, Model model){
 
-        parent.setCreatedBy("admin123");
-        parent.setUpdatedBy("admin123");
+        parent.setCreatedBy(appUser.getUsername());
+        parent.setUpdatedBy(appUser.getUsername());
         mainService.addParent(parent);
 
         return "redirect:/login";

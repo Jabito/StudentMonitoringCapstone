@@ -1,5 +1,6 @@
 package com.capstone.jmt.data;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ public class TapLog implements Serializable{
     @JsonProperty("logType")
     private String logType;
     @JsonProperty("logDateTime")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date logDateTime;
 
     public String getRfid() {

@@ -1,5 +1,6 @@
 package com.capstone.jmt.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
@@ -10,7 +11,7 @@ import java.util.Date;
  * Created by Jabito on 25/08/2017.
  */
 @Entity
-public class Student implements Serializable{
+public class Student implements Serializable {
 
     @JsonProperty("id")
     private String id;
@@ -21,6 +22,7 @@ public class Student implements Serializable{
     @JsonProperty("middleName")
     private String middleName;
     @JsonProperty("bday")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date bday;
     @JsonProperty("place")
     private String place;
@@ -48,16 +50,19 @@ public class Student implements Serializable{
     private String rfid;
     @JsonProperty("isEnrolled")
     private Boolean isEnrolled;
-            @JsonProperty("createdBy")
+    @JsonProperty("createdBy")
     private String createdBy;
     @JsonProperty("createdOn")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date createdOn;
     @JsonProperty("updatedBy")
     private String updatedBy;
     @JsonProperty("updatedOn")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date updatedOn;
 
-    public Student(){}
+    public Student() {
+    }
 
     public String getId() {
         return id;

@@ -1,5 +1,6 @@
 package com.capstone.jmt.mapper;
 
+import com.capstone.jmt.data.GuidanceRecord;
 import com.capstone.jmt.data.MessageJson;
 import com.capstone.jmt.data.RefGradeLevel;
 import com.capstone.jmt.data.TapLog;
@@ -70,6 +71,7 @@ public interface MainMapper {
 
     Student getStudOut();
 
+    void addGuidanceRecord(@Param("gr")GuidanceRecord gr);
 
-
+    List<GuidanceRecord> getGuidanceRecord(@Param("studentId")String studentId);
 }

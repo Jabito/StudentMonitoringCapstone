@@ -1,5 +1,6 @@
 package com.capstone.jmt.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
@@ -25,8 +26,10 @@ public class EmergencyContact implements Serializable {
     @JsonProperty("address")
     private String address;
     @JsonProperty("createdOn")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date createdOn;
     @JsonProperty("updatedOn")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date updatedOn;
     @JsonProperty("createdBy")
     private String createdBy;
