@@ -65,4 +65,11 @@ public interface MainMapper {
     List<Student> getAllStudents();
 
     Student getStudentByRfid(@Param("rfid") String rfid);
+
+    Student getStudIn();
+
+    Student getStudOut();
+
+
+
 }

@@ -50,14 +50,14 @@
         </ul>
         <!-- /.navbar-top-links -->
 
-        <div class="navbar-default sidebar" role="navigation">
+        <div id="sidebar" class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse" >
                 <ul class="nav" id="side-menu" >
                     <li><a href="" th:href="@{/homepage}"><i class="fa fa-dashboard fa-fw"></i> Homepage</a></li>
                     <li><a href="" th:href="@{/attendanceLogs}"><i class="fa fa-calendar fa-fw"></i> Attendance Logs</a></li>
                     <li><a href="" th:href="@{/messages}"><i class="fa fa-envelope"></i> Messages</a></li>
                     <li><a href="" th:href="@{/settings}"><i class="fa fa-cog"></i> Settings</a></li>
-                    <li><a href="" th:href="@{/monitor}"><i class="fa fa-cog"></i> Monitor</a></li>
+                    <li><a href="" target="_blank" th:href="@{/monitor}"><i class="fa fa-cog"></i> Monitor</a></li>
                     <li><a href="" th:href="@{/getStudent}"><i class="fa fa-cog"></i> Add Student</a></li>
                     <li><a href="" th:href="@{/getParent}"><i class="fa fa-cog"></i> Add Parent</a></li>
                     <li><a href="" th:href="@{/getUser}"><i class="fa fa-cog"></i> Add User</a></li>
@@ -70,5 +70,15 @@
         <!-- /.navbar-static-side -->
     </nav>
 </div>
+<script>
+    $(document).ready(function () {
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+</script>
 </body>
 </html>
+
+
