@@ -329,4 +329,8 @@ public class MainService {
     public List<GuidanceRecord> getGuidanceRecord(String studentId){
         return mainMapper.getGuidanceRecord(studentId);
     }
+
+    public void uploadImageById(PictureObject po){
+
+    }
 }

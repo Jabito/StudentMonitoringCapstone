@@ -7,8 +7,12 @@ import com.capstone.jmt.entity.Guidance;
 import com.capstone.jmt.entity.Parent;
 import com.capstone.jmt.entity.Student;
 import com.capstone.jmt.entity.User;
+import com.capstone.jmt.service.AndroidPushNotificationsService;
 import com.capstone.jmt.service.MainService;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -20,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Jabito on 08/08/2017.
@@ -29,9 +35,14 @@ import java.util.HashMap;
 @SessionAttributes("appUser")
 public class MainWebController {
 
+    private final String TOPIC = "Capstone";
+
 
     @Autowired
     MainService mainService;
+
+    @Autowired
+    AndroidPushNotificationsService androidPushNotificationsService;
 
     @ModelAttribute("appUSer")
     public User getShopUser() {
@@ -43,7 +54,56 @@ public class MainWebController {
         return new Student();
     }
 
-
+//    @RequestMapping(value="/sendPushNotif", method = RequestMethod.GET, produces = "application/json")
+//    public String sendPushNotif() throws JSONException{
+//
+//        JSONObject body = new JSONObject();
+//        body.put("to", "/topics/" + TOPIC);
+//        body.put("priority", "high");
+//
+//        JSONObject notification = new JSONObject();
+//        notification.put("title", "MIKAELA VIRUS");
+//        notification.put("body", "Enjoy.");
+//
+//        JSONObject data = new JSONObject();
+//        data.put("Key-1", "JSA Data 1");
+//        data.put("Key-2", "JSA Data 2");
+//
+//        body.put("notification", notification);
+//        body.put("data", data);
+//        System.out.println(notification);
+//        System.out.println(data);
+//
+///**
+// {
+// "notification": {
+// "title": "JSA Notification",
+// "body": "Happy Message!"
+// },
+// "data": {
+// "Key-1": "JSA Data 1",
+// "Key-2": "JSA Data 2"
+// },
+// "to": "/topics/JavaSampleApproach",
+// "priority": "high"
+// }
+// */
+//        HttpEntity<String> request = new HttpEntity<>(body.toString());
+//        CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
+//        CompletableFuture.allOf(pushNotification).join();
+//
+//        try {
+//            String firebaseResponse = pushNotification.get();
+//
+//            return "redirect:/login";
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return "redirect:/login";
+//    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginShopUser(@RequestParam(value = "error", required = false) String error, HttpServletRequest request,
