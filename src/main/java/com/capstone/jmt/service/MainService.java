@@ -8,11 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import javax.mail.Multipart;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by Jabito on 08/08/2017.
@@ -36,15 +36,10 @@ public class MainService {
             response.put("responseDesc", "Username does not exists.");
         } else {
             if (passwordEncoder.matches(password, user.getPassword())) {
-                Guidance guidance = new Guidance();
-                Parent parent = new Parent();
-                if (user.getUserTypeId() == 1)
-                    guidance = mainMapper.getGuidance(user.getReferenceId());
-                else
-                    parent = mainMapper.getParent(user.getReferenceId());
+                Parent parent = mainMapper.getParent(user.getReferenceId());
                 response.put("User", user);
-                response.put("Guidance", guidance);
                 response.put("Parent", parent);
+                response.put("Student", mainMapper.getStudent(parent.getParentOf()));
                 response.put("responseCode", HttpStatus.OK);
                 response.put("responseDesc", "Login Successful.");
             } else {
@@ -53,6 +48,10 @@ public class MainService {
             }
         }
         return response;
+    }
+
+    public void saveImage(PictureObject imageHolder) {
+        mainMapper.saveImage(imageHolder);
     }
 
     public HashMap<String, Object> getStudent(String studentId) {
@@ -339,7 +338,44 @@ public class MainService {
         return mainMapper.getGuidanceRecord(studentId);
     }
 
-    public void uploadImageById(PictureObject po){
+    public void uploadImageById(MultipartFile file, String username){
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+//        String id = sdf.format(new Date());
+//        String contentType = po.getContentType();
+//        PictureObject imageHolder = new PictureObject();
+//        imageHolder.setStudentId(po.getStudentId());
+//        imageHolder.setFileId(id);
+//        imageHolder.setContentType(contentType);
+//        imageHolder.setOriginalFileName(po.getOriginalFileName());
+//        imageHolder.setFileNameNoSuffix(po.getOriginalFileName().substring(0, po.getOriginalFileName().indexOf(".")));
+//        imageHolder.setFileSuffix(po.getOriginalFileName().substring(po.getOriginalFileName().indexOf(".")));
+//
+//        HashMap<String, Object> response = new HashMap<>();
+//
+//        if (!file.isEmpty()) {
+//            try {
+//                imageHolder.setContent(file.getBytes());
+//                maceService.saveImage(imageHolder);
+//                VerifiedMember verifiedMember = maceService.getLatestVerifiedMember(memCode);
+//
+//                response.put("responseCode", 200);
+//                response.put("responseDesc", "Success");
+//                return new ResponseEntity<>(response, HttpStatus.OK);
+//
+//            } catch (Exception e) {
+//                response.put("responseCode", 500);
+//                response.put("responseDesc", "Internal Server Error");
+//                response.put("error", e.getMessage());
+//                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        } else {
+//            response.put("responseCode", 204);
+//            response.put("responseDesc", "File is empty");
+//            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+//        }
+    }
 
+    public PictureObject retrieveImage(String fileId) {
+        return mainMapper.retrieveImage(fileId);
     }
 }

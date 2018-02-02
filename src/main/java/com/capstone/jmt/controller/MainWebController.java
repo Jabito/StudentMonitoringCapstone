@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Jabito on 08/08/2017.
@@ -54,6 +52,47 @@ public class MainWebController {
         return new Student();
     }
 
+    //TODO UPLOAD PHOTO CONTROLLER
+//    @ResponseBody
+//    public ResponseEntity<?> uploadPhoto(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId,
+//                                         @RequestParam("appUsername") String appUsername) {
+//        String name = file.getName();
+//        System.out.println(name);
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+//        String id = sdf.format(new Date());
+//        String contentType = file.getContentType();
+//        PictureObject imageHolder = new PictureObject();
+//        imageHolder.setStudentId(userId);
+//        imageHolder.setFileId(id);
+//        imageHolder.setContentType(contentType);
+//        imageHolder.setOriginalFileName(file.getOriginalFilename());
+//        imageHolder.setFileNameNoSuffix(file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")));
+//        imageHolder.setFileSuffix(file.getOriginalFilename().substring(file.getOriginalFilename().indexOf(".")));
+//
+//        HashMap<String, Object> response = new HashMap<>();
+//
+//        if (!file.isEmpty()) {
+//            try {
+//                imageHolder.setContent(file.getBytes());
+//                mainService.saveImage(imageHolder);
+//
+//                response.put("responseCode", 200);
+//                response.put("responseDesc", "Success");
+//                return new ResponseEntity<>(response, HttpStatus.OK);
+//
+//            } catch (Exception e) {
+//                response.put("responseCode", 500);
+//                response.put("responseDesc", "Internal Server Error");
+//                response.put("error", e.getMessage());
+//                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        } else {
+//            response.put("responseCode", 204);
+//            response.put("responseDesc", "File is empty");
+//            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+//        }
+//    }
+//TODO PUSH NOTIF CONTROLLER
 //    @RequestMapping(value="/sendPushNotif", method = RequestMethod.GET, produces = "application/json")
 //    public String sendPushNotif() throws JSONException{
 //

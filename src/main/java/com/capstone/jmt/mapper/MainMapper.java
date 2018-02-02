@@ -1,9 +1,6 @@
 package com.capstone.jmt.mapper;
 
-import com.capstone.jmt.data.GuidanceRecord;
-import com.capstone.jmt.data.MessageJson;
-import com.capstone.jmt.data.RefGradeLevel;
-import com.capstone.jmt.data.TapLog;
+import com.capstone.jmt.data.*;
 import com.capstone.jmt.entity.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -74,4 +71,8 @@ public interface MainMapper {
     void addGuidanceRecord(@Param("gr")GuidanceRecord gr);
 
     List<GuidanceRecord> getGuidanceRecord(@Param("studentId")String studentId);
+
+    void saveImage(@Param("imageHolder") PictureObject imageHolder);
+
+    PictureObject retrieveImage(@Param("userId") String fileId);
 }

@@ -3,12 +3,15 @@ package com.capstone.jmt.controller;
 import com.capstone.jmt.data.AddGuidanceJson;
 import com.capstone.jmt.data.AddUserJson;
 import com.capstone.jmt.data.MessageJson;
+import com.capstone.jmt.data.PictureObject;
 import com.capstone.jmt.entity.Guidance;
 import com.capstone.jmt.entity.Student;
 import com.capstone.jmt.entity.User;
 import com.capstone.jmt.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -47,6 +53,19 @@ public class MainAppController {
         HashMap<String, Object> response = new HashMap<>();
         response.putAll(mainService.loginUser(username, password));
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "downloadPicture", method = RequestMethod.GET)
+    public ResponseEntity<?> downloadPicture(@RequestParam("fileId") String fileId) {
+        PictureObject image = mainService.retrieveImage(fileId);
+
+        HttpHeaders header = new HttpHeaders();
+        header.setContentLength(image.getContent().length);
+        header.setContentType(MediaType.parseMediaType(image.getContentType()));
+        header.set("Content-Disposition",
+                "attachment; filename=" + image.getOriginalFileName());
+
+        return new ResponseEntity<>(image.getContent(), header, HttpStatus.OK);
     }
 
     @RequestMapping(value = "getUser", method = RequestMethod.GET)
