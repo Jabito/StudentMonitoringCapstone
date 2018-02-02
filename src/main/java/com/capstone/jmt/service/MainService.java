@@ -260,12 +260,21 @@ public class MainService {
         return response;
     }
 
-    public Student getStudentByRfid(String rfid){
+    public Student getStudentByRfidIn(){
+
+        return mainMapper.getStudIn();
+    }
+
+    public Student getStudentByRfidOut(){
+
+        return mainMapper.getStudOut();
+    }
+
+    public void tapStudent(String rfid){
         TapLog tapLog = new TapLog();
         tapLog.setRfid(rfid);
         tapLog.setLogType("IN");
         mainMapper.processRfidTap(tapLog);
-        return mainMapper.getStudentByRfid(rfid);
     }
 
     public HashMap<String, Object> getUserById(String id) {

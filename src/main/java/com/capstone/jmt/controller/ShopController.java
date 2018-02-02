@@ -99,24 +99,7 @@ public class ShopController {
         return "main";
     }
 
-    @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
-    public String showSales(@ModelAttribute("shopUser") ShopLogin shopUser, Model model) {
-//        if (shopUser.getId() == null)
-//            return "redirect:/login";
 
-//        List<OrderInfo> orders = orderService.getOrdersByShopId(shopUser.getStaffOf());
-//        model.addAttribute("orders", orders);
-//        model.addAttribute("username", shopUser.getUsername());
-//        Double sales = 0.0;
-//        for(int x=0; x<orders.size(); x++){
-//            if(null!=orders.get(x).getTotalCost())
-//                    sales += orders.get(x).getTotalCost();
-//        }
-//
-//        model.addAttribute("totalSales", "P " + sales.toString());
-//
-        return "sales";
-    }
 
     @RequestMapping(value = "/transactions", method = RequestMethod.GET)
     public String showTransactions(@ModelAttribute("shopUser") ShopLogin shopUser, Model model) {

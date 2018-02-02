@@ -2,18 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
     <title>AquaJMT | Monitoring </title>
-    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+
 </head>
 <body onload="showDateTime()">
-<div class="container-fluid">
-    <div class="row">
+
+<div class="container-fluid" style="background-color: #122b40;">
+    <div class="row" style="  background-color: #122b40;">
         <div class="">
-            <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+            <!--/*/ <th:block th:include="fragments/headerMonitor :: header"></th:block> /*/-->
         </div>
     </div>
 </div>
-
-
 <div class="container-fluid">
     <div id="page-wrapper">
         <div class="row">
@@ -22,87 +21,166 @@
             </div>
             <div class="row">
                 <form class="col-md-6" th:object="${student}" th:action="@{/monitorStudent}" th:method="POST">
-                    Please tap the rfid: <input id="rfidTag" th:field="*{rfid}" class="form-control" th:autofocus="true" hidden="true" style="border-color: transparent; color: transparent"/>
+                    Please tap the rfid: <input id="rfidTag" th:field="*{rfid}" class="form-control"
+                                                autofocus="true"
+                                                style="border-color: transparent; color: transparent"/>
 
-                    <input type="submit" id="submit"/>
+                    <input type="submit" id="submit" hidden="hidden"/>
                 </form>
             </div>
         </div>
+        <div class="row">
+            <table style="float: left; margin-left: 40px;">
+                <tbody>
+                <tr>
+                    <td colspan="2">
+                        <img src="../static/images/school_logo.png" width="360" height="360"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        First Name :
+                    </td>
+                    <td th:text="${stud.firstName}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Last Name :
+                    </td>
+                    <td th:text="${stud.lastName}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Middle Name :
+                    </td>
+                    <td th:text="${stud.middleName}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Time IN: </label>
+                    </td>
+                    <td>
+                        <label id="timeIn"></label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!--<div class="form-group">-->
+            <!--<label>First Name: </label>-->
+            <!--<label th:text="${stud.firstName}"></label>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+            <!--<label>Last Name: </label>-->
+            <!--<label th:text="${stud.lastName}"></label>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+            <!--<label>Middle Name: </label>-->
+            <!--<label th:text="${stud.middleName}"></label>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+            <!--<label>Time <span th:text="${tapType}"></span></label>-->
+            <!--<label id="timeIn"></label>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;/.panel-body&ndash;&gt;-->
+            <!--</div>-->
 
-        <div class="panel-body">
-            <div class="form-group">
-                <label>First Name: </label>
-                <label th:text="${stud.firstName}"></label>
-            </div>
-            <div class="form-group">
-                <label>Last Name: </label>
-                <label th:text="${stud.lastName}"></label>
-            </div>
-            <div class="form-group">
-                <label>Middle Name: </label>
-                <label th:text="${stud.middleName}"></label>
-            </div>
-            <div class="form-group">
-                <label>Time <span th:text="${tapType}"></span></label>
-                <label id="timeIn"></label>
-            </div>
-             <!--/.panel-body-->
-        </div>
-
-        <div class="panel-body">
-            <div class="form-group">
-                <label>First Name: </label>
-                <label th:text="${stud.firstName}"></label>
-            </div>
-            <div class="form-group">
-                <label>Last Name: </label>
-                <label th:text="${stud.lastName}"></label>
-            </div>
-            <div class="form-group">
-                <label>Middle Name: </label>
-                <label th:text="${stud.middleName}"></label>
-            </div>
-            <div class="form-group">
-                <label>Time <span th:text="${tapType}"></span></label>
-                <label id="timeIn"></label>
-            </div>
-            <!--/.panel-body-->
-        </div>
-
-
-        <!-- /.col-lg-12 -->
+            <!--<div class="panel-body">-->
+            <!--<div class="form-group">-->
+            <!--<label>First Name: </label>-->
+            <!--<label th:text="${stud.firstName}"></label>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+            <!--<label>Last Name: </label>-->
+            <!--<label th:text="${stud.lastName}"></label>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+            <!--<label>Middle Name: </label>-->
+            <!--<label th:text="${stud.middleName}"></label>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+            <!--<label>Time <span th:text="${tapType}"></span></label>-->
+            <!--<label id="timeIn"></label>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;/.panel-body&ndash;&gt;-->
+            <!--</div>-->
+            <table style="float: left; margin-left: 450px;">
+                <tbody>
+                <tr>
+                    <td colspan="2">
+                        <img src="../static/images/school_logo.png" width="360" height="360"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        First Name :
+                    </td>
+                    <td th:text="${stud1.firstName}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Last Name :
+                    </td>
+                    <td th:text="${stud1.lastName}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Middle Name :
+                    </td>
+                    <td th:text="${stud1.middleName}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Time OUT: </label>
+                    </td>
+                    <td>
+                        <label id="timeIn1"></label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
     </div>
+
+    <!-- /.col-lg-12 -->
+</div>
 </div>
 <script th:inline="javascript">
     /*<![CDATA[*/
 
     $('#img').hide();
     $('#timeIn').hide();
+    $('#timeIn1').hide();
     $('#submit').hide();
-    $("#rfidTag").keyup(function () {
+    $('#rfidTag').keyup(function () {
         if (this.value.length == 10)
             $('#submit').click();
-
-
     });
     showDateTime();
-    function showDateTime(){
-            $('#timeIn').show();
+    function showDateTime() {
+        $('#timeIn').show();
+        $('#timeIn1').show();
 
         var d = new Date(),
-            minutes = d.getMinutes().toString().length == 1 ? '0'+d.getMinutes() : d.getMinutes(),
+            minutes = d.getMinutes().toString().length == 1 ? '0' + d.getMinutes() : d.getMinutes(),
             seconds = d.getSeconds().toString(),
-            hours = d.getHours().toString().length == 1 ? '0'+d.getHours() : d.getHours(),
+            hours = d.getHours().toString().length == 1 ? '0' + d.getHours() : d.getHours(),
             ampm = d.getHours() >= 12 ? 'pm' : 'am',
-            months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-            days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-            minutes = checkTime(minutes);
-            seconds = checkTime(seconds);
-        document.getElementById('timeIn').innerHTML = days[d.getDay()]+' '+months[d.getMonth()]+' '+d.getDate()+' '+d.getFullYear()+' '+hours+':'+minutes+':'+seconds+ampm;
+            months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        minutes = checkTime(minutes);
+        seconds = checkTime(seconds);
+        document.getElementById('timeIn').innerHTML = days[d.getDay()] + ' ' + months[d.getMonth()] + ' ' + d.getDate() + ' ' + d.getFullYear() + ' ' + hours + ':' + minutes + ':' + seconds + ampm;
         var t = setTimeout(showDateTime, 500);
     }
     function checkTime(i) {
-        if (i > 10) {i = "0" + i}  // add zero in front of numbers < 10
+        if (i > 10) {
+            i = "0" + i
+        }  // add zero in front of numbers < 10
         return i;
     }
 

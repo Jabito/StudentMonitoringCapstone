@@ -234,14 +234,16 @@ public class MainWebController {
 
     @RequestMapping(value = "/monitor", method = RequestMethod.GET)
     public String shopMonitor(@RequestParam(value = "rfid", required = false) String rfid, Model model){
-        Student student = mainService.getStudentByRfid(rfid);
-        TapLog tap = new TapLog();
-        if(null != rfid)
-             tap = (TapLog) mainService.getLastTapEntry(student.getId()).get("tapDetails");
+        mainService.tapStudent(rfid);
+        Student studIn = mainService.getStudentByRfidIn();
+        Student studOut = mainService.getStudentByRfidOut();
+//        TapLog tap = new TapLog();
+//        if(null != rfid)
+//             tap = (TapLog) mainService.getLastTapEntry(student.getId()).get("tapDetails");
         model.addAttribute("student", new Student());
-        model.addAttribute("stud", null != student?student: new Student());
-        model.addAttribute("tapType", tap != null? tap.getLogType(): "");
-        System.out.println("TAPTYPE: " + tap != null? tap.getLogType():"NONE");
+        model.addAttribute("stud", null != studIn?studIn: new Student());
+        model.addAttribute("stud1", null != studOut?studOut: new Student());
+//        model.addAttribute("tapType", tap != null? tap.getLogType(): "");
         return "monitor";
     }
 
@@ -269,6 +271,25 @@ public class MainWebController {
 //        model.addAttribute("inventory", shopService.getShopSalesInformationById(shopUser.getStaffOf()));
 
         return "inventory";
+    }
+
+    @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
+    public String showSales(Model model) {
+//        if (shopUser.getId() == null)
+//            return "redirect:/login";
+
+//        List<OrderInfo> orders = orderService.getOrdersByShopId(shopUser.getStaffOf());
+//        model.addAttribute("orders", orders);
+//        model.addAttribute("username", shopUser.getUsername());
+//        Double sales = 0.0;
+//        for(int x=0; x<orders.size(); x++){
+//            if(null!=orders.get(x).getTotalCost())
+//                    sales += orders.get(x).getTotalCost();
+//        }
+//
+//        model.addAttribute("totalSales", "P " + sales.toString());
+//
+        return "attendanceLogs";
     }
 
 

@@ -41,6 +41,8 @@
         <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
         <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
         <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="parent_name" property="parentName" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="parent_fname" property="parentFName" jdbcType="VARCHAR"/>
         <result column="parent_lname" property="parentLName" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR" />
@@ -163,7 +165,8 @@
 
     <insert id="addParent" flushCache="true">
         INSERT INTO data_parents(
-        id, parent_of, relationship, parent_name, occupation, office_no, email)
+        id, parent_of, relationship, parent_name, occupation, office_no, email
+        )
         VALUES
         (
         #{parent.id, jdbcType=VARCHAR},
@@ -311,6 +314,24 @@
         ORDER BY log_datetime DESC
         LIMIT 1
     </select>
+    <select id="getStudIn" resultMap="StudentMap" resultType="com.capstone.jmt.entity.Student">
+
+    SELECT * FROM data_students WHERE rfid = (
+    SELECT rfid FROM log_taps WHERE log_type = 'IN'
+    ORDER BY log_datetime DESC
+    LIMIT 1
+    )
+    </select>
+
+    <select id="getStudOut" resultMap="StudentMap" resultType="com.capstone.jmt.entity.Student">
+
+        SELECT * FROM data_students WHERE rfid = (
+        SELECT rfid FROM log_taps WHERE log_type = 'OUT'
+        ORDER BY log_datetime DESC
+        LIMIT 1
+        )
+    </select>
+
 
     <select id="getTapListDetailsByStudentId" resultMap="TapLogMap" resultType="java.util.List">
         SELECT * FROM log_taps

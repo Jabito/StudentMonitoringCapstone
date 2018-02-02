@@ -67,6 +67,10 @@ public interface MainMapper {
 
     Student getStudentByRfid(@Param("rfid") String rfid);
 
+    Student getStudIn();
+
+    Student getStudOut();
+
     void addGuidanceRecord(@Param("gr")GuidanceRecord gr);
 
     List<GuidanceRecord> getGuidanceRecord(@Param("studentId")String studentId);
