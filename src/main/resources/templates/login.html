@@ -52,6 +52,21 @@
         </div>
     </div>
 </div>
-
+<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+<script>
+    var firebase = require("firebase/app");
+    require("firebase/auth");
+    require("firebase/database");
+    // Initialize Firebase
+    // TODO: Replace with your project's customized code snippet
+    var config = {
+        apiKey: "AIzaSyAS5TmIcCxrS5GLS9kt-GXZ9u1XYebhTDc",
+        authDomain: "aqua-cc873.firebaseapp.com",
+        databaseURL: "https://aqua-cc873.firebaseio.com",
+        storageBucket: "aqua-cc873.appspot.com",
+        messagingSenderId: "1021590070325",
+    };
+    firebase.initializeApp(config);
+</script>
 </body>
 </html>

@@ -5,6 +5,7 @@ import com.capstone.jmt.data.AddUserJson;
 import com.capstone.jmt.data.MessageJson;
 import com.capstone.jmt.data.PictureObject;
 import com.capstone.jmt.entity.Guidance;
+import com.capstone.jmt.entity.Parent;
 import com.capstone.jmt.entity.Student;
 import com.capstone.jmt.entity.User;
 import com.capstone.jmt.service.MainService;
@@ -208,6 +209,11 @@ public class MainAppController {
             response.put("responseDesc", "Admin user ID not found.");
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="addParent", method = RequestMethod.POST)
+    public ResponseEntity<?> addParent(@RequestBody Parent par){
+        return new ResponseEntity<>(mainService.addParent(par), HttpStatus.OK);
     }
 
     @RequestMapping(value = "postAnnouncement", method = RequestMethod.POST)
