@@ -36,15 +36,14 @@
         <result column="parent_of" property="parentOf" jdbcType="VARCHAR"/>
         <result column="relationship" property="relationship" jdbcType="VARCHAR"/>
         <result column="occupation" property="occupation" jdbcType="VARCHAR"/>
-        <result column="contact_no" property="contactNo" jdbcType="VARCHAR"/>
+        <result column="contact_no" property="officeNo" jdbcType="VARCHAR"/>
         <result column="created_on" property="createdOn" jdbcType="TIMESTAMP"/>
         <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
         <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
         <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
         <result column="parent_name" property="parentName" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
-        <result column="parent_fname" property="parentFName" jdbcType="VARCHAR"/>
-        <result column="parent_lname" property="parentLName" jdbcType="VARCHAR"/>
+        <result column="parent_name" property="parentName" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR" />
     </resultMap>
 

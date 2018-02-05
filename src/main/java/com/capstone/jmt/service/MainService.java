@@ -37,9 +37,13 @@ public class MainService {
         } else {
             if (passwordEncoder.matches(password, user.getPassword())) {
                 Parent parent = mainMapper.getParent(user.getId());
+                if(null == parent){
+                    response.put("responseCode", HttpStatus.NOT_FOUND);
+                    response.put("responseDesc", "Parent does not exists.");
+                }
                 response.put("User", user);
                 response.put("Parent", parent);
-                response.put("Student", mainMapper.getStudent(parent.getParentOf()));
+//                response.put("Student", mainMapper.getStudent(parent.getParentOf()));
                 response.put("responseCode", HttpStatus.OK);
                 response.put("responseDesc", "Login Successful.");
             } else {
