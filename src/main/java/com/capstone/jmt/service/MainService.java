@@ -36,7 +36,7 @@ public class MainService {
             response.put("responseDesc", "Username does not exists.");
         } else {
             if (passwordEncoder.matches(password, user.getPassword())) {
-                Parent parent = mainMapper.getParent(user.getReferenceId());
+                Parent parent = mainMapper.getParent(user.getId());
                 response.put("User", user);
                 response.put("Parent", parent);
                 response.put("Student", mainMapper.getStudent(parent.getParentOf()));
