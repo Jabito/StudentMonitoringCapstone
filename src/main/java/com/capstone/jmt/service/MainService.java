@@ -3,6 +3,8 @@ package com.capstone.jmt.service;
 import com.capstone.jmt.data.*;
 import com.capstone.jmt.entity.*;
 import com.capstone.jmt.mapper.MainMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,8 @@ import java.util.*;
 @Service("mainService")
 public class MainService {
 
+    private static final Logger logger = LoggerFactory.getLogger(MainService.class);
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -31,12 +35,14 @@ public class MainService {
 
         User user = mainMapper.getUserByUsername(username);
         response.put("User", user);
+        logger.info("user", user);
         if (null == user) {
             response.put("responseCode", HttpStatus.NOT_FOUND);
             response.put("responseDesc", "Username does not exists.");
         } else {
             if (passwordEncoder.matches(password, user.getPassword())) {
-                Parent parent = mainMapper.getParent(user.getId());
+                Parent parent = mainMapper.getParent(user.getReferenceId());
+                logger.info("parent", parent);
                 if(null == parent){
                     response.put("responseCode", HttpStatus.NOT_FOUND);
                     response.put("responseDesc", "Parent does not exists.");

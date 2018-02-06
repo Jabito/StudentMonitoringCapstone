@@ -43,8 +43,6 @@
         <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
         <result column="parent_name" property="parentName" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
-        <result column="parent_name" property="parentName" jdbcType="VARCHAR"/>
-        <result column="email" property="email" jdbcType="VARCHAR" />
     </resultMap>
 
     <resultMap id="StudentMap" type="com.capstone.jmt.entity.Student">
