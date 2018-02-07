@@ -41,7 +41,7 @@ public class MainService {
             response.put("responseDesc", "Username does not exists.");
         } else {
             if (passwordEncoder.matches(password, user.getPassword())) {
-                Parent parent = mainMapper.getParent(user.getReferenceId());
+                Parent parent = mainMapper.getParent(user.getId());
                 logger.info("parent", parent);
                 if(null == parent){
                     response.put("responseCode", HttpStatus.NOT_FOUND);
