@@ -418,7 +418,7 @@
         <result column="original_file_name" property="originalFileName" jdbcType="VARCHAR"/>
         <result column="file_suffix"  property="fileSuffix"  jdbcType="VARCHAR"/>
         <result column="file_name_no_suffix" property="fileNameNoSuffix"  jdbcType="VARCHAR"/>
-        <result column="content" property="content" jdbcType="BLOB"/>
+        <result column="content" property="content" jdbcType="BLOB" javaType="byte[]"/>
     </resultMap>
 
     <select id="retrieveImage" resultMap="PictureObjectMap" resultType="com.capstone.jmt.data.PictureObject">

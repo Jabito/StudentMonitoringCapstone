@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,8 +58,14 @@ public class MainAppController {
     }
 
     @RequestMapping(value = "downloadPicture", method = RequestMethod.GET)
-    public ResponseEntity<?> downloadPicture(@RequestParam("fileId") String fileId) {
+    public ResponseEntity<?> downloadPicture(@RequestParam("userId") String fileId) {
+
+
         PictureObject image = mainService.retrieveImage(fileId);
+
+
+
+
 
         HttpHeaders header = new HttpHeaders();
         header.setContentLength(image.getContent().length);
