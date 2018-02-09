@@ -258,7 +258,7 @@
     </resultMap>
 
     <select id="getAnnouncementsByParentId" resultMap="MessageMap" resultType="java.util.List">
-        SELECT * FROM logs_of_messages
+        SELECT * FROM log_messages
         WHERE message_target LIKE #{searchString}
         OR message_type = 3
     </select>
