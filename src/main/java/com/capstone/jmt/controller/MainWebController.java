@@ -1,6 +1,7 @@
 package com.capstone.jmt.controller;
 
 import com.capstone.jmt.data.AddUserJson;
+import com.capstone.jmt.data.PictureObject;
 import com.capstone.jmt.data.ShopLogin;
 import com.capstone.jmt.data.TapLog;
 import com.capstone.jmt.entity.Guidance;
@@ -20,9 +21,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -31,7 +35,7 @@ import java.util.concurrent.ExecutionException;
  * Created by Jabito on 08/08/2017.
  */
 @Controller
-@RequestMapping(value="/")
+@RequestMapping(value = "/")
 @SessionAttributes("appUser")
 public class MainWebController {
 
@@ -161,16 +165,16 @@ public class MainWebController {
     }
 
 
-    @RequestMapping(value="loginWebUser", method = RequestMethod.POST)
-    public String loginWebUser(@ModelAttribute("appUser") User user, Model model){
+    @RequestMapping(value = "loginWebUser", method = RequestMethod.POST)
+    public String loginWebUser(@ModelAttribute("appUser") User user, Model model) {
 
 
         System.out.println("USERNAME: " + user.getUsername());
         System.out.println("PASSWORD: " + user.getPassword());
 
-        HashMap<String, Object> returnJson = mainService.loginUser(user.getUsername(),user.getPassword());
+        HashMap<String, Object> returnJson = mainService.loginUser(user.getUsername(), user.getPassword());
         User returnedUser = (User) returnJson.get("User");
-        if(null == returnedUser){
+        if (null == returnedUser) {
             System.out.println("Null");
         }
 
@@ -184,34 +188,42 @@ public class MainWebController {
     @RequestMapping(value = "/homepage", method = RequestMethod.GET)
     public String showDashboard(@ModelAttribute("appUser") User user, Model model) {
         System.out.println("HOMEPAGE: " + user.getUsername());
-       if(null != user.getUsername()) {
-           model.addAttribute("User", user);
-           return "dashboard";
-       }
-       return "redirect:/login";
+        if (null != user.getUsername()) {
+            model.addAttribute("User", user);
+            return "dashboard";
+        }
+        return "redirect:/login";
     }
 
 
     @RequestMapping(value = "/getStudent", method = RequestMethod.GET)
-    public String shopAddStudent(@Valid Student student, Model model) {
+    public String shopAddStudent(Model model, @RequestBody(required = false) PictureObject pictureObject) {
 
         model.addAttribute("student", getStudent());
+        model.addAttribute("pic", new PictureObject());
+
+        if (null == pictureObject) {
+            System.out.println("walang laman");
+        } else {
+            System.out.println("mays laman");
+        }
 
         return "addStudent";
     }
 
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
-    public String addStudent(@ModelAttribute("appUSer") User appUser, @Valid Student student , BindingResult bindingResult, Model model){
+    public String addStudent(@ModelAttribute("appUSer") User appUser, @Valid Student student, BindingResult bindingResult, Model model) {
 
 
         System.out.println("student first name: " + student.getFirstName());
         System.out.println("student last name: " + student.getLastName());
-        try{
+        try {
             student.setCreatedBy(appUser.getUsername());
             mainService.addStudent(student);
             System.out.println("SUCCESS!!");
+
             return "redirect:/login";
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -219,7 +231,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getParent", method = RequestMethod.GET)
-    public String getParentOfStudent(@Valid Parent parent, Model model){
+    public String getParentOfStudent(@Valid Parent parent, Model model) {
 
         model.addAttribute("students", mainService.getAllStudents());
         model.addAttribute("parent", new Parent());
@@ -227,7 +239,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/addNewParent", method = RequestMethod.POST)
-    public String addNewParent(@ModelAttribute("appUSer") User appUser, @Valid Parent parent, BindingResult bindingResult, Model model){
+    public String addNewParent(@ModelAttribute("appUSer") User appUser, @Valid Parent parent, BindingResult bindingResult, Model model) {
 
         parent.setCreatedBy(appUser.getUsername());
         parent.setUpdatedBy(appUser.getUsername());
@@ -237,16 +249,16 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public String getUserData(@Valid AddUserJson newUser, Model model){
+    public String getUserData(@Valid AddUserJson newUser, Model model) {
 
         //TODO ADD VALIDATION OF NULL VALUES
 
         model.addAttribute("newUser", new User());
-        return  "addUser";
+        return "addUser";
     }
 
     @RequestMapping(value = "/addNewUser", method = RequestMethod.POST)
-    public String postNewUser(@Valid AddUserJson newUser, BindingResult bindingResult, Model model){
+    public String postNewUser(@Valid AddUserJson newUser, BindingResult bindingResult, Model model) {
 
         System.out.println("USER username: " + newUser.getUsername());
         System.out.println("USER password: " + newUser.getPassword());
@@ -256,14 +268,14 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getGuidance", method = RequestMethod.GET)
-    public String getGuidanceData(@Valid Guidance guidance, Model model){
+    public String getGuidanceData(@Valid Guidance guidance, Model model) {
 
         model.addAttribute("newGuidance", new Guidance());
         return "addGuidance";
     }
 
     @RequestMapping(value = "/addNewGuidance", method = RequestMethod.POST)
-    public String postNewGuidance(@Valid Guidance guidance, BindingResult bindingResult, Model model){
+    public String postNewGuidance(@Valid Guidance guidance, BindingResult bindingResult, Model model) {
 
         System.out.println("GUIDANCE FIRST NAME: " + guidance.getFirstName());
         System.out.println("GUIDANCE LAST NAME: " + guidance.getLastName());
@@ -274,7 +286,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/monitor", method = RequestMethod.GET)
-    public String shopMonitor(@RequestParam(value = "rfid", required = false) String rfid, Model model){
+    public String shopMonitor(@RequestParam(value = "rfid", required = false) String rfid, Model model) {
         mainService.tapStudent(rfid);
         Student studIn = mainService.getStudentByRfidIn();
         Student studOut = mainService.getStudentByRfidOut();
@@ -282,25 +294,25 @@ public class MainWebController {
 //        if(null != rfid)
 //             tap = (TapLog) mainService.getLastTapEntry(student.getId()).get("tapDetails");
         model.addAttribute("student", new Student());
-        model.addAttribute("stud", null != studIn?studIn: new Student());
-        model.addAttribute("stud1", null != studOut?studOut: new Student());
+        model.addAttribute("stud", null != studIn ? studIn : new Student());
+        model.addAttribute("stud1", null != studOut ? studOut : new Student());
 //        model.addAttribute("tapType", tap != null? tap.getLogType(): "");
         return "monitor";
     }
 
     @RequestMapping(value = "/monitorStudent", method = RequestMethod.POST)
-    public String monitorStudent(@ModelAttribute("student") Student student,BindingResult bindingResult,  Model model){
+    public String monitorStudent(@ModelAttribute("student") Student student, BindingResult bindingResult, Model model) {
         System.out.println("STUDENT RFID: " + student.getRfid());
 //            mainService.processRfidTap(student.getRfid());
 //        Student student1 = mainService.getStudentByRfid(student.getRfid());
 //        System.out.println("STUDENT RETRIEVED: " + student1.getFirstName());
 //        model.addAttribute("student", student1);
 
-        return "redirect:/monitor?rfid=" +student.getRfid();
+        return "redirect:/monitor?rfid=" + student.getRfid();
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
-    public String shopInventory(@ModelAttribute("shopUser") ShopLogin shopUser, Model model){
+    public String shopInventory(@ModelAttribute("shopUser") ShopLogin shopUser, Model model) {
 //        if (shopUser.getId() == null)
 //            return "redirect:/login";
 //
@@ -333,6 +345,46 @@ public class MainWebController {
         return "attendanceLogs";
     }
 
+    @RequestMapping(value = "/savePhoto", method = RequestMethod.POST)
+    public String showSavedPhoto(@RequestParam(value = "myFile", required = false) MultipartFile multipartFile) {
 
+
+        if (null == multipartFile) {
+            return "addStudent";
+        } else {
+            try {
+                PictureObject pictureObject = new PictureObject();
+
+
+                pictureObject.setOriginalFileName(multipartFile.getOriginalFilename());
+                System.out.println("NAME : " + multipartFile.getName());
+                System.out.println("CONTENT TYPE : " + multipartFile.getContentType());
+                System.out.println("SIZE : " + multipartFile.getSize());
+                System.out.println("CONTENT BYTES : " + multipartFile.getBytes().toString());
+                System.out.println("ORIGINAL NAME : " + multipartFile.getOriginalFilename());
+
+                pictureObject.setContent(multipartFile.getBytes());
+                pictureObject.setContentType(multipartFile.getContentType());
+                pictureObject.setFileId("sample");
+                pictureObject.setOriginalFileName(multipartFile.getOriginalFilename());
+                pictureObject.setStudentId("SID10");
+
+                mainService.saveImage(pictureObject);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            PictureObject pictureObject = new PictureObject();
+//            try {
+//                pictureObject.setContent(multipartFile.getBytes());
+//                pictureObject.setContentType(multipartFile.getContentType());
+//                pictureObject.setOriginalFileName(multipartFile.getOriginalFilename());
+//            }catch (IOException e){
+//                e.printStackTrace();
+//            }
+
+
+            return "redirect:/login";
+        }
+    }
 
 }

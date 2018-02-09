@@ -1,5 +1,6 @@
 package com.capstone.jmt.entity;
 
+import com.capstone.jmt.data.PictureObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -60,6 +61,16 @@ public class Student implements Serializable {
     @JsonProperty("updatedOn")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date updatedOn;
+    private PictureObject pictureObject;
+
+
+    public PictureObject getPictureObject() {
+        return pictureObject;
+    }
+
+    public void setPictureObject(PictureObject pictureObject) {
+        this.pictureObject = pictureObject;
+    }
 
     public Student() {
     }
