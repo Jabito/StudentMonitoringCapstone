@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 public class AndroidPushNotificationsService {
 
-    private static final String FIREBASE_SERVER_KEY = "AAAA7duDZDU:APA91bFFrIeeyaVzVnSPiwENACuBnFLblO9Hr577f1L1v8rq6kzlmNoJajRodfWYfrYaSZiMbqcNSj-TLZUSelHklFJOUx_MVVJ0D6rG5FnDYlk0tL4KIAiL-0BJ0oM__YXU-LUhiuEb";
+    private static final String FIREBASE_SERVER_KEY = "AIzaSyAS5TmIcCxrS5GLS9kt-GXZ9u1XYebhTDc";
     private static final String FIREBASE_API_URL = "https://aqua-cc873.firebaseio.com";
 
     @Async

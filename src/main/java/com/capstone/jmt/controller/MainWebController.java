@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Jabito on 08/08/2017.
@@ -93,56 +95,56 @@ public class MainWebController {
 //        }
 //    }
 //TODO PUSH NOTIF CONTROLLER
-//    @RequestMapping(value="/sendPushNotif", method = RequestMethod.GET, produces = "application/json")
-//    public String sendPushNotif() throws JSONException{
-//
-//        JSONObject body = new JSONObject();
-//        body.put("to", "/topics/" + TOPIC);
-//        body.put("priority", "high");
-//
-//        JSONObject notification = new JSONObject();
-//        notification.put("title", "MIKAELA VIRUS");
-//        notification.put("body", "Enjoy.");
-//
-//        JSONObject data = new JSONObject();
-//        data.put("Key-1", "JSA Data 1");
-//        data.put("Key-2", "JSA Data 2");
-//
-//        body.put("notification", notification);
-//        body.put("data", data);
-//        System.out.println(notification);
-//        System.out.println(data);
-//
-///**
-// {
-// "notification": {
-// "title": "JSA Notification",
-// "body": "Happy Message!"
-// },
-// "data": {
-// "Key-1": "JSA Data 1",
-// "Key-2": "JSA Data 2"
-// },
-// "to": "/topics/JavaSampleApproach",
-// "priority": "high"
-// }
-// */
-//        HttpEntity<String> request = new HttpEntity<>(body.toString());
-//        CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
-//        CompletableFuture.allOf(pushNotification).join();
-//
-//        try {
-//            String firebaseResponse = pushNotification.get();
-//
-//            return "redirect:/login";
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return "redirect:/login";
-//    }
+    @RequestMapping(value="/sendPushNotif", method = RequestMethod.GET, produces = "application/json")
+    public String sendPushNotif() throws JSONException{
+
+        JSONObject body = new JSONObject();
+        body.put("to", "/topics/" + TOPIC);
+        body.put("priority", "high");
+
+        JSONObject notification = new JSONObject();
+        notification.put("title", "You have been hacked.");
+        notification.put("body", "Enjoy.");
+
+        JSONObject data = new JSONObject();
+        data.put("Key-1", "JSA Data 1");
+        data.put("Key-2", "JSA Data 2");
+
+        body.put("notification", notification);
+        body.put("data", data);
+        System.out.println(notification);
+        System.out.println(data);
+
+/**
+ {
+ "notification": {
+ "title": "JSA Notification",
+ "body": "Happy Message!"
+ },
+ "data": {
+ "Key-1": "JSA Data 1",
+ "Key-2": "JSA Data 2"
+ },
+ "to": "/topics/JavaSampleApproach",
+ "priority": "high"
+ }
+ */
+        HttpEntity<String> request = new HttpEntity<>(body.toString());
+        CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
+        CompletableFuture.allOf(pushNotification).join();
+
+        try {
+            String firebaseResponse = pushNotification.get();
+
+            return "redirect:/login";
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/login";
+    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginShopUser(@RequestParam(value = "error", required = false) String error, HttpServletRequest request,
