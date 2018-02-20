@@ -13,17 +13,16 @@ import com.capstone.jmt.service.MainService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -39,8 +38,8 @@ import java.util.concurrent.ExecutionException;
 @SessionAttributes("appUser")
 public class MainWebController {
 
-    private final String TOPIC = "Capstone";
-
+    private final String TOPIC = "JavaSampleApproach";
+    private final String DEVICE = "";
 
     @Autowired
     MainService mainService;
@@ -58,96 +57,40 @@ public class MainWebController {
         return new Student();
     }
 
-    //TODO UPLOAD PHOTO CONTROLLER
-//    @ResponseBody
-//    public ResponseEntity<?> uploadPhoto(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId,
-//                                         @RequestParam("appUsername") String appUsername) {
-//        String name = file.getName();
-//        System.out.println(name);
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-//        String id = sdf.format(new Date());
-//        String contentType = file.getContentType();
-//        PictureObject imageHolder = new PictureObject();
-//        imageHolder.setStudentId(userId);
-//        imageHolder.setFileId(id);
-//        imageHolder.setContentType(contentType);
-//        imageHolder.setOriginalFileName(file.getOriginalFilename());
-//        imageHolder.setFileNameNoSuffix(file.getOriginalFilename().substring(0, file.getOriginalFilename().indexOf(".")));
-//        imageHolder.setFileSuffix(file.getOriginalFilename().substring(file.getOriginalFilename().indexOf(".")));
-//
-//        HashMap<String, Object> response = new HashMap<>();
-//
-//        if (!file.isEmpty()) {
-//            try {
-//                imageHolder.setContent(file.getBytes());
-//                mainService.saveImage(imageHolder);
-//
-//                response.put("responseCode", 200);
-//                response.put("responseDesc", "Success");
-//                return new ResponseEntity<>(response, HttpStatus.OK);
-//
-//            } catch (Exception e) {
-//                response.put("responseCode", 500);
-//                response.put("responseDesc", "Internal Server Error");
-//                response.put("error", e.getMessage());
-//                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        } else {
-//            response.put("responseCode", 204);
-//            response.put("responseDesc", "File is empty");
-//            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-//        }
-//    }
-//TODO PUSH NOTIF CONTROLLER
-    @RequestMapping(value="/sendPushNotif", method = RequestMethod.GET, produces = "application/json")
-    public String sendPushNotif() throws JSONException{
+    @RequestMapping(value = "/send", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> send() throws JSONException {
 
         JSONObject body = new JSONObject();
-        body.put("to", "/topics/" + TOPIC);
+        body.put("to", DEVICE);
         body.put("priority", "high");
 
         JSONObject notification = new JSONObject();
-        notification.put("title", "You have been hacked.");
-        notification.put("body", "Enjoy.");
+        notification.put("title", "JSA Notification");
+        notification.put("body", "Happy Message!");
+        notification.put("sound", "default");
 
         JSONObject data = new JSONObject();
-        data.put("Key-1", "JSA Data 1");
-        data.put("Key-2", "JSA Data 2");
+        data.put("title", "Hacker News");
+        data.put("message", "You have been hacked.");
 
         body.put("notification", notification);
         body.put("data", data);
-        System.out.println(notification);
-        System.out.println(data);
-
-/**
- {
- "notification": {
- "title": "JSA Notification",
- "body": "Happy Message!"
- },
- "data": {
- "Key-1": "JSA Data 1",
- "Key-2": "JSA Data 2"
- },
- "to": "/topics/JavaSampleApproach",
- "priority": "high"
- }
- */
         HttpEntity<String> request = new HttpEntity<>(body.toString());
+
         CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
         CompletableFuture.allOf(pushNotification).join();
 
         try {
             String firebaseResponse = pushNotification.get();
 
-            return "redirect:/login";
+            return new ResponseEntity<>(firebaseResponse, HttpStatus.OK);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
-        return "redirect:/login";
+        return new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)

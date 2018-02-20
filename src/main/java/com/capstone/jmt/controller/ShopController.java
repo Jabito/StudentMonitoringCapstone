@@ -44,42 +44,42 @@ public class ShopController {
         return new User();
     }
 
-    @RequestMapping(value = "sendPushNotif", method = RequestMethod.GET, produces = "application/json")
-    public String sendPushNotif() throws JSONException {
-
-        JSONObject body = new JSONObject();
-//        body.put("to", "/topics/" + TOPIC);
-//        body.put("priority", "high");
-
-        JSONObject notification = new JSONObject();
-        notification.put("title", "MIKAELA VIRUS");
-        notification.put("body", "Enjoy.");
-
-        JSONObject data = new JSONObject();
-        data.put("Key-1", "JSA Data 1");
-        data.put("Key-2", "JSA Data 2");
-
-        body.put("notification", notification);
-        body.put("data", data);
-        body.put("topic", TOPIC);
-
-        HttpEntity<String> request = new HttpEntity<>(body.toString());
-        CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
-        CompletableFuture.allOf(pushNotification).join();
-        try {
-            String firebaseResponse = pushNotification.get();
-
-            return "redirect:/login";
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch(HttpClientErrorException e){
-            e.printStackTrace();
-        }
-
-        return "redirect:/login";
-    }
+//    @RequestMapping(value = "sendPushNotif", method = RequestMethod.GET, produces = "application/json")
+//    public String sendPushNotif() throws JSONException {
+//
+//        JSONObject body = new JSONObject();
+////        body.put("to", "/topics/" + TOPIC);
+////        body.put("priority", "high");
+//
+//        JSONObject notification = new JSONObject();
+//        notification.put("title", "MIKAELA VIRUS");
+//        notification.put("body", "Enjoy.");
+//
+//        JSONObject data = new JSONObject();
+//        data.put("Key-1", "JSA Data 1");
+//        data.put("Key-2", "JSA Data 2");
+//
+//        body.put("notification", notification);
+//        body.put("data", data);
+//        body.put("topic", TOPIC);
+//
+//        HttpEntity<String> request = new HttpEntity<>(body.toString());
+//        CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
+//        CompletableFuture.allOf(pushNotification).join();
+//        try {
+//            String firebaseResponse = pushNotification.get();
+//
+//            return "redirect:/login";
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        } catch(HttpClientErrorException e){
+//            e.printStackTrace();
+//        }
+//
+//        return "redirect:/login";
+//    }
 
 
     @RequestMapping(value = "/rating", method = RequestMethod.GET)

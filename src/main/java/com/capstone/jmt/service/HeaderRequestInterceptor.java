@@ -1,16 +1,13 @@
 package com.capstone.jmt.service;
 
+import java.io.IOException;
+
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.support.HttpRequestWrapper;
 
-import java.io.IOException;
-
-/**
- * Created by Jabito on 22/01/2018.
- */
 public class HeaderRequestInterceptor implements ClientHttpRequestInterceptor {
 
     private final String headerName;
