@@ -26,23 +26,23 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping(value = "/")
 
 public class ShopController {
-
-    private final String TOPIC = "messages";
-
-    @Autowired
-    private ShopService shopService;
-
-    @Autowired
-    private AndroidPushNotificationsService androidPushNotificationsService;
+//
+//    private final String TOPIC = "messages";
+//
+//    @Autowired
+//    private ShopService shopService;
+//
+//    @Autowired
+//    private AndroidPushNotificationsService androidPushNotificationsService;
     //private OrderService orderService;
 
     /*
     List of all GET Requests
      */
-    @ModelAttribute("shopUser")
-    public User getShopUser() {
-        return new User();
-    }
+//    @ModelAttribute("shopUser")
+//    public User getShopUser() {
+//        return new User();
+//    }
 
 //    @RequestMapping(value = "sendPushNotif", method = RequestMethod.GET, produces = "application/json")
 //    public String sendPushNotif() throws JSONException {
@@ -82,47 +82,38 @@ public class ShopController {
 //    }
 
 
-    @RequestMapping(value = "/rating", method = RequestMethod.GET)
-    public String shopRating(@ModelAttribute("shopUser") ShopLogin shopUser, Model model) {
-        if (shopUser.getId() == null)
-            return "redirect:/login";
-
-        model.addAttribute("username", shopUser.getUsername());
-
-        return "rating";
-    }
-
-    @RequestMapping(value = "/main", method = RequestMethod.GET)
-    public String loginShopUser3(Model model) {
-
-
-        return "main";
-    }
-
-
-
-    @RequestMapping(value = "/transactions", method = RequestMethod.GET)
-    public String showTransactions(@ModelAttribute("shopUser") ShopLogin shopUser, Model model) {
-//        if (shopUser.getId() == null)
-//            return "redirect:/login";
-
-        return "transactions";
-    }
-
-
-    @RequestMapping(value = "/settings", method = RequestMethod.GET)
-    public String showBottleSales(@ModelAttribute("shopUser") ShopLogin shopUser, Model model) {
+//    @RequestMapping(value = "/rating", method = RequestMethod.GET)
+//    public String shopRating(@ModelAttribute("shopUser") ShopLogin shopUser, Model model) {
 //        if (shopUser.getId() == null)
 //            return "redirect:/login";
 //
 //        model.addAttribute("username", shopUser.getUsername());
-//        model.addAttribute("bottleSalesRecord", orderService.getBottleSales());
+//
+//        return "rating";
+//    }
 
-        return "bottlesales";
-    }
+//    @RequestMapping(value = "/main", method = RequestMethod.GET)
+//    public String loginShopUser3(Model model) {
+//
+//
+//        return "main";
+//    }
 
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String shopProfile(@ModelAttribute("shopUser") ShopLogin shopUser, Model model) {
+
+
+//    @RequestMapping(value = "/transactions", method = RequestMethod.GET)
+//    public String showTransactions(@ModelAttribute("shopUser") ShopLogin shopUser, Model model) {
+////        if (shopUser.getId() == null)
+////            return "redirect:/login";
+//
+//        return "transactions";
+//    }
+
+
+//
+//
+//    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+//    public String shopProfile(@ModelAttribute("shopUser") ShopLogin shopUser, Model model) {
 //        if (shopUser.getId() == null)
 //            return "redirect:/login";
 //
@@ -130,9 +121,9 @@ public class ShopController {
 //        model.addAttribute("shop", shopService.getShopInfoById(shopUser.getStaffOf()));
 //        model.addAttribute("water", shopService.getShopSalesInformationById(shopUser.getStaffOf()));
 //        model.addAttribute("username", shopUser.getUsername());
-
-        return "profile";
-    }
+//
+//        return "profile";
+//    }
 
 //    @RequestMapping(value = "/addStudent", method = RequestMethod.GET)
 //    public String shopAddStudent(@ModelAttribute("shopUser") ShopLogin shopUser, Model model) {
@@ -160,39 +151,39 @@ public class ShopController {
 ////            return "redirect:/login/?error=" + "1";
 ////        }
 //    }
-
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public String logOutUser(@ModelAttribute("shopUser") ShopLogin shopUser, HttpServletRequest request, SessionStatus session) {
-        session.setComplete();
-
-        return "login";
-    }
-
-    @RequestMapping(value = "/updateInventory1", method = RequestMethod.POST)
-    public String updateInventory1(@ModelAttribute("shopUser") ShopLogin shopUser, ShopSalesInformation shop, Model model) {
-
-        shopService.updateRoundStock(shopUser.getId(), shopUser.getStaffOf(), shop.getRoundStock());
-        return "redirect:/inventory";
-    }
-
-    @RequestMapping(value = "/updateInventory2", method = RequestMethod.POST)
-    public String updateInventory2(@ModelAttribute("shopUser") ShopLogin shopUser, ShopSalesInformation shop, Model model) {
-
-        shopService.updateSlimStock(shopUser.getId(), shopUser.getStaffOf(), shop.getSlimStock());
-        return "redirect:/inventory";
-    }
-
-    @RequestMapping(value = "/updatePrices", method = RequestMethod.POST)
-    public String updatePrices(@ModelAttribute("shopUser") ShopLogin shopUser, ShopSalesInformation water, Model model) {
-
-        shopService.updatePrices(shopUser.getUsername(), shopUser.getStaffOf(), water);
-        return "redirect:/inventory";
-    }
-
-    @RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
-    public String updateProfile(@ModelAttribute("shopUser") ShopLogin shopUser, ShopInfo shop, Model model) {
-
-        shopService.updateProfile(shop, shopUser.getId());
-        return "redirect:/profile";
-    }
+//
+//    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+//    public String logOutUser(@ModelAttribute("shopUser") ShopLogin shopUser, HttpServletRequest request, SessionStatus session) {
+//        session.setComplete();
+//
+//        return "login";
+//    }
+//
+//    @RequestMapping(value = "/updateInventory1", method = RequestMethod.POST)
+//    public String updateInventory1(@ModelAttribute("shopUser") ShopLogin shopUser, ShopSalesInformation shop, Model model) {
+//
+//        shopService.updateRoundStock(shopUser.getId(), shopUser.getStaffOf(), shop.getRoundStock());
+//        return "redirect:/inventory";
+//    }
+//
+//    @RequestMapping(value = "/updateInventory2", method = RequestMethod.POST)
+//    public String updateInventory2(@ModelAttribute("shopUser") ShopLogin shopUser, ShopSalesInformation shop, Model model) {
+//
+//        shopService.updateSlimStock(shopUser.getId(), shopUser.getStaffOf(), shop.getSlimStock());
+//        return "redirect:/inventory";
+//    }
+//
+//    @RequestMapping(value = "/updatePrices", method = RequestMethod.POST)
+//    public String updatePrices(@ModelAttribute("shopUser") ShopLogin shopUser, ShopSalesInformation water, Model model) {
+//
+//        shopService.updatePrices(shopUser.getUsername(), shopUser.getStaffOf(), water);
+//        return "redirect:/inventory";
+//    }
+//
+//    @RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
+//    public String updateProfile(@ModelAttribute("shopUser") ShopLogin shopUser, ShopInfo shop, Model model) {
+//
+//        shopService.updateProfile(shop, shopUser.getId());
+//        return "redirect:/profile";
+//    }
 }

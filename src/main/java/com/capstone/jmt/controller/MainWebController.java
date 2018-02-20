@@ -2,8 +2,6 @@ package com.capstone.jmt.controller;
 
 import com.capstone.jmt.data.AddUserJson;
 import com.capstone.jmt.data.PictureObject;
-import com.capstone.jmt.data.ShopLogin;
-import com.capstone.jmt.data.TapLog;
 import com.capstone.jmt.entity.Guidance;
 import com.capstone.jmt.entity.Parent;
 import com.capstone.jmt.entity.Student;
@@ -47,7 +45,7 @@ public class MainWebController {
     @Autowired
     AndroidPushNotificationsService androidPushNotificationsService;
 
-    @ModelAttribute("appUSer")
+    @ModelAttribute("appUser")
     public User getShopUser() {
         return new User();
     }
@@ -118,7 +116,7 @@ public class MainWebController {
         HashMap<String, Object> returnJson = mainService.loginUser(user.getUsername(), user.getPassword());
         User returnedUser = (User) returnJson.get("User");
         if (null == returnedUser) {
-            System.out.println("Null");
+            return "redirect:/login?error=1";
         }
 
         System.out.println("RETURNED USER: " + returnedUser.getUsername());
@@ -155,7 +153,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
-    public String addStudent(@ModelAttribute("appUSer") User appUser, @Valid Student student, BindingResult bindingResult, Model model) {
+    public String addStudent(@ModelAttribute("appUser") User appUser, @Valid Student student, BindingResult bindingResult, Model model) {
 
 
         System.out.println("student first name: " + student.getFirstName());
@@ -182,7 +180,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/addNewParent", method = RequestMethod.POST)
-    public String addNewParent(@ModelAttribute("appUSer") User appUser, @Valid Parent parent, BindingResult bindingResult, Model model) {
+    public String addNewParent(@ModelAttribute("appUser") User appUser, @Valid Parent parent, BindingResult bindingResult, Model model) {
 
         parent.setCreatedBy(appUser.getUsername());
         parent.setUpdatedBy(appUser.getUsername());
@@ -255,7 +253,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
-    public String shopInventory(@ModelAttribute("shopUser") ShopLogin shopUser, Model model) {
+    public String shopInventory(@ModelAttribute("shopUser") User user, Model model) {
 //        if (shopUser.getId() == null)
 //            return "redirect:/login";
 //
@@ -330,4 +328,14 @@ public class MainWebController {
         }
     }
 
+    @RequestMapping(value = "/settings", method = RequestMethod.GET)
+    public String showBottleSales(@ModelAttribute("user") User user, Model model) {
+//        if (shopUser.getId() == null)
+//            return "redirect:/login";
+//
+//        model.addAttribute("username", shopUser.getUsername());
+//        model.addAttribute("bottleSalesRecord", orderService.getBottleSales());
+
+        return "bottlesales";
+    }
 }
