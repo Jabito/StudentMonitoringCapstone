@@ -213,9 +213,9 @@ public class MainService {
         String forInsert = "";
         for (int i = 0; i < mj.getParentIds().length; i++) {
             if (i == 0)
-                forInsert += mj.getParentIds();
+                forInsert += mj.getParentIds()[i];
             else
-                forInsert += "," + mj.getParentIds();
+                forInsert += "," + mj.getParentIds()[i];
         }
         mj.setMessageTarget(forInsert);
         mainMapper.postAnnouncement(mj);
