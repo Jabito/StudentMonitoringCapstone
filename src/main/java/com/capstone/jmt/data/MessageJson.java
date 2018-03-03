@@ -22,7 +22,7 @@ public class MessageJson implements Serializable{
     @JsonProperty("datePosted")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date datePosted;
-    @JsonProperty("messageTarget")
+    @JsonIgnore
     private String messageTarget;
     @JsonProperty("parentIds")
     private String[] parentIds;

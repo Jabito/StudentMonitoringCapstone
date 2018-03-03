@@ -216,12 +216,14 @@
         posted_by,
         message_type,
         message_target,
-        message_content)
+        message_content,
+        date_posted)
         VALUES (
         #{mj.postedBy, jdbcType=VARCHAR},
-        #{mj.messageType, jdbcType=INTEGER},
-        #{mj.messageTargetit co, jdbcType=VARCHAR},
-        #{mj.messageContent, jdbcType=VARCHAR}
+        #{mj.messageTypeId, jdbcType=INTEGER},
+        #{mj.messageTarget, jdbcType=VARCHAR},
+        #{mj.message, jdbcType=VARCHAR},
+        NOW()
         )
     </insert>
 
@@ -261,6 +263,7 @@
         SELECT * FROM log_messages
         WHERE message_target LIKE #{searchString}
         OR message_type = 3
+        ORDER BY date_posted DESC
     </select>
 
     <insert id="addUser" flushCache="true">
