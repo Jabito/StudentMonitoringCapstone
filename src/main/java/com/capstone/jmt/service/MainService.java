@@ -259,6 +259,10 @@ public class MainService {
         return mainMapper.getGradeLevelList();
     }
 
+    public List<RefSection> getSectionList(int gradeLvlId) {
+        return mainMapper.getSectionList(gradeLvlId);
+    }
+
     public HashMap<String, Object> addGuidance(Guidance guidance) {
         HashMap<String, Object> response = new HashMap<>();
         guidance.setId("GID" + mainMapper.getLastId(1));

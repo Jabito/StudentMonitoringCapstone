@@ -2,6 +2,7 @@ package com.capstone.jmt.controller;
 
 import com.capstone.jmt.data.AddUserJson;
 import com.capstone.jmt.data.PictureObject;
+import com.capstone.jmt.data.RefSection;
 import com.capstone.jmt.entity.Guidance;
 import com.capstone.jmt.entity.Parent;
 import com.capstone.jmt.entity.Student;
@@ -23,8 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.xml.ws.Response;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -138,10 +142,14 @@ public class MainWebController {
 
 
     @RequestMapping(value = "/getStudent", method = RequestMethod.GET)
-    public String shopAddStudent(Model model, @RequestBody(required = false) PictureObject pictureObject) {
+    public String shopAddStudent(@RequestParam(value = "gradeLvlId", required = false) Integer gradeLvlId, Model model, @RequestBody(required = false) PictureObject pictureObject) {
 
+        System.out.println("GET STUDENT GRADE LEVEL ID: " + gradeLvlId);
         model.addAttribute("student", getStudent());
         model.addAttribute("pic", new PictureObject());
+        model.addAttribute("gradeLevel", mainService.getGradeLevelList());
+        gradeLvlId = 0;
+        model.addAttribute("section", mainService.getSectionList(gradeLvlId));
 
         if (null == pictureObject) {
             System.out.println("walang laman");
@@ -338,4 +346,15 @@ public class MainWebController {
 
         return "bottlesales";
     }
+
+    @RequestMapping(value = "/selectGradeLevel", method = RequestMethod.GET)
+    public ResponseEntity<?> selectGradeLevel(@RequestParam(value = "gradeLvlId") int gradeLvlId) {
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("GRADE LEVEL SELECTED: " + gradeLvlId);
+        List<RefSection> returnList = mainService.getSectionList(gradeLvlId);
+
+        response.put("section", returnList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }
