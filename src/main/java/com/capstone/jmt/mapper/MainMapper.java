@@ -32,6 +32,8 @@ public interface MainMapper {
 
     List<RefGradeLevel> getGradeLevelList();
 
+    List<RefSection> getSectionList(@Param("gradeLvlId") int gradeLvlId);
+
     void addTeacher(@Param("guidance") Guidance guidance);
 
     Guidance getGuidance(@Param("id") String id);

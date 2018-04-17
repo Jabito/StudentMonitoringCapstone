@@ -29,7 +29,7 @@
         <!-- /.row -->
 
         <div class="row">
-            <input type="checkbox" data-toggle="toggle" data-on="NOTIFICATION" data-off="SMS" style="width: 127px;height: 34px;float: right;"/>
+            <input type="checkbox" data-toggle="toggle" data-on="SMS" data-off="NOTIFICATION"/>
             <div class="col-lg-12">
                 <h3>Announcement</h3>
                 <textarea id="message" style="margin: 0px; width: 446px; height: 85px;" maxlength="140"></textarea>
@@ -53,11 +53,11 @@
 //    var sentTo = pref + to;
 
     function sendSms(){
-        var announcement = document.getElementById('message').value;
-        var to = '63'+document.getElementById('to').value;
-//        var pref = document.getElementById('prefix').value;
-
-        var msgId = guid();
+//        var announcement = document.getElementById('message').value;
+//        var to = '63'+document.getElementById('to').value;
+////        var pref = document.getElementById('prefix').value;
+//
+//        var msgId = guid();
 //        var xhr = new XMLHttpRequest();
 //        var url = "https://post.chikka.com/smsapi/request";
 //        xhr.open("POST", url, true);
@@ -65,32 +65,42 @@
 //
 //        var data = JSON.stringify({"message_type": "SEND", "mobile_number": "639954835023", "shortcode": "292903147", "message_id": "ccc81279fcc048d1a6fcc52ed4c14255", "message": "HI", "client_id": "230d0648f6672956b8fc2bed85a480ebb32b296a412e2672714096c37bebebcd", "secret_key": "da51dc811a15e7f7b10784f1e7266b350efe07d13792c0735a4b406e1332c490"});
 //        xhr.send(data);
-        $.post("https://post.chikka.com/smsapi/request", {
-            message_type: "SEND",
-            mobile_number: to,
-            shortcode: "292903147",
-            message_id: msgId,
-            message: announcement,
-            client_id: "230d0648f6672956b8fc2bed85a480ebb32b296a412e2672714096c37bebebcd",
-            secret_key: "da51dc811a15e7f7b10784f1e7266b350efe07d13792c0735a4b406e1332c490"
+//        $.post("https://post.chikka.com/smsapi/request", {
+//            message_type: "SEND",
+//            mobile_number: to,
+//            shortcode: "292903147",
+//            message_id: msgId,
+//            message: announcement,
+//            client_id: "230d0648f6672956b8fc2bed85a480ebb32b296a412e2672714096c37bebebcd",
+//            secret_key: "da51dc811a15e7f7b10784f1e7266b350efe07d13792c0735a4b406e1332c490"
+//        }, function (data, status) {
+//            alert("Data: " + data + "\nStatus: " + status);
+//        });
+
+        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
+            apiusername: "APIXV4PYFBUJJ",
+            apipassword: "APIXV4PYFBUJJBLB47",
+            mobileno: "09176996988",
+            senderid: "292903149",
+            languagetype: "1",
+            message: "HI ALFRED VARGAS IV, SAW YOUR PROFILE AND THIS IS TO INFORM YOU THAT YOU ONLY HAVE 1 HOUR LEFT TO TELL EVERYBODY THAT IT IS THE END OF THE WORLD - ANONYMOUS"
         }, function (data, status) {
             alert("Data: " + data + "\nStatus: " + status);
         });
-
-        function guid() {
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-            }
-            var ret = '';
-            var x=0;
-            while(x != 8){
-                ret += s4();
-                x++;
-            }
-            return ret;
-        }
+//        function guid() {
+//            function s4() {
+//                return Math.floor((1 + Math.random()) * 0x10000)
+//                    .toString(16)
+//                    .substring(1);
+//            }
+//            var ret = '';
+//            var x=0;
+//            while(x != 8){
+//                ret += s4();
+//                x++;
+//            }
+//            return ret;
+//        }
     }
 </script>
 

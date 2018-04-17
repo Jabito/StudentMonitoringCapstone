@@ -346,8 +346,18 @@
         <result column="grade_level" property="gradeLevel" jdbcType="VARCHAR" />
     </resultMap>
 
+    <resultMap id="SectionMap" type="com.capstone.jmt.data.RefSection">
+        <result column="id" property="id" jdbcType="INTEGER" />
+        <result column="grade_level" property="gradeLevel" jdbcType="VARCHAR" />
+        <result column="ref_grade_level_id" property="refGradeLvlId" jdbcType="INTEGER" />
+    </resultMap>
+
     <select id="getGradeLevelList" resultMap="GradeLevelMap" resultType="java.util.List">
         SELECT * FROM ref_grade_level
+    </select>
+
+    <select id="getSectionList" resultMap="SectionMap" resultType="java.util.List">
+        SELECT * FROM ref_section WHERE ref_grade_level_id = #{gradeLvlId}
     </select>
 
     <insert id="addTeacher" flushCache="true">

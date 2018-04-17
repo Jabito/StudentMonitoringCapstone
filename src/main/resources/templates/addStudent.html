@@ -5,7 +5,7 @@
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
     <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
 </head>
-<body>
+<body id="addStudent">
 <div class="container-fluid">
     <div class="row">
         <div class="">
@@ -73,6 +73,20 @@
                                         <input class="form-control" placeholder="Contact Number" th:field="*{contactNo}"/>
                                     </div>
                                     <div class="form-group">
+                                        <label style="color: black">Grade Level</label>
+                                        <select id="selected" name="gradeLvlId">
+                                            <option  th:each="gradeLevel  : ${gradeLevel}" th:text="${gradeLevel.gradeLevel}" th:value="${gradeLevel.id}" th:field="*{gradeLvlId}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Section</label>
+                                        <select id="section">
+                                            <option  th:each="section  : ${section}" th:text="${section.section}" th:value="${section.id}" th:field="*{section}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
                                         <label>Tap Card</label>
                                         <input class="form-control" placeholder="Please Tap Card Once" th:field="*{rfid}"/>
                                     </div>
@@ -104,20 +118,40 @@
     <!-- /.row -->
     </div>
 </div>
-<script>
+<script th:inline="javascript">
     //Initialize firebase to web APP
     //TODO: Replace with your project Customized code snippet
 
-    var config ={
-        apiKey: "",
-        authDomain: "",
-        databaseUrl: "",
-        projectId: "",
-        storageBucket: "",
-        messagingSenderId: ""
-    };
 
-    firebase.initializeApp(config);
+
+    $("body").on("change", "#selected", function() {
+        var gradeLvlId = $(this).val();
+        alert("SELECTED GRADE LEVEL" + gradeLvlId);
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            url: '/selectGradeLevel',
+            data: {gradeLvlId: gradeLvlId},
+            success: function(response){
+                console.log(response);
+                $('#section').empty();
+                response.section.forEach(function(item){
+                   $('#section').append(new Option(item.section, item.id));
+                });
+            }
+        });
+    });
+
+//    var config ={
+//        apiKey: "",
+//        authDomain: "",
+//        databaseUrl: "",
+//        projectId: "",
+//        storageBucket: "",
+//        messagingSenderId: ""
+//    };
+//
+//    firebase.initializeApp(config);
 
 </script>
 </body>

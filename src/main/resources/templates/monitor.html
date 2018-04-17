@@ -114,42 +114,47 @@
     </div>
 </div>
 <script th:inline="javascript">
-    /*<![CDATA[*/
 
-    $('#img').hide();
-    $('#timeIn').hide();
-    $('#timeIn1').hide();
-    $('#submit').hide();
-    $('#rfidTag').keyup(function () {
-        if (this.value.length == 10)
+    $(document).ready(function() {
+        /*<![CDATA[*/
+
+        //$('#img').hide();
+        $('#timeIn').hide();
+        $('#timeIn1').hide();
+        $('#submit').hide();
+        $('#rfidTag').keyup(function () {
+            console.log("LOG VALUE" + this.value);
+            if (this.value.length == 10)
+                console.log("LOG VALUE" + this.value);
             $('#submit').click();
+        });
+        showDateTime();
+        function showDateTime() {
+            $('#timeIn').show();
+            $('#timeIn1').show();
+
+            var d = new Date(),
+                minutes = d.getMinutes().toString().length == 1 ? '0' + d.getMinutes() : d.getMinutes(),
+                seconds = d.getSeconds().toString(),
+                hours = d.getHours().toString().length == 1 ? '0' + d.getHours() : d.getHours(),
+                ampm = d.getHours() >= 12 ? 'pm' : 'am',
+                months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            minutes = checkTime(minutes);
+            seconds = checkTime(seconds);
+            document.getElementById('timeIn').innerHTML = days[d.getDay()] + ' ' + months[d.getMonth()] + ' ' + d.getDate() + ' ' + d.getFullYear() + ' ' + hours + ':' + minutes + ':' + seconds + ampm;
+            var t = setTimeout(showDateTime, 500);
+        }
+
+        function checkTime(i) {
+            if (i > 10) {
+                i = "0" + i
+            }  // add zero in front of numbers < 10
+            return i;
+        }
+
+        /*]]>*/
     });
-    showDateTime();
-    function showDateTime() {
-        $('#timeIn').show();
-        $('#timeIn1').show();
-
-        var d = new Date(),
-            minutes = d.getMinutes().toString().length == 1 ? '0' + d.getMinutes() : d.getMinutes(),
-            seconds = d.getSeconds().toString(),
-            hours = d.getHours().toString().length == 1 ? '0' + d.getHours() : d.getHours(),
-            ampm = d.getHours() >= 12 ? 'pm' : 'am',
-            months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        minutes = checkTime(minutes);
-        seconds = checkTime(seconds);
-        document.getElementById('timeIn').innerHTML = days[d.getDay()] + ' ' + months[d.getMonth()] + ' ' + d.getDate() + ' ' + d.getFullYear() + ' ' + hours + ':' + minutes + ':' + seconds + ampm;
-        var t = setTimeout(showDateTime, 500);
-    }
-    function checkTime(i) {
-        if (i > 10) {
-            i = "0" + i
-        }  // add zero in front of numbers < 10
-        return i;
-    }
-
-    /*]]>*/
-
 </script>
 </body>
 </html>
