@@ -3,6 +3,7 @@ package com.capstone.jmt.controller;
 import com.capstone.jmt.data.AddUserJson;
 import com.capstone.jmt.data.PictureObject;
 import com.capstone.jmt.data.RefSection;
+import com.capstone.jmt.data.TapLog;
 import com.capstone.jmt.entity.Guidance;
 import com.capstone.jmt.entity.Parent;
 import com.capstone.jmt.entity.Student;
@@ -252,7 +253,7 @@ public class MainWebController {
     @RequestMapping(value = "/monitorStudent", method = RequestMethod.POST)
     public String monitorStudent(@ModelAttribute("student") Student student, BindingResult bindingResult, Model model) {
         System.out.println("STUDENT RFID: " + student.getRfid());
-//            mainService.processRfidTap(student.getRfid());
+//        mainService.processRfidTap(student.getRfid());
 //        Student student1 = mainService.getStudentByRfid(student.getRfid());
 //        System.out.println("STUDENT RETRIEVED: " + student1.getFirstName());
 //        model.addAttribute("student", student1);
@@ -277,21 +278,25 @@ public class MainWebController {
 
     @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
     public String showSales(Model model) {
-//        if (shopUser.getId() == null)
-//            return "redirect:/login";
 
-//        List<OrderInfo> orders = orderService.getOrdersByShopId(shopUser.getStaffOf());
-//        model.addAttribute("orders", orders);
-//        model.addAttribute("username", shopUser.getUsername());
-//        Double sales = 0.0;
-//        for(int x=0; x<orders.size(); x++){
-//            if(null!=orders.get(x).getTotalCost())
-//                    sales += orders.get(x).getTotalCost();
-//        }
-//
-//        model.addAttribute("totalSales", "P " + sales.toString());
-//
+
+
         return "attendanceLogs";
+    }
+
+    @RequestMapping(value = "/getAttendanceLogsDetails", method = RequestMethod.GET)
+    public ResponseEntity<?> getAttendanceLogsDetails(@RequestParam(value = "studId") String studId) {
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("Student Id selected: " + studId);
+//        List<TapLog> returnList = ;
+
+//        if(returnList.isEmpty()) {
+//            response.put("responseDesc", HttpStatus.NOT_FOUND);
+//            response.put("responseCode", 404);
+//        }
+//        response.put("tapLogList", returnList);
+        return new ResponseEntity<>((List<TapLog>) mainService.getTapLogOfStudent(studId).get("tapListDetails"), HttpStatus.OK);
+
     }
 
     @RequestMapping(value = "/savePhoto", method = RequestMethod.POST)

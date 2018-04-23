@@ -3,8 +3,8 @@
 <mapper namespace="com.capstone.jmt.mapper.MainMapper">
 
     <resultMap id="LastIdMap" type="com.capstone.jmt.entity.LastId">
-        <result column="id" property="id" jdbcType="INTEGER" />
-        <result column="last_id" property="lastId" jdbcType="INTEGER" />
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="last_id" property="lastId" jdbcType="INTEGER"/>
     </resultMap>
 
     <resultMap id="EmergencyContactMap" type="com.capstone.jmt.entity.EmergencyContact">
@@ -20,15 +20,15 @@
     </resultMap>
 
     <resultMap id="GuidanceMap" type="com.capstone.jmt.entity.Guidance">
-        <result column="id" property="id" jdbcType="VARCHAR" />
-        <result column="teacher_fname" property="firstName" jdbcType="VARCHAR" />
-        <result column="teacher_lname" property="lastName" jdbcType="VARCHAR" />
-        <result column="position" property="position" jdbcType="VARCHAR" />
-        <result column="contact_no" property="contactNo" jdbcType="VARCHAR" />
-        <result column="created_on" property="createdOn" jdbcType="TIMESTAMP" />
-        <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP" />
-        <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
-        <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="teacher_fname" property="firstName" jdbcType="VARCHAR"/>
+        <result column="teacher_lname" property="lastName" jdbcType="VARCHAR"/>
+        <result column="position" property="position" jdbcType="VARCHAR"/>
+        <result column="contact_no" property="contactNo" jdbcType="VARCHAR"/>
+        <result column="created_on" property="createdOn" jdbcType="TIMESTAMP"/>
+        <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
+        <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
     </resultMap>
 
     <resultMap id="ParentMap" type="com.capstone.jmt.entity.Parent">
@@ -121,7 +121,8 @@
         WHERE id = #{id}
     </select>
 
-    <select id="getEmergencyContact" resultMap="EmergencyContactMap" resultType="com.capstone.jmt.entity.EmergencyContact">
+    <select id="getEmergencyContact" resultMap="EmergencyContactMap"
+            resultType="com.capstone.jmt.entity.EmergencyContact">
         SELECT * FROM data_emergency_contact
         WHERE id = #{id}
     </select>
@@ -228,9 +229,11 @@
     </insert>
 
     <resultMap id="TapLogMap" type="com.capstone.jmt.data.TapLog">
-        <result column="rfid" property="rfid" jdbcType="VARCHAR" />
-        <result column="log_type" property="logType" jdbcType="VARCHAR" />
-        <result column="log_datetime" property="logDateTime" jdbcType="TIMESTAMP" />
+        <result column="rfid" property="rfid" jdbcType="VARCHAR"/>
+        <result column="log_type" property="logType" jdbcType="VARCHAR"/>
+        <result column="log_datetime" property="logDateTime" jdbcType="TIMESTAMP"/>
+        <result column="first_name" property="firstName" jdbcType="VARCHAR"/>
+        <result column="last_name" property="lastName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="getFilteredParentsBySection" resultMap="ParentMap" resultType="java.util.List">
@@ -252,11 +255,11 @@
     </select>
 
     <resultMap id="MessageMap" type="com.capstone.jmt.data.MessageJson">
-        <result column="posted_by" property="postedBy" jdbcType="VARCHAR" />
-        <result column="message_type" property="messageTypeId" jdbcType="VARCHAR" />
-        <result column="message_target" property="messageTarget" jdbcType="VARCHAR" />
-        <result column="date_posted" property="datePosted" jdbcType="TIMESTAMP" />
-        <result column="message_content" property="message" jdbcType="VARCHAR" />
+        <result column="posted_by" property="postedBy" jdbcType="VARCHAR"/>
+        <result column="message_type" property="messageTypeId" jdbcType="VARCHAR"/>
+        <result column="message_target" property="messageTarget" jdbcType="VARCHAR"/>
+        <result column="date_posted" property="datePosted" jdbcType="TIMESTAMP"/>
+        <result column="message_content" property="message" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="getAnnouncementsByParentId" resultMap="MessageMap" resultType="java.util.List">
@@ -334,22 +337,25 @@
 
 
     <select id="getTapListDetailsByStudentId" resultMap="TapLogMap" resultType="java.util.List">
-        SELECT * FROM log_taps
-        WHERE rfid =
-        (SELECT rfid FROM data_students
-        WHERE id = #{studentId})
-        ORDER BY log_datetime DESC
+        SELECT A.log_type, A.log_datetime, B.first_name, B.last_name FROM LOG_TAPS A JOIN data_students B
+        ON A.rfid = B.rfid
+        <if test="studentId != ''">
+            WHERE B.id = #{studentId}
+        </if>
+        order by A.log_datetime desc
+
+
     </select>
 
     <resultMap id="GradeLevelMap" type="com.capstone.jmt.data.RefGradeLevel">
-        <result column="id" property="id" jdbcType="INTEGER" />
-        <result column="grade_level" property="gradeLevel" jdbcType="VARCHAR" />
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="grade_level" property="gradeLevel" jdbcType="VARCHAR"/>
     </resultMap>
 
     <resultMap id="SectionMap" type="com.capstone.jmt.data.RefSection">
-        <result column="id" property="id" jdbcType="INTEGER" />
-        <result column="grade_level" property="gradeLevel" jdbcType="VARCHAR" />
-        <result column="ref_grade_level_id" property="refGradeLvlId" jdbcType="INTEGER" />
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="grade_level" property="gradeLevel" jdbcType="VARCHAR"/>
+        <result column="ref_grade_level_id" property="refGradeLvlId" jdbcType="INTEGER"/>
     </resultMap>
 
     <select id="getGradeLevelList" resultMap="GradeLevelMap" resultType="java.util.List">
@@ -426,11 +432,11 @@
 
     <resultMap id="PictureObjectMap" type="com.capstone.jmt.data.PictureObject">
         <result column="userid" property="studentId" jdbcType="VARCHAR"/>
-        <result column="file_id" property="fileId"  jdbcType="VARCHAR"/>
-        <result column="content_type" property="contentType"  jdbcType="VARCHAR"/>
+        <result column="file_id" property="fileId" jdbcType="VARCHAR"/>
+        <result column="content_type" property="contentType" jdbcType="VARCHAR"/>
         <result column="original_file_name" property="originalFileName" jdbcType="VARCHAR"/>
-        <result column="file_suffix"  property="fileSuffix"  jdbcType="VARCHAR"/>
-        <result column="file_name_no_suffix" property="fileNameNoSuffix"  jdbcType="VARCHAR"/>
+        <result column="file_suffix" property="fileSuffix" jdbcType="VARCHAR"/>
+        <result column="file_name_no_suffix" property="fileNameNoSuffix" jdbcType="VARCHAR"/>
         <result column="content" property="content" jdbcType="BLOB" javaType="byte[]"/>
     </resultMap>
 

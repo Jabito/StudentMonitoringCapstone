@@ -1,37 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head lang="en">
-    <title>AquaJMT | Monitoring </title>
-
+<head>
+    <title>St. Mark's Institute</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
-<body onload="showDateTime()" style="background-color: #122b40">
-
-<div class="container-fluid" style="background-color: #122b40;">
-    <div class="row" style="  background-color: #122b40;">
-        <div class="">
-            <!--/*/ <th:block th:include="fragments/headerMonitor :: header"></th:block> /*/-->
-        </div>
-    </div>
-</div>
+<body style="background-color: #122b40">
 <div class="container-fluid" style="background-color:#122b40;">
-    <div id="page-wrapper">
+    <div class="page-wrapper">
         <div class="row">
+
             <div class="col-lg-12">
                 <h1 class="page-header" style="color: white">Monitoring</h1>
             </div>
             <div class="row">
-                <form class="col-md-6" th:object="${student}" th:action="@{/monitorStudent}" th:method="POST" style="color:#122b40 ">
+                <form class="col-md-6" th:object="${student}" th:action="@{/monitorStudent}" th:method="POST">
                     Please tap the rfid: <input id="rfidTag" th:field="*{rfid}" class="form-control"
                                                 autofocus="true"
-                                                style="border-color: transparent; color: transparent"/>
+                                                style="border-color: transparent; color: transparent"   />
 
                     <input type="submit" id="submit" hidden="hidden" style="color:#122b40; opacity: 0;"/>
                 </form>
             </div>
         </div>
+
         <div class="row">
-            <div class="col-lg-6" >
-                <table style="float: left; margin-left: 40px;padding: 20px; margin-left: 200px" >
+            <div class="col-lg-6">
+                <table style="float: left; margin-left: 40px;padding: 20px; margin-left: 200px">
                     <tbody>
                     <tr>
                         <td colspan="2">
@@ -40,14 +34,14 @@
                     </tr>
                     <tr>
                         <td>
-                           <h4 style="color: white">First Name :</h4>
+                            <h4 style="color: white">First Name :</h4>
                         </td>
                         <td style="color: white" th:text="${stud.firstName}">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                           <h4 style="color: white">Last Name :</h4>
+                            <h4 style="color: white">Last Name :</h4>
                         </td>
                         <td style="color: white" th:text="${stud.lastName}">
                         </td>
@@ -61,7 +55,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <label><h4 style="color: white">Time IN: </h4> </label>
+                            <label><h4 style="color: white">Time IN: </h4></label>
                         </td>
                         <td>
                             <label style="color: white" id="timeIn"></label>
@@ -70,8 +64,8 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-lg-6" >
-                <table style="float: left; margin-left: 150px; padding: 20px;" >
+            <div class="col-lg-6">
+                <table style="float: left; margin-left: 150px; padding: 20px;">
                     <tbody>
                     <tr>
                         <td colspan="2">
@@ -94,14 +88,14 @@
                     </tr>
                     <tr>
                         <td>
-                            <h4 style="color: white" >Middle Name :</h4>
+                            <h4 style="color: white">Middle Name :</h4>
                         </td>
                         <td style="color: white" th:text="${stud1.middleName}">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label><h4 style="color: white">Time OUT:</h4> </label>
+                            <label><h4 style="color: white">Time OUT:</h4></label>
                         </td>
                         <td>
                             <label style="color: white" id="timeIn1"></label>
@@ -114,47 +108,42 @@
     </div>
 </div>
 <script th:inline="javascript">
+    /*<![CDATA[*/
 
-    $(document).ready(function() {
-        /*<![CDATA[*/
-
-        //$('#img').hide();
-        $('#timeIn').hide();
-        $('#timeIn1').hide();
-        $('#submit').hide();
-        $('#rfidTag').keyup(function () {
+    $('#rfidTag').on('keyup',function () {
+        console.log("LOG VALUE" + this.value);
+        if (this.value.length == 10)
             console.log("LOG VALUE" + this.value);
-            if (this.value.length == 10)
-                console.log("LOG VALUE" + this.value);
-            $('#submit').click();
-        });
-        showDateTime();
-        function showDateTime() {
-            $('#timeIn').show();
-            $('#timeIn1').show();
-
-            var d = new Date(),
-                minutes = d.getMinutes().toString().length == 1 ? '0' + d.getMinutes() : d.getMinutes(),
-                seconds = d.getSeconds().toString(),
-                hours = d.getHours().toString().length == 1 ? '0' + d.getHours() : d.getHours(),
-                ampm = d.getHours() >= 12 ? 'pm' : 'am',
-                months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            minutes = checkTime(minutes);
-            seconds = checkTime(seconds);
-            document.getElementById('timeIn').innerHTML = days[d.getDay()] + ' ' + months[d.getMonth()] + ' ' + d.getDate() + ' ' + d.getFullYear() + ' ' + hours + ':' + minutes + ':' + seconds + ampm;
-            var t = setTimeout(showDateTime, 500);
-        }
-
-        function checkTime(i) {
-            if (i > 10) {
-                i = "0" + i
-            }  // add zero in front of numbers < 10
-            return i;
-        }
-
-        /*]]>*/
+        $('#submit').submit();
     });
+
+    showDateTime();
+    function showDateTime() {
+        $('#timeIn').show();
+        $('#timeIn1').show();
+
+        var d = new Date(),
+            minutes = d.getMinutes().toString().length == 1 ? '0' + d.getMinutes() : d.getMinutes(),
+            seconds = d.getSeconds().toString(),
+            hours = d.getHours().toString().length == 1 ? '0' + d.getHours() : d.getHours(),
+            ampm = d.getHours() >= 12 ? 'pm' : 'am',
+            months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        minutes = checkTime(minutes);
+        seconds = checkTime(seconds);
+        document.getElementById('timeIn').innerHTML = days[d.getDay()] + ' ' + months[d.getMonth()] + ' ' + d.getDate() + ' ' + d.getFullYear() + ' ' + hours + ':' + minutes + ':' + seconds + ampm;
+        var t = setTimeout(showDateTime, 500);
+    }
+
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i
+        }  // add zero in front of numbers < 10
+        return i
+    }
+
+    /*]]>*/
 </script>
+
 </body>
 </html>

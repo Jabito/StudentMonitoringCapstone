@@ -148,6 +148,7 @@ public class MainService {
             response.put("responseCode", 200);
             response.put("responseDesc", "Last tap entry retrieved.");
         } else {
+            response.put("tapListDetails", new ArrayList<>());
             response.put("responseCode", 404);
             response.put("responseDesc", "No logs yet.");
         }
