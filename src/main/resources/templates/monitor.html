@@ -98,7 +98,7 @@
                             <label><h4 style="color: white">Time OUT:</h4></label>
                         </td>
                         <td>
-                            <label style="color: white" id="timeIn1"></label>
+                            <label style="color: white" th:text="${stud1.logDateTime}"></label>
                         </td>
                     </tr>
                     </tbody>
@@ -111,10 +111,8 @@
     /*<![CDATA[*/
 
     $('#rfidTag').on('keyup',function () {
-        console.log("LOG VALUE" + this.value);
-        if (this.value.length == 10)
-            console.log("LOG VALUE" + this.value);
-        $('#submit').submit();
+        if (this.value.length >= 10)
+            $('#submit').trigger('click');
     });
 
     showDateTime();

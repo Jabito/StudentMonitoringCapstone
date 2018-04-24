@@ -68,6 +68,7 @@
         <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
         <result column="created_on" property="createdOn" jdbcType="TIMESTAMP"/>
         <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
+        <result column="log_datetime" property="logDateTime" jdbcType="VARCHAR" />
     </resultMap>
 
     <resultMap id="UserMap" type="com.capstone.jmt.entity.User">
@@ -319,20 +320,16 @@
     </select>
     <select id="getStudIn" resultMap="StudentMap" resultType="com.capstone.jmt.entity.Student">
 
-    SELECT * FROM data_students WHERE rfid = (
-    SELECT rfid FROM log_taps WHERE log_type = 'IN'
-    ORDER BY log_datetime DESC
-    LIMIT 1
-    )
+        SELECT A.*, B.log_datetime FROM data_students A JOIN log_taps B ON a.rfid = b.rfid
+        WHERE B.log_type = 'IN'
+        ORDER BY B.log_datetime DESC LIMIT 1
     </select>
 
     <select id="getStudOut" resultMap="StudentMap" resultType="com.capstone.jmt.entity.Student">
 
-        SELECT * FROM data_students WHERE rfid = (
-        SELECT rfid FROM log_taps WHERE log_type = 'OUT'
-        ORDER BY log_datetime DESC
-        LIMIT 1
-        )
+        SELECT A.*, B.log_datetime FROM data_students A JOIN log_taps B ON a.rfid = b.rfid
+        WHERE B.log_type = 'OUT'
+        ORDER BY B.log_datetime DESC LIMIT 1
     </select>
 
 

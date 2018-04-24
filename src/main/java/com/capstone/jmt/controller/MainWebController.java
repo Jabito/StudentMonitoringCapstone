@@ -132,7 +132,9 @@ public class MainWebController {
 
 
     @RequestMapping(value = "/homepage", method = RequestMethod.GET)
-    public String showDashboard(@ModelAttribute("appUser") User user, Model model) {
+    public String showDashboard(@RequestParam(value = "added", required = false, defaultValue = "") String added, @ModelAttribute("appUser") User user, Model model) {
+        model.addAttribute("added", added);
+
         System.out.println("HOMEPAGE: " + user.getUsername());
         if (null != user.getUsername()) {
             model.addAttribute("User", user);
@@ -172,7 +174,7 @@ public class MainWebController {
             mainService.addStudent(student);
             System.out.println("SUCCESS!!");
 
-            return "redirect:/login";
+            return "redirect:/homepage?added=Student";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -195,7 +197,7 @@ public class MainWebController {
         parent.setUpdatedBy(appUser.getUsername());
         mainService.addParent(parent);
 
-        return "redirect:/login";
+        return "redirect:/homepage?added=Parent";
     }
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
@@ -214,7 +216,7 @@ public class MainWebController {
         System.out.println("USER password: " + newUser.getPassword());
 
         mainService.addUser(newUser);
-        return "redirect:/login";
+        return "redirect:/homepage?added=User";
     }
 
     @RequestMapping(value = "/getGuidance", method = RequestMethod.GET)
@@ -231,7 +233,7 @@ public class MainWebController {
         System.out.println("GUIDANCE LAST NAME: " + guidance.getLastName());
 
         mainService.addGuidance(guidance);
-        return "redirect:/login";
+        return "redirect:/homepage?added=Guidance";
 
     }
 
@@ -240,13 +242,11 @@ public class MainWebController {
         mainService.tapStudent(rfid);
         Student studIn = mainService.getStudentByRfidIn();
         Student studOut = mainService.getStudentByRfidOut();
-//        TapLog tap = new TapLog();
-//        if(null != rfid)
-//             tap = (TapLog) mainService.getLastTapEntry(student.getId()).get("tapDetails");
+
         model.addAttribute("student", new Student());
         model.addAttribute("stud", null != studIn ? studIn : new Student());
         model.addAttribute("stud1", null != studOut ? studOut : new Student());
-//        model.addAttribute("tapType", tap != null? tap.getLogType(): "");
+
         return "monitor";
     }
 
@@ -278,7 +278,6 @@ public class MainWebController {
 
     @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
     public String showSales(Model model) {
-
 
 
         return "attendanceLogs";

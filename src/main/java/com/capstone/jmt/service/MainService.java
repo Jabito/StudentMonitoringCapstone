@@ -280,7 +280,6 @@ public class MainService {
     }
 
     public Student getStudentByRfidOut(){
-
         return mainMapper.getStudOut();
     }
 
