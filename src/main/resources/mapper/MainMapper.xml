@@ -205,9 +205,9 @@
         grade_level_id = #{student.gradeLvlId, jdbcType=INTEGER},
         school_year = #{student.schoolYear, jdbcType=INTEGER},
         section = #{student.section, jdbcType=VARCHAR},
-        is_old_student = #{student.isOldStudent, jdbcType=TINYINT},
-        is_transferee = #{student.isTransferee, jdbcType=TINYINT},
-        is_enrolled = #{student.isEnrolled, jdbcType=TINYINT},
+        is_old_student = #{student.isOldStudent, jdbcType=BOOLEAN},
+        is_transferee = #{student.isTransferee, jdbcType=BOOLEAN},
+        is_enrolled = #{student.isEnrolled, jdbcType=BOOLEAN},
         updated_by = #{student.updatedBy, jdbcType=VARCHAR},
         rfid = #{student.rfid, jdbcType=VARCHAR}
         WHERE id = #{student.id, jdbcType=VARCHAR}
@@ -253,6 +253,11 @@
         SELECT TOP 1 * FROM log_taps
         WHERE rfid = #{rfid}
         ORDER BY log_datetime DESC
+    </select>
+
+    <select id="getStudentById" resultMap="StudentMap" resultType="com.capstone.jmt.data.TapLog">
+        SELECT * FROM data_students
+        WHERE id = #{id}
     </select>
 
     <resultMap id="MessageMap" type="com.capstone.jmt.data.MessageJson">
@@ -340,8 +345,10 @@
             WHERE B.id = #{studentId}
         </if>
         order by A.log_datetime desc
+    </select>
 
-
+    <select id="getStudentList" resultMap="StudentMap" resultType="java.util.List">
+        SELECT * FROM data_students
     </select>
 
     <resultMap id="GradeLevelMap" type="com.capstone.jmt.data.RefGradeLevel">

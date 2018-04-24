@@ -182,6 +182,26 @@ public class MainWebController {
         return "addStudent";
     }
 
+    @RequestMapping(value = "/updateStudent", method = RequestMethod.POST)
+    public String udpateStudent(@ModelAttribute("appUser") User appUser, @Valid Student student, BindingResult bindingResult, Model model) {
+
+
+        System.out.println("student ID: " + student.getId());
+        System.out.println("student first name: " + student.getFirstName());
+        System.out.println("student last name: " + student.getLastName());
+        try {
+            mainService.updateStudentInfo(student);
+            System.out.println("SUCCESS!!");
+            return "getStudents";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "students";
+
+    }
+
     @RequestMapping(value = "/getParent", method = RequestMethod.GET)
     public String getParentOfStudent(@Valid Parent parent, Model model) {
 
@@ -298,6 +318,18 @@ public class MainWebController {
 
     }
 
+    @RequestMapping(value = "/getStudents", method = RequestMethod.GET)
+    public String getStudentList(Model model) {
+
+        List<Student> studentList = mainService.getStudentList();
+        if(null == studentList) {
+            return "redirect:/login";
+        }else{
+            model.addAttribute("studList", studentList);
+            return "students";
+        }
+    }
+
     @RequestMapping(value = "/savePhoto", method = RequestMethod.POST)
     public String showSavedPhoto(@RequestParam(value = "myFile", required = false) MultipartFile multipartFile) {
 
@@ -359,6 +391,18 @@ public class MainWebController {
 
         response.put("section", returnList);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/showStudentInfo", method = RequestMethod.GET)
+    public String showStudentInfo(Model model, @RequestParam(value = "id") String id) {
+        Student student = mainService.getStudentById(id);
+        if(null == student) {
+            System.out.println("NULL PURCHASE REQUEST");
+            return "studentInfo";
+        }else{
+            model.addAttribute("student", student);
+            return "studentInfo";
+        }
     }
 
 }

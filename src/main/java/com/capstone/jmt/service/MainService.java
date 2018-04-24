@@ -159,7 +159,9 @@ public class MainService {
         HashMap<String, Object> response = new HashMap<>();
         Student existingStudent = mainMapper.getStudent(student.getId());
         if (null != existingStudent) {
+            System.out.println("UPDATED");
             mainMapper.updateStudent(student);
+            System.out.println("UPDATED SUCCESSFULLY");
         } else {
             response.put("responseCode", 404);
             response.put("responseDesc", "Failed to update student.");
@@ -391,5 +393,13 @@ public class MainService {
 
     public PictureObject retrieveImage(String fileId) {
         return mainMapper.retrieveImage(fileId);
+    }
+
+    public List<Student> getStudentList() {
+        return mainMapper.getStudentList();
+    }
+
+    public Student getStudentById(String id) {
+        return mainMapper.getStudentById(id);
     }
 }
