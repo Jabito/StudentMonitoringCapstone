@@ -78,4 +78,8 @@ public interface MainMapper {
     void saveImage(@Param("imageHolder") PictureObject imageHolder);
 
     PictureObject retrieveImage(@Param("userId") String fileId);
+
+    List<Student> getStudentList();
+
+    Student getStudentById(@Param("id") String id);
 }
