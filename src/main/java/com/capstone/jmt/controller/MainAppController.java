@@ -9,7 +9,9 @@ import com.capstone.jmt.entity.Parent;
 import com.capstone.jmt.entity.Student;
 import com.capstone.jmt.entity.User;
 import com.capstone.jmt.service.MainService;
+import com.capstone.jmt.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,6 +40,9 @@ public class MainAppController {
     @Autowired
     private MainService mainService;
 
+    @Autowired
+    private StorageService storageService;
+
     @RequestMapping(value = "toggleSMS", method = RequestMethod.POST)
     public ResponseEntity<?> toggleSMS(@RequestParam("parentId") String parentId, @RequestParam("mode") boolean mode){
         return new ResponseEntity<>(mainService.toggleSMS(parentId, mode), HttpStatus.OK);
@@ -60,20 +65,11 @@ public class MainAppController {
     @RequestMapping(value = "downloadPicture", method = RequestMethod.GET)
     public ResponseEntity<?> downloadPicture(@RequestParam("userId") String fileId) {
 
-
-        PictureObject image = mainService.retrieveImage(fileId);
-
-
-
-
-
-        HttpHeaders header = new HttpHeaders();
-        header.setContentLength(image.getContent().length);
-        header.setContentType(MediaType.parseMediaType(image.getContentType()));
-        header.set("Content-Disposition",
-                "attachment; filename=" + image.getOriginalFileName());
-
-        return new ResponseEntity<>(image.getContent(), header, HttpStatus.OK);
+        PictureObject po = mainService.retrieveImage(fileId);
+        Resource file = storageService.loadFile(po.getOriginalFileName());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
     }
 
     @RequestMapping(value = "getUser", method = RequestMethod.GET)

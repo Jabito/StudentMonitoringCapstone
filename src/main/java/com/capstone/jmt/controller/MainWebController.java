@@ -10,11 +10,14 @@ import com.capstone.jmt.entity.Student;
 import com.capstone.jmt.entity.User;
 import com.capstone.jmt.service.AndroidPushNotificationsService;
 import com.capstone.jmt.service.MainService;
+import com.capstone.jmt.service.StorageService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,16 +25,20 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.xml.ws.Response;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 /**
  * Created by Jabito on 08/08/2017.
@@ -41,7 +48,48 @@ import java.util.concurrent.ExecutionException;
 @SessionAttributes("appUser")
 public class MainWebController {
 
-    private final String TOPIC = "JavaSampleApproach";
+    /**
+     * For File Storage
+     * */
+
+    @Autowired
+    StorageService storageService;
+
+
+    @PostMapping("/upImage")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam(value = "userId", required = false) String userId,
+                                   Model model) {
+        try {
+            storageService.store(file);
+            model.addAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
+            PictureObject po = new PictureObject();
+            po.setStudentId(null == userId? "SID15":userId);
+            po.setOriginalFileName(file.getOriginalFilename());
+            mainService.saveImage(po);
+        } catch (Exception e) {
+            model.addAttribute("message", "FAIL to upload " + file.getOriginalFilename() + "!");
+        }
+
+        return "addStudent";
+    }
+
+    @RequestMapping("/getPictureFilename")
+    public ResponseEntity<?> getPictureObject(@RequestParam("userId") String userId){
+        return new ResponseEntity<>(mainService.retrieveImage(userId).getOriginalFileName(), HttpStatus.OK);
+    }
+
+    @GetMapping("/files/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+        Resource file = storageService.loadFile(filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
+    }
+
+    /** END FILE STORAGE */
+
+    private final String TOPIC = "StudentMonitoring";
     private final String DEVICE = "";
 
     @Autowired
@@ -60,24 +108,25 @@ public class MainWebController {
         return new Student();
     }
 
+
     @RequestMapping(value = "/send", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> send() throws JSONException {
 
         JSONObject body = new JSONObject();
-        body.put("to", DEVICE);
+        body.put("to", "/topics/" + TOPIC);
         body.put("priority", "high");
 
         JSONObject notification = new JSONObject();
         notification.put("title", "JSA Notification");
         notification.put("body", "Happy Message!");
-        notification.put("sound", "default");
 
         JSONObject data = new JSONObject();
-        data.put("title", "Hacker News");
-        data.put("message", "You have been hacked.");
+        data.put("Key-1", "JSA Data 1");
+        data.put("Key-2", "JSA Data 2");
 
         body.put("notification", notification);
         body.put("data", data);
+
         HttpEntity<String> request = new HttpEntity<>(body.toString());
 
         CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
@@ -296,48 +345,6 @@ public class MainWebController {
 //        response.put("tapLogList", returnList);
         return new ResponseEntity<>((List<TapLog>) mainService.getTapLogOfStudent(studId).get("tapListDetails"), HttpStatus.OK);
 
-    }
-
-    @RequestMapping(value = "/savePhoto", method = RequestMethod.POST)
-    public String showSavedPhoto(@RequestParam(value = "myFile", required = false) MultipartFile multipartFile) {
-
-
-        if (null == multipartFile) {
-            return "addStudent";
-        } else {
-            try {
-                PictureObject pictureObject = new PictureObject();
-
-
-                pictureObject.setOriginalFileName(multipartFile.getOriginalFilename());
-                System.out.println("NAME : " + multipartFile.getName());
-                System.out.println("CONTENT TYPE : " + multipartFile.getContentType());
-                System.out.println("SIZE : " + multipartFile.getSize());
-                System.out.println("CONTENT BYTES : " + multipartFile.getBytes().toString());
-                System.out.println("ORIGINAL NAME : " + multipartFile.getOriginalFilename());
-
-                pictureObject.setContent(multipartFile.getBytes());
-                pictureObject.setContentType(multipartFile.getContentType());
-                pictureObject.setFileId("sample");
-                pictureObject.setOriginalFileName(multipartFile.getOriginalFilename());
-                pictureObject.setStudentId("SID10");
-
-                mainService.saveImage(pictureObject);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-//            PictureObject pictureObject = new PictureObject();
-//            try {
-//                pictureObject.setContent(multipartFile.getBytes());
-//                pictureObject.setContentType(multipartFile.getContentType());
-//                pictureObject.setOriginalFileName(multipartFile.getOriginalFilename());
-//            }catch (IOException e){
-//                e.printStackTrace();
-//            }
-
-
-            return "redirect:/login";
-        }
     }
 
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
