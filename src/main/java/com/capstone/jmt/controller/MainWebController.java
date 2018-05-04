@@ -192,7 +192,7 @@ public class MainWebController {
         try {
             mainService.updateStudentInfo(student);
             System.out.println("SUCCESS!!");
-            return "getStudents";
+            return "redirect:/getStudents";
 
         } catch (Exception e) {
             e.printStackTrace();
