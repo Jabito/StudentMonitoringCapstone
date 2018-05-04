@@ -29,7 +29,7 @@
                     <tbody>
                     <tr>
                         <td colspan="2">
-                            <img src="../static/images/school_logo.png" width="360" height="360"/>
+                            <img id="imageIn" width="360" height="360"/>
                         </td>
                     </tr>
                     <tr>
@@ -58,7 +58,7 @@
                             <label><h4 style="color: white">Time IN: </h4></label>
                         </td>
                         <td>
-                            <label style="color: white" id="timeIn"></label>
+                            <label style="color: white" th:text="${stud1.logDateTime}"></label>
                         </td>
                     </tr>
                     </tbody>
@@ -69,7 +69,7 @@
                     <tbody>
                     <tr>
                         <td colspan="2">
-                            <img src="../static/images/school_logo.png" width="360" height="360"/>
+                            <img id="imageOut" width="360" height="360"/>
                         </td>
                     </tr>
                     <tr>
@@ -103,44 +103,50 @@
                     </tr>
                     </tbody>
                 </table>
+                <label id="studInId" th:text="${stud.id}" hidden="false"></label>
+                <label id="studOutId" th:text="${stud1.id}" hidden="false"></label>
             </div>
         </div>
     </div>
 </div>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-
-    $('#rfidTag').on('keyup',function () {
-        if (this.value.length >= 10)
-            $('#submit').trigger('click');
+<script>
+    $(document).ready(function() {
+        var studIn = $('#studInId').text();
+        var studOut = $('#studOutId').text();
+        var filename = getFilename(studIn);
+        console.log("FN - " + filename);
     });
 
-    showDateTime();
-    function showDateTime() {
-        $('#timeIn').show();
-        $('#timeIn1').show();
+    var getFilename = function(userId){
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            url: '/getPictureFilename',
+            data: {userId: userId},
+            success: function(response){
+                var res = String(response);
+                console.log("RES - " + res);
+                if(res){
+                     alert(getImage(res));
+                     $('.imageIn').src = res;
+                }
+            },
+            error: function(response){
+                console.log("error", response);
+            }
+        });
+    };
 
-        var d = new Date(),
-            minutes = d.getMinutes().toString().length == 1 ? '0' + d.getMinutes() : d.getMinutes(),
-            seconds = d.getSeconds().toString(),
-            hours = d.getHours().toString().length == 1 ? '0' + d.getHours() : d.getHours(),
-            ampm = d.getHours() >= 12 ? 'pm' : 'am',
-            months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        minutes = checkTime(minutes);
-        seconds = checkTime(seconds);
-        document.getElementById('timeIn').innerHTML = days[d.getDay()] + ' ' + months[d.getMonth()] + ' ' + d.getDate() + ' ' + d.getFullYear() + ' ' + hours + ':' + minutes + ':' + seconds + ampm;
-        var t = setTimeout(showDateTime, 500);
+    var getImage = function(filename){
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            url: '/files/' + filename,
+            success: function(response){
+                return response;
+            }
+        });
     }
-
-    function checkTime(i) {
-        if (i < 10) {
-            i = "0" + i
-        }  // add zero in front of numbers < 10
-        return i
-    }
-
-    /*]]>*/
 </script>
 
 </body>

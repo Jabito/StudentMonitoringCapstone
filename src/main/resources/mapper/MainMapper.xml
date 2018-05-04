@@ -413,9 +413,7 @@
         file_id,
         content_type,
         original_file_name,
-        file_suffix,
-        file_name_no_suffix,
-        content
+        file_suffix
         )
         VALUES
         (
@@ -423,9 +421,7 @@
         #{imageHolder.fileId, jdbcType=VARCHAR},
         #{imageHolder.contentType, jdbcType=VARCHAR},
         #{imageHolder.originalFileName, jdbcType=VARCHAR},
-        #{imageHolder.fileSuffix, jdbcType=VARCHAR},
-        #{imageHolder.fileNameNoSuffix, jdbcType=VARCHAR},
-        #{imageHolder.content, javaType=byte[], jdbcType=BLOB, typeHandler=org.apache.ibatis.type.BlobTypeHandler}
+        #{imageHolder.fileSuffix, jdbcType=VARCHAR}
         )
     </insert>
 
@@ -436,15 +432,11 @@
 
     <resultMap id="PictureObjectMap" type="com.capstone.jmt.data.PictureObject">
         <result column="userid" property="studentId" jdbcType="VARCHAR"/>
-        <result column="file_id" property="fileId" jdbcType="VARCHAR"/>
-        <result column="content_type" property="contentType" jdbcType="VARCHAR"/>
         <result column="original_file_name" property="originalFileName" jdbcType="VARCHAR"/>
-        <result column="file_suffix" property="fileSuffix" jdbcType="VARCHAR"/>
-        <result column="file_name_no_suffix" property="fileNameNoSuffix" jdbcType="VARCHAR"/>
-        <result column="content" property="content" jdbcType="BLOB" javaType="byte[]"/>
     </resultMap>
 
     <select id="retrieveImage" resultMap="PictureObjectMap" resultType="com.capstone.jmt.data.PictureObject">
-        SELECT * FROM data_images WHERE userid = #{userId}
+        SELECT userid,original_file_name
+        FROM data_images WHERE userid = #{userId} LIMIT 1
     </select>
 </mapper>
