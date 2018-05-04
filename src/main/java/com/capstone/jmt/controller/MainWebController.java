@@ -163,6 +163,14 @@ public class MainWebController {
         return "addStudent";
     }
 
+    @RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
+    public String sendMessage(Model model) {
+
+
+
+        return "sendMessage";
+    }
+
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
     public String addStudent(@ModelAttribute("appUser") User appUser, @Valid Student student, BindingResult bindingResult, Model model) {
 
