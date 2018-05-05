@@ -10,13 +10,14 @@ import com.capstone.jmt.entity.Student;
 import com.capstone.jmt.entity.User;
 import com.capstone.jmt.service.AndroidPushNotificationsService;
 import com.capstone.jmt.service.MainService;
+import com.capstone.jmt.service.StorageService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
+import java.util.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,11 +28,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.xml.ws.Response;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * Created by Jabito on 08/08/2017.
@@ -412,5 +416,64 @@ public class MainWebController {
             return "studentInfo";
         }
     }
+
+    /**
+     * For File Storage
+     * */
+
+    @Autowired
+    StorageService storageService;
+
+
+    @PostMapping("/upImage")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam(value = "userId", required = false) String userId,
+                                   Model model) {
+        try {
+            storageService.store(file);
+            model.addAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
+            PictureObject po = new PictureObject();
+            po.setStudentId(null == userId? "SID15":userId);
+            po.setOriginalFileName(file.getOriginalFilename());
+            mainService.saveImage(po);
+        } catch (Exception e) {
+            model.addAttribute("message", "FAIL to upload " + file.getOriginalFilename() + "!");
+        }
+
+        return "addStudent";
+    }
+
+    @RequestMapping("/getPictureFilename")
+    public ResponseEntity<?> getPictureObject(@RequestParam("userId") String userId){
+        return new ResponseEntity<>(mainService.retrieveImage(userId).getOriginalFileName(), HttpStatus.OK);
+    }
+
+    @GetMapping("/files/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+        Resource file = storageService.loadFile(filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
+    }
+
+    @RequestMapping(value = "/loadImage", method = RequestMethod.GET)
+        public ResponseEntity<byte[]> loadImage(@RequestParam("studId") String studId){
+        HashMap<String, Object> response = new HashMap<>();
+        HttpHeaders headers = new HttpHeaders();
+        Resource file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
+        try {
+            InputStream in = file.getInputStream();
+            byte[] media = IOUtils.toByteArray(in);
+//            headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return new ResponseEntity<byte[]>(Base64.getEncoder().encode(media), headers, HttpStatus.OK);
+        }catch(IOException e){
+            response.put("responseDesc", "Failed to retrieve image.");
+            return new ResponseEntity<byte[]>(new byte[1], HttpStatus.OK);
+        }
+
+    }
+
+    /** END FILE STORAGE */
 
 }

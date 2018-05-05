@@ -16,7 +16,7 @@
                 <form class="col-md-6" th:object="${student}" th:action="@{/monitorStudent}" th:method="POST">
                     Please tap the rfid: <input id="rfidTag" th:field="*{rfid}" class="form-control"
                                                 autofocus="true"
-                                                style="border-color: transparent; color: transparent"   />
+                                                style="border-color: transparent; color: transparent"/>
 
                     <input type="submit" id="submit" hidden="hidden" style="color:#122b40; opacity: 0;"/>
                 </form>
@@ -36,7 +36,8 @@
                         <td>
                             <h4 style="color: white">Full Name :</h4>
                         </td>
-                        <td style="color: white" th:text="${stud.firstName + ' ' + stud.middleName + ' ' + stud.lastName}">
+                        <td style="color: white"
+                            th:text="${stud.firstName + ' ' + stud.middleName + ' ' + stud.lastName}">
                         </td>
                     </tr>
                     <tr>
@@ -78,7 +79,8 @@
                         <td>
                             <h4 style="color: white">Full Name :</h4>
                         </td>
-                        <td style="color: white" th:text="${stud1.firstName + ' ' + stud1.middleName + ' ' + stud1.lastName}">
+                        <td style="color: white"
+                            th:text="${stud1.firstName + ' ' + stud1.middleName + ' ' + stud1.lastName}">
                         </td>
                     </tr>
                     <tr>
@@ -114,40 +116,30 @@
     </div>
 </div>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         var studIn = $('#studInId').text();
         var studOut = $('#studOutId').text();
-        var filename = getFilename(studIn);
-        console.log("FN - " + filename);
+        loadImage(studIn, 1);
+        loadImage(studOut, 2);
+        console.log("StudNo - " + studIn);
     });
 
-    var getFilename = function(userId){
+    var loadImage = function (studId, mode) {
         $.ajax({
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
-            url: '/getPictureFilename',
-            data: {userId: userId},
-            success: function(response){
-                var res = String(response);
-                console.log("RES - " + res);
-                if(res){
-                     alert(getImage(res));
-                     $('.imageIn').src = res;
+            url: '/loadImage',
+            data: {studId: studId},
+            success: function (response) {
+                if (response) {
+                    if (mode == 1)
+                        $('#imageIn').attr('src', "data:image/jpg;base64," + response);
+                    else if (mode == 2)
+                        $('#imageOut').attr('src', "data:image/jpg;base64," + response);
                 }
             },
-            error: function(response){
+            error: function (response) {
                 console.log("error", response);
-            }
-        });
-    };
-
-    var getImage = function(filename){
-        $.ajax({
-            type: 'GET',
-            contentType: 'application/json; charset=utf-8',
-            url: '/files/' + filename,
-            success: function(response){
-                return response;
             }
         });
     }
