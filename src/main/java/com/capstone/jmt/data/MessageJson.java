@@ -24,19 +24,23 @@ public class MessageJson implements Serializable{
     private Date datePosted;
     @JsonIgnore
     private String messageTarget;
-    @JsonProperty("parentIds")
-    private String[] parentIds;
+    @JsonProperty("targetIds")
+    private String[] targetIds;
 
     public void setMessageTarget(String messageTarget) {
         this.messageTarget = messageTarget;
     }
 
-    public String[] getParentIds() {
-        return parentIds;
+    public String getMessageTarget() {
+        return messageTarget;
     }
 
-    public void setParentIds(String[] parentIds) {
-        this.parentIds = parentIds;
+    public String[] getTargetIds() {
+        return targetIds;
+    }
+
+    public void setTargetIds(String[] targetIds) {
+        this.targetIds = targetIds;
     }
 
     public Integer getMessageTypeId() {

@@ -225,7 +225,7 @@ public class MainAppController {
     }
 
     @RequestMapping(value = "getAnnouncements", method = RequestMethod.GET)
-    public ResponseEntity<?> getAnnouncements(@RequestParam String parentId){
-        return new ResponseEntity<>(mainService.getAnnouncements(parentId), HttpStatus.OK);
+    public ResponseEntity<?> getAnnouncements(@RequestParam String userId){
+        return new ResponseEntity<>(mainService.getAnnouncements(userId), HttpStatus.OK);
     }
 }
