@@ -163,6 +163,14 @@ public class MainWebController {
         return "addStudent";
     }
 
+    @RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
+    public String sendMessage(Model model) {
+
+
+
+        return "sendMessage";
+    }
+
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
     public String addStudent(@ModelAttribute("appUser") User appUser, @Valid Student student, BindingResult bindingResult, Model model) {
 
@@ -192,7 +200,7 @@ public class MainWebController {
         try {
             mainService.updateStudentInfo(student);
             System.out.println("SUCCESS!!");
-            return "getStudents";
+            return "redirect:/getStudents";
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -348,7 +356,7 @@ public class MainWebController {
                 System.out.println("CONTENT BYTES : " + multipartFile.getBytes().toString());
                 System.out.println("ORIGINAL NAME : " + multipartFile.getOriginalFilename());
 
-                pictureObject.setContent(multipartFile.getBytes());
+//                pictureObject.setContent(multipartFile.getBytes());
                 pictureObject.setContentType(multipartFile.getContentType());
                 pictureObject.setFileId("sample");
                 pictureObject.setOriginalFileName(multipartFile.getOriginalFilename());
