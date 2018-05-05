@@ -52,7 +52,33 @@
     //    var from = "63"+ document.getElementById('from').value;
     //    var sentTo = pref + to;
 
-    function sendSms(){
+    function sendSms() {
+//        $.ajax({
+//            type: 'POST',
+//            dataType: 'json',
+//            contentType: 'application/json',
+//            headers: {
+//              'Authorization': 'Bearer' + AAAAt-n5sJQ:APA91bE18HJ7YLTCvAGJX1kYgsiM1gRKjY0I779nx0vK-knw67p79Tx4yk93F6tvlNoTW5quJ--68WTfO4pxe9jRL1JRla7jYzIlU53DZmtC8Qucv8Tjxu0eajsNFNFw-T5Zj9_eVsQu
+//            },
+//            url: 'https://fcm.googleapis.com/v1/projects/student-monitoring-app-57835/messages:send',
+//            data: JSON.stringify({
+//                "message":{
+//                    "token":"cCwCs7rSw2o:APA91bFU4rVbC01kEZ9XPybeXQZeTLzqosBl_GN8F-ncZ2gqxv7zxVp4zOFLWQDGB3QVBgbz71P-3rDPvNwQVSJE7GdEquHbdoRYYhrca434DQNHIwHtAUYBEtJPW1unoJhFEyF7oLIy",
+//                    "notification":{
+//                        "title":"Portugal vs. Denmark",
+//                        "body":"great match!"
+//                    }
+//                }
+//            }),
+//            success: function () {
+//                alert("SUCCESS!");
+//            },
+//            error: function () {
+//                alert("FAILED");
+//            }
+//        });
+//
+//    }
 //        var announcement = document.getElementById('message').value;
 //        var to = '63'+document.getElementById('to').value;
 ////        var pref = document.getElementById('prefix').value;
@@ -78,15 +104,16 @@
 //        });
 
         $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
-            apiusername: "APIXV4PYFBUJJ",
-            apipassword: "APIXV4PYFBUJJBLB47",
-            mobileno: "09176996988",
-            senderid: "292903149",
+            apiusername: "APIE4DYUT3XMS",
+            apipassword: "APIE4DYUT3XMSE4DYU",
+            mobileno: "09065172324",
+            senderid: "292903147",
             languagetype: "1",
-            message: "HI ALFRED VARGAS IV, SAW YOUR PROFILE AND THIS IS TO INFORM YOU THAT YOU ONLY HAVE 1 HOUR LEFT TO TELL EVERYBODY THAT IT IS THE END OF THE WORLD - ANONYMOUS"
+            message: "Please Disregard this message Hi Ryan!"
         }, function (data, status) {
             alert("Data: " + data + "\nStatus: " + status);
         });
+    }
 //        function guid() {
 //            function s4() {
 //                return Math.floor((1 + Math.random()) * 0x10000)
@@ -101,7 +128,20 @@
 //            }
 //            return ret;
 //        }
-    }
+
+
+    // Initialize Firebase
+//    var config = {
+//        apiKey: "AIzaSyAf5LYN7vKoUn2Ua3fDD5yFLXLrW0Im7dk",
+//        authDomain: "student-monitoring-app-57835.firebaseapp.com",
+//        databaseURL: "https://student-monitoring-app-57835.firebaseio.com",
+//        projectId: "student-monitoring-app-57835",
+//        storageBucket: "student-monitoring-app-57835.appspot.com",
+//        messagingSenderId: "789904470164"
+//    };
+//    firebase.initializeApp(config);
+
+
 </script>
 
 
