@@ -62,6 +62,7 @@ public class Student implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date updatedOn;
     private PictureObject pictureObject;
+    private String logDateTime;
 
 
     public PictureObject getPictureObject() {
@@ -249,5 +250,13 @@ public class Student implements Serializable {
 
     public void setUpdatedOn(Date updatedOn) {
         this.updatedOn = updatedOn;
+    }
+
+    public String getLogDateTime() {
+        return logDateTime;
+    }
+
+    public void setLogDateTime(String logDateTime) {
+        this.logDateTime = logDateTime;
     }
 }

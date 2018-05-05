@@ -4,6 +4,7 @@ import com.capstone.jmt.data.*;
 import com.capstone.jmt.entity.*;
 import org.apache.ibatis.annotations.Param;
 
+import java.sql.Blob;
 import java.util.List;
 
 /**
@@ -77,4 +78,8 @@ public interface MainMapper {
     void saveImage(@Param("imageHolder") PictureObject imageHolder);
 
     PictureObject retrieveImage(@Param("userId") String fileId);
+
+    List<Student> getStudentList();
+
+    Student getStudentById(@Param("id") String id);
 }

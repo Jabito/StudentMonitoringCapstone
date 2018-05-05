@@ -21,7 +21,7 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header"> ANNOUNCEMENT </h1>
+                <h1 class="page-header"> Attendance Logs </h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -29,16 +29,32 @@
         <!-- /.row -->
 
         <div class="row">
-            <input type="checkbox" data-toggle="toggle" data-on="SMS" data-off="NOTIFICATION"/>
-            <div class="col-lg-12">
-                <h3>Announcement</h3>
-                <textarea id="message" style="margin: 0px; width: 446px; height: 85px;" maxlength="140"></textarea>
-                FROM: <input type="text" id="from"/>
-                SEND TO: <input id="prefix" type="text" disabled="disabled" value="63" placeholder="+63" maxlength="4"/> <input type="text" id="to"/>
-                <label>Format: +63 XXXXXXXXXX</label>
-                <button type="submit" onclick="sendSms()" style="margin-left: 60px">SEND</button>
-            </div>
+            Search Student ID: <input type="text" id="studId"/>
+            <button type="button" id="btnSearch">Search</button>
         </div>
+
+
+        <table width="100%" class="table table-striped table-bordered table-hover"
+               id="dataTables-example">
+            <thead>
+            <tr>
+                <th>Log IN/OUT</th>
+                <th>DateTime</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <!--<th>Cost per Bottle</th>
+                <th>No. of Slim</th>
+                <th>Cost per Bottle</th>
+                <th>Total Cost</th>-->
+            </tr>
+            </thead>
+            <tbody id="tableBody">
+            <!--<tr class="odd gradeX">-->
+                <!--<td th:text="${attendance.logType}"></td>-->
+                <!--<td th:text="${attendance.logDateTime}"></td>-->
+            <!--</tr>-->
+            </tbody>
+        </table>
 
 
         <!-- /.row -->
@@ -49,59 +65,39 @@
 <script type="text/javascript">
     // Initialize Firebase
 
-//    var from = "63"+ document.getElementById('from').value;
-//    var sentTo = pref + to;
+    //Declaring variables
 
-    function sendSms(){
-//        var announcement = document.getElementById('message').value;
-//        var to = '63'+document.getElementById('to').value;
-////        var pref = document.getElementById('prefix').value;
-//
-//        var msgId = guid();
-//        var xhr = new XMLHttpRequest();
-//        var url = "https://post.chikka.com/smsapi/request";
-//        xhr.open("POST", url, true);
-//        xhr.setRequestHeader("Content-type", "application/json");
-//
-//        var data = JSON.stringify({"message_type": "SEND", "mobile_number": "639954835023", "shortcode": "292903147", "message_id": "ccc81279fcc048d1a6fcc52ed4c14255", "message": "HI", "client_id": "230d0648f6672956b8fc2bed85a480ebb32b296a412e2672714096c37bebebcd", "secret_key": "da51dc811a15e7f7b10784f1e7266b350efe07d13792c0735a4b406e1332c490"});
-//        xhr.send(data);
-//        $.post("https://post.chikka.com/smsapi/request", {
-//            message_type: "SEND",
-//            mobile_number: to,
-//            shortcode: "292903147",
-//            message_id: msgId,
-//            message: announcement,
-//            client_id: "230d0648f6672956b8fc2bed85a480ebb32b296a412e2672714096c37bebebcd",
-//            secret_key: "da51dc811a15e7f7b10784f1e7266b350efe07d13792c0735a4b406e1332c490"
-//        }, function (data, status) {
-//            alert("Data: " + data + "\nStatus: " + status);
-//        });
+    var studId;
 
-        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
-            apiusername: "APIXV4PYFBUJJ",
-            apipassword: "APIXV4PYFBUJJBLB47",
-            mobileno: "09176996988",
-            senderid: "292903149",
-            languagetype: "1",
-            message: "HI ALFRED VARGAS IV, SAW YOUR PROFILE AND THIS IS TO INFORM YOU THAT YOU ONLY HAVE 1 HOUR LEFT TO TELL EVERYBODY THAT IT IS THE END OF THE WORLD - ANONYMOUS"
-        }, function (data, status) {
-            alert("Data: " + data + "\nStatus: " + status);
+    $("#btnSearch").on("click", function () {
+        console.log("Clicked");
+        studId = $("#studId").val();
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            url: '/getAttendanceLogsDetails',
+            data: {studId: studId},
+            success: function(response){
+                $('#tableBody').empty();
+                console.log(response);
+                $.each(response, function(key,value){
+                    console.log(value);
+                    $('#tableBody').append('<tr class="odd gradeX"><td>' + value.logType + '</td>' +
+                        '<td>' + value.logDateTime + '</td>' +
+                        '<td>' + value.firstName + '</td>' +
+                        '<td>' + value.lastName + '</td></tr>')
+                })
+            },
+            error: function(response){
+                console.log("Error.")
+            }
+
         });
-//        function guid() {
-//            function s4() {
-//                return Math.floor((1 + Math.random()) * 0x10000)
-//                    .toString(16)
-//                    .substring(1);
-//            }
-//            var ret = '';
-//            var x=0;
-//            while(x != 8){
-//                ret += s4();
-//                x++;
-//            }
-//            return ret;
-//        }
-    }
+    });
+
+
+    //
+
 </script>
 
 

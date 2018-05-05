@@ -3,19 +3,21 @@ package com.capstone.jmt.controller;
 import com.capstone.jmt.data.AddUserJson;
 import com.capstone.jmt.data.PictureObject;
 import com.capstone.jmt.data.RefSection;
+import com.capstone.jmt.data.TapLog;
 import com.capstone.jmt.entity.Guidance;
 import com.capstone.jmt.entity.Parent;
 import com.capstone.jmt.entity.Student;
 import com.capstone.jmt.entity.User;
 import com.capstone.jmt.service.AndroidPushNotificationsService;
 import com.capstone.jmt.service.MainService;
+import com.capstone.jmt.service.StorageService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
+import java.util.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,11 +28,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.xml.ws.Response;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * Created by Jabito on 08/08/2017.
@@ -131,7 +136,9 @@ public class MainWebController {
 
 
     @RequestMapping(value = "/homepage", method = RequestMethod.GET)
-    public String showDashboard(@ModelAttribute("appUser") User user, Model model) {
+    public String showDashboard(@RequestParam(value = "added", required = false, defaultValue = "") String added, @ModelAttribute("appUser") User user, Model model) {
+        model.addAttribute("added", added);
+
         System.out.println("HOMEPAGE: " + user.getUsername());
         if (null != user.getUsername()) {
             model.addAttribute("User", user);
@@ -160,6 +167,14 @@ public class MainWebController {
         return "addStudent";
     }
 
+    @RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
+    public String sendMessage(Model model) {
+
+
+
+        return "sendMessage";
+    }
+
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
     public String addStudent(@ModelAttribute("appUser") User appUser, @Valid Student student, BindingResult bindingResult, Model model) {
 
@@ -171,12 +186,32 @@ public class MainWebController {
             mainService.addStudent(student);
             System.out.println("SUCCESS!!");
 
-            return "redirect:/login";
+            return "redirect:/homepage?added=Student";
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return "addStudent";
+    }
+
+    @RequestMapping(value = "/updateStudent", method = RequestMethod.POST)
+    public String udpateStudent(@ModelAttribute("appUser") User appUser, @Valid Student student, BindingResult bindingResult, Model model) {
+
+
+        System.out.println("student ID: " + student.getId());
+        System.out.println("student first name: " + student.getFirstName());
+        System.out.println("student last name: " + student.getLastName());
+        try {
+            mainService.updateStudentInfo(student);
+            System.out.println("SUCCESS!!");
+            return "redirect:/getStudents";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "students";
+
     }
 
     @RequestMapping(value = "/getParent", method = RequestMethod.GET)
@@ -194,7 +229,7 @@ public class MainWebController {
         parent.setUpdatedBy(appUser.getUsername());
         mainService.addParent(parent);
 
-        return "redirect:/login";
+        return "redirect:/homepage?added=Parent";
     }
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
@@ -213,7 +248,7 @@ public class MainWebController {
         System.out.println("USER password: " + newUser.getPassword());
 
         mainService.addUser(newUser);
-        return "redirect:/login";
+        return "redirect:/homepage?added=User";
     }
 
     @RequestMapping(value = "/getGuidance", method = RequestMethod.GET)
@@ -230,7 +265,7 @@ public class MainWebController {
         System.out.println("GUIDANCE LAST NAME: " + guidance.getLastName());
 
         mainService.addGuidance(guidance);
-        return "redirect:/login";
+        return "redirect:/homepage?added=Guidance";
 
     }
 
@@ -239,20 +274,18 @@ public class MainWebController {
         mainService.tapStudent(rfid);
         Student studIn = mainService.getStudentByRfidIn();
         Student studOut = mainService.getStudentByRfidOut();
-//        TapLog tap = new TapLog();
-//        if(null != rfid)
-//             tap = (TapLog) mainService.getLastTapEntry(student.getId()).get("tapDetails");
+
         model.addAttribute("student", new Student());
         model.addAttribute("stud", null != studIn ? studIn : new Student());
         model.addAttribute("stud1", null != studOut ? studOut : new Student());
-//        model.addAttribute("tapType", tap != null? tap.getLogType(): "");
+
         return "monitor";
     }
 
     @RequestMapping(value = "/monitorStudent", method = RequestMethod.POST)
     public String monitorStudent(@ModelAttribute("student") Student student, BindingResult bindingResult, Model model) {
         System.out.println("STUDENT RFID: " + student.getRfid());
-//            mainService.processRfidTap(student.getRfid());
+//        mainService.processRfidTap(student.getRfid());
 //        Student student1 = mainService.getStudentByRfid(student.getRfid());
 //        System.out.println("STUDENT RETRIEVED: " + student1.getFirstName());
 //        model.addAttribute("student", student1);
@@ -277,21 +310,36 @@ public class MainWebController {
 
     @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
     public String showSales(Model model) {
-//        if (shopUser.getId() == null)
-//            return "redirect:/login";
 
-//        List<OrderInfo> orders = orderService.getOrdersByShopId(shopUser.getStaffOf());
-//        model.addAttribute("orders", orders);
-//        model.addAttribute("username", shopUser.getUsername());
-//        Double sales = 0.0;
-//        for(int x=0; x<orders.size(); x++){
-//            if(null!=orders.get(x).getTotalCost())
-//                    sales += orders.get(x).getTotalCost();
-//        }
-//
-//        model.addAttribute("totalSales", "P " + sales.toString());
-//
+
         return "attendanceLogs";
+    }
+
+    @RequestMapping(value = "/getAttendanceLogsDetails", method = RequestMethod.GET)
+    public ResponseEntity<?> getAttendanceLogsDetails(@RequestParam(value = "studId") String studId) {
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("Student Id selected: " + studId);
+//        List<TapLog> returnList = ;
+
+//        if(returnList.isEmpty()) {
+//            response.put("responseDesc", HttpStatus.NOT_FOUND);
+//            response.put("responseCode", 404);
+//        }
+//        response.put("tapLogList", returnList);
+        return new ResponseEntity<>((List<TapLog>) mainService.getTapLogOfStudent(studId).get("tapListDetails"), HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value = "/getStudents", method = RequestMethod.GET)
+    public String getStudentList(Model model) {
+
+        List<Student> studentList = mainService.getStudentList();
+        if(null == studentList) {
+            return "redirect:/login";
+        }else{
+            model.addAttribute("studList", studentList);
+            return "students";
+        }
     }
 
     @RequestMapping(value = "/savePhoto", method = RequestMethod.POST)
@@ -312,7 +360,7 @@ public class MainWebController {
                 System.out.println("CONTENT BYTES : " + multipartFile.getBytes().toString());
                 System.out.println("ORIGINAL NAME : " + multipartFile.getOriginalFilename());
 
-                pictureObject.setContent(multipartFile.getBytes());
+//                pictureObject.setContent(multipartFile.getBytes());
                 pictureObject.setContentType(multipartFile.getContentType());
                 pictureObject.setFileId("sample");
                 pictureObject.setOriginalFileName(multipartFile.getOriginalFilename());
@@ -356,5 +404,76 @@ public class MainWebController {
         response.put("section", returnList);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/showStudentInfo", method = RequestMethod.GET)
+    public String showStudentInfo(Model model, @RequestParam(value = "id") String id) {
+        Student student = mainService.getStudentById(id);
+        if(null == student) {
+            System.out.println("NULL PURCHASE REQUEST");
+            return "studentInfo";
+        }else{
+            model.addAttribute("student", student);
+            return "studentInfo";
+        }
+    }
+
+    /**
+     * For File Storage
+     * */
+
+    @Autowired
+    StorageService storageService;
+
+
+    @PostMapping("/upImage")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam(value = "userId", required = false) String userId,
+                                   Model model) {
+        try {
+            storageService.store(file);
+            model.addAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
+            PictureObject po = new PictureObject();
+            po.setStudentId(null == userId? "SID15":userId);
+            po.setOriginalFileName(file.getOriginalFilename());
+            mainService.saveImage(po);
+        } catch (Exception e) {
+            model.addAttribute("message", "FAIL to upload " + file.getOriginalFilename() + "!");
+        }
+
+        return "addStudent";
+    }
+
+    @RequestMapping("/getPictureFilename")
+    public ResponseEntity<?> getPictureObject(@RequestParam("userId") String userId){
+        return new ResponseEntity<>(mainService.retrieveImage(userId).getOriginalFileName(), HttpStatus.OK);
+    }
+
+    @GetMapping("/files/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+        Resource file = storageService.loadFile(filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
+    }
+
+    @RequestMapping(value = "/loadImage", method = RequestMethod.GET)
+        public ResponseEntity<byte[]> loadImage(@RequestParam("studId") String studId){
+        HashMap<String, Object> response = new HashMap<>();
+        HttpHeaders headers = new HttpHeaders();
+        Resource file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
+        try {
+            InputStream in = file.getInputStream();
+            byte[] media = IOUtils.toByteArray(in);
+//            headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return new ResponseEntity<byte[]>(Base64.getEncoder().encode(media), headers, HttpStatus.OK);
+        }catch(IOException e){
+            response.put("responseDesc", "Failed to retrieve image.");
+            return new ResponseEntity<byte[]>(new byte[1], HttpStatus.OK);
+        }
+
+    }
+
+    /** END FILE STORAGE */
 
 }

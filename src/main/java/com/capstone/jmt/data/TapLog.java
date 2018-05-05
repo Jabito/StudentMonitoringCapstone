@@ -17,6 +17,27 @@ public class TapLog implements Serializable{
     @JsonProperty("logDateTime")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date logDateTime;
+    @JsonProperty("firstName")
+    private String firstName;
+    @JsonProperty("lastName")
+    private String lastName;
+
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public String getRfid() {
         return rfid;

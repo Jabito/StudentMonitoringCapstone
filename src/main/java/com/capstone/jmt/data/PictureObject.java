@@ -1,7 +1,9 @@
 package com.capstone.jmt.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.Lob;
 import java.io.Serializable;
 
 /**
@@ -23,12 +25,6 @@ public class PictureObject implements Serializable{
 
     @JsonProperty("fileSuffix")
     private String fileSuffix;
-
-    @JsonProperty("fileNameNoSuffix")
-    private String fileNameNoSuffix;
-
-    @JsonProperty("content")
-    private byte[] content;
 
     public String getStudentId() {
         return studentId;
@@ -68,21 +64,5 @@ public class PictureObject implements Serializable{
 
     public void setFileSuffix(String fileSuffix) {
         this.fileSuffix = fileSuffix;
-    }
-
-    public String getFileNameNoSuffix() {
-        return fileNameNoSuffix;
-    }
-
-    public void setFileNameNoSuffix(String fileNameNoSuffix) {
-        this.fileNameNoSuffix = fileNameNoSuffix;
-    }
-
-    public byte[] getContent() {
-        return content;
-    }
-
-    public void setContent(byte[] content) {
-        this.content = content;
     }
 }
