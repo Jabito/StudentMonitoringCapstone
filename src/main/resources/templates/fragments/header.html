@@ -56,13 +56,13 @@
                     <li><a href="" th:href="@{/homepage}"><i class="fa fa-dashboard fa-fw"></i> Homepage</a></li>
                     <li><a href="" th:href="@{/attendanceLogs}"><i class="fa fa-calendar fa-fw"></i> Attendance Logs</a></li>
                     <li><a href="" th:href="@{/messages}"><i class="fa fa-envelope"></i> Messages</a></li>
-                    <li><a href="" th:href="@{/settings}"><i class="fa fa-cog"></i>SMS Settings</a></li>
-                    <li><a href="" target="_blank" th:href="@{/monitor}"><i class="fa fa-cog"></i> Monitor</a></li>
-                    <li><a href="" th:href="@{/getStudent}"><i class="fa fa-cog"></i> Add Student</a></li>
-                    <li><a href="" th:href="@{/getParent}"><i class="fa fa-cog"></i> Add Parent</a></li>
-                    <li><a href="" th:href="@{/getUser}"><i class="fa fa-cog"></i> Add User</a></li>
-                    <li><a href="" th:href="@{/getGuidance}"><i class="fa fa-cog"></i> Add Guidance</a></li>
-                    <li><a href="" th:href="@{/getStudents}"><i class="fa fa-cog"></i> View Students</a></li>
+                    <li><a href="" th:if="${role}" th:href="@{/settings}"><i class="fa fa-cog"></i>SMS Settings</a></li>
+                    <li><a href="" th:if="${role}" target="_blank" th:href="@{/monitor}"><i class="fa fa-cog"></i> Monitor</a></li>
+                    <li><a href="" th:if="${role}" th:href="@{/getStudent}"><i class="fa fa-cog"></i> Add Student</a></li>
+                    <li><a href="" th:if="${role}" th:href="@{/getParent}"><i class="fa fa-cog"></i> Add Parent</a></li>
+                    <li><a href="" th:if="${role}" th:href="@{/getUser}"><i class="fa fa-cog"></i> Add User</a></li>
+                    <li><a href="" th:if="${role}" th:href="@{/getGuidance}"><i class="fa fa-cog"></i> Add Guidance</a></li>
+                    <li><a href="" th:if="${role}" th:href="@{/getStudents}"><i class="fa fa-cog"></i> View Students</a></li>
 
                     <li><a href="" th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
                 </ul>

@@ -139,10 +139,20 @@ public class MainWebController {
     public String showDashboard(@RequestParam(value = "added", required = false, defaultValue = "") String added, @ModelAttribute("appUser") User user, Model model) {
         model.addAttribute("added", added);
 
+        User user1 = mainService.getUser(user.getUsername());
+
         System.out.println("HOMEPAGE: " + user.getUsername());
+        System.out.println("USERTYPEID: " + user1.getUserTypeId());
         if (null != user.getUsername()) {
-            model.addAttribute("User", user);
-            return "dashboard";
+            if(user1.getUserTypeId() == 0) {
+                model.addAttribute("role", true);
+                model.addAttribute("User", user);
+                return "dashboard";
+            }else {
+                model.addAttribute("role", false);
+                model.addAttribute("User", user);
+                return "dashboard";
+            }
         }
         return "redirect:/login";
     }
