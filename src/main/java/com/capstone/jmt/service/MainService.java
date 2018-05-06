@@ -208,6 +208,8 @@ public class MainService {
         return mainMapper.getUserByUsername(username);
     }
 
+
+
     public HashMap<String, Object> deleteStudentById(String id) {
         HashMap<String, Object> response = new HashMap<>();
         mainMapper.deleteStudentById(id);
@@ -216,14 +218,7 @@ public class MainService {
 
     public HashMap<String, Object> postAnnouncement(MessageJson mj) {
         HashMap<String, Object> response = new HashMap<>();
-        String forInsert = "";
-        for (int i = 0; i < mj.getParentIds().length; i++) {
-            if (i == 0)
-                forInsert += mj.getParentIds()[i];
-            else
-                forInsert += "," + mj.getParentIds()[i];
-        }
-        mj.setMessageTarget(forInsert);
+
         mainMapper.postAnnouncement(mj);
         response.put("responseCode", 200);
         response.put("responseDesc", "Announcement Posted.");
@@ -309,9 +304,9 @@ public class MainService {
         return response;
     }
 
-    public HashMap<String, Object> getAnnouncements(String parentId) {
+    public HashMap<String, Object> getAnnouncements(String userId) {
         HashMap<String, Object> response = new HashMap<>();
-        List<MessageJson> announcements = mainMapper.getAnnouncementsByParentId("%" + parentId + "%");
+        List<MessageJson> announcements = mainMapper.getAnnouncementsByUserId(userId);
         response.put("announcements", announcements);
         response.put("responseCode", 200);
         response.put("responseDesc", "Successfully retrieved list.");
@@ -357,43 +352,6 @@ public class MainService {
         return mainMapper.getGuidanceRecord(studentId);
     }
 
-    public void uploadImageById(MultipartFile file, String username){
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-//        String id = sdf.format(new Date());
-//        String contentType = po.getContentType();
-//        PictureObject imageHolder = new PictureObject();
-//        imageHolder.setStudentId(po.getStudentId());
-//        imageHolder.setFileId(id);
-//        imageHolder.setContentType(contentType);
-//        imageHolder.setOriginalFileName(po.getOriginalFileName());
-//        imageHolder.setFileNameNoSuffix(po.getOriginalFileName().substring(0, po.getOriginalFileName().indexOf(".")));
-//        imageHolder.setFileSuffix(po.getOriginalFileName().substring(po.getOriginalFileName().indexOf(".")));
-//
-//        HashMap<String, Object> response = new HashMap<>();
-//
-//        if (!file.isEmpty()) {
-//            try {
-//                imageHolder.setContent(file.getBytes());
-//                maceService.saveImage(imageHolder);
-//                VerifiedMember verifiedMember = maceService.getLatestVerifiedMember(memCode);
-//
-//                response.put("responseCode", 200);
-//                response.put("responseDesc", "Success");
-//                return new ResponseEntity<>(response, HttpStatus.OK);
-//
-//            } catch (Exception e) {
-//                response.put("responseCode", 500);
-//                response.put("responseDesc", "Internal Server Error");
-//                response.put("error", e.getMessage());
-//                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        } else {
-//            response.put("responseCode", 204);
-//            response.put("responseDesc", "File is empty");
-//            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-//        }
-    }
-
     public PictureObject retrieveImage(String fileId) {
         return mainMapper.retrieveImage(fileId);
     }
@@ -404,5 +362,9 @@ public class MainService {
 
     public Student getStudentById(String id) {
         return mainMapper.getStudentById(id);
+    }
+
+    public List<Student> getStudentsBySearch(String searchString){
+        return mainMapper.getStudentsBySearchString("%"+ searchString + "%");
     }
 }
