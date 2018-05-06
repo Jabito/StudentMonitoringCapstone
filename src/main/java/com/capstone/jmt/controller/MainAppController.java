@@ -1,15 +1,13 @@
 package com.capstone.jmt.controller;
 
-import com.capstone.jmt.data.AddGuidanceJson;
-import com.capstone.jmt.data.AddUserJson;
-import com.capstone.jmt.data.MessageJson;
-import com.capstone.jmt.data.PictureObject;
+import com.capstone.jmt.data.*;
 import com.capstone.jmt.entity.Guidance;
 import com.capstone.jmt.entity.Parent;
 import com.capstone.jmt.entity.Student;
 import com.capstone.jmt.entity.User;
 import com.capstone.jmt.service.MainService;
 import com.capstone.jmt.service.StorageService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -63,13 +63,20 @@ public class MainAppController {
     }
 
     @RequestMapping(value = "downloadPicture", method = RequestMethod.GET)
-    public ResponseEntity<?> downloadPicture(@RequestParam("userId") String fileId) {
+    public ResponseEntity<?> downloadPicture(@RequestParam("userId") String userId) {
+        HashMap<String, Object> response = new HashMap<>();
+        try {
+            Resource file = storageService.loadFile(mainService.retrieveImage(userId).getOriginalFileName());
+            InputStream in = file.getInputStream();
+            byte[] media = IOUtils.toByteArray(in);
 
-        PictureObject po = mainService.retrieveImage(fileId);
-        Resource file = storageService.loadFile(po.getOriginalFileName());
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-                .body(file);
+            response.put("imageBase64", media);
+            response.put("responseDesc", "Success to retrieve image.");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch(IOException e){
+            response.put("responseDesc", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
     }
 
     @RequestMapping(value = "getUser", method = RequestMethod.GET)
