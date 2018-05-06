@@ -223,8 +223,10 @@
         VALUES (
         #{mj.postedBy, jdbcType=VARCHAR},
         #{mj.messageTypeId, jdbcType=INTEGER},
-        #{mj.messageTarget, jdbcType=VARCHAR},
-        #{mj.message, jdbcType=VARCHAR},
+        <foreach item="id" collection="mj.targetIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        , #{mj.message, jdbcType=VARCHAR},
         NOW()
         )
     </insert>
@@ -438,5 +440,40 @@
     <select id="retrieveImage" resultMap="PictureObjectMap" resultType="com.capstone.jmt.data.PictureObject">
         SELECT userid,original_file_name
         FROM data_images WHERE userid = #{userId} LIMIT 1
+    </select>
+
+
+    <select id="getAnnouncementsByUserId" resultMap="MessageMap" resultType="com.capstone.jmt.data.MessageJson">
+        SELECT * FROM log_messages A
+WHERE posted_by = #{userId}
+OR message_type = 3
+OR(message_type = 2
+AND #{userId} IN (
+  SELECT id FROM data_parents B WHERE parent_of IN (
+    SELECT id from data_students C WHERE A.message_target LIKE '%' || C.section || '%'
+    )
+  )
+)
+OR(message_type = 1
+AND #{userId} IN (
+    SELECT id FROM data_parents B WHERE parent_of IN(
+      SELECT id from data_students D WHERE A.message_target LIKE '%' || CAST(D.grade_level_id AS VARCHAR) || '%'
+    )
+  )
+)
+OR(message_type = 0
+AND #{userId} IN (
+    SELECT id FROM data_parents B where parent_of IN(
+      SELECT id from data_students E WHERE A.message_target LIKE '%' || E.id || '%'
+    )
+  )
+)
+    </select>
+
+    <select id="getStudentsBySearchString" resultMap="StudentMap" resultType="java.util.List">
+        SELECT * FROM data_students
+        WHERE first_name LIKE #{searchString}
+        OR last_name LIKE #{searchString}
+        OR middle_name LIKE #{searchString}
     </select>
 </mapper>
