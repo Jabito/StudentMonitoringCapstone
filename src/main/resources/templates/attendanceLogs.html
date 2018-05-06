@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
-    <title>St. Mark's | Homepage</title>
+    <title>St. Mark's | Attendance Logs</title>
     <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
@@ -28,14 +28,14 @@
 
         <!-- /.row -->
 
-        <div class="row">
+        <div class="row" style="padding: 20px">
             Search Student ID: <input type="text" id="studId"/>
             <button type="button" id="btnSearch">Search</button>
         </div>
 
 
         <table width="100%" class="table table-striped table-bordered table-hover"
-               id="dataTables-example">
+               id="">
             <thead>
             <tr>
                 <th>Log IN/OUT</th>
@@ -55,7 +55,6 @@
             <!--</tr>-->
             </tbody>
         </table>
-
 
         <!-- /.row -->
     </div>
@@ -94,11 +93,17 @@
 
         });
     });
+    $(document).ready( function () {
+        $('#myTable').DataTable();
+    } );
+
 
 
     //
 
 </script>
+
+
 
 
 </body>

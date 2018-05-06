@@ -118,18 +118,18 @@ public class MainWebController {
     @RequestMapping(value = "loginWebUser", method = RequestMethod.POST)
     public String loginWebUser(@ModelAttribute("appUser") User user, Model model) {
 
-
-        System.out.println("USERNAME: " + user.getUsername());
-        System.out.println("PASSWORD: " + user.getPassword());
-
-        HashMap<String, Object> returnJson = mainService.loginUser(user.getUsername(), user.getPassword());
-        User returnedUser = (User) returnJson.get("User");
-        if (null == returnedUser) {
-            return "redirect:/login?error=1";
-        }
-
-        System.out.println("RETURNED USER: " + returnedUser.getUsername());
-        model.addAttribute("User", returnedUser);
+//
+//        System.out.println("USERNAME: " + user.getUsername());
+//        System.out.println("PASSWORD: " + user.getPassword());
+//
+//        HashMap<String, Object> returnJson = mainService.loginUser(user.getUsername(), user.getPassword());
+//        User returnedUser = (User) returnJson.get("User");
+//        if (null == returnedUser) {
+//            return "redirect:/login?error=1";
+//        }
+//
+//        System.out.println("RETURNED USER: " + returnedUser.getUsername());
+//        model.addAttribute("User", returnedUser);
 
         return "redirect:/homepage";
     }
@@ -313,6 +313,14 @@ public class MainWebController {
 
 
         return "attendanceLogs";
+    }
+
+
+    @RequestMapping(value = "/guidanceReport", method = RequestMethod.GET)
+    public String guidanceReport(Model model) {
+
+
+        return "guidanceReport";
     }
 
     @RequestMapping(value = "/getAttendanceLogsDetails", method = RequestMethod.GET)
