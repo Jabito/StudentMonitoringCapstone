@@ -41,8 +41,14 @@
                         </div>
                         <div class="form-group" id="byParent" style="display: none; padding: 20px ">
                             <label>Input Parent Id</label>
-                            <input class="form-control"/>
+                            <input class="form-control" id="searchText" list="studList"/>
                         </div>
+                        <datalist id="studList">
+                            <option>ASD</option>
+                            <option>ERT</option>
+                            <option>YUI</option>
+                            <option>YUI</option>
+                        </datalist>
 
                         <div class="form-group" id="byAll" style="display: none; padding: 20px ">
                             <label>Send to ALL</label>
@@ -742,6 +748,28 @@
             x.style.display = "none";
         }
     }
+
+    $("#searchText").on("input", function () {
+        var value = $(this).val();
+        console.log(value);
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            url: '/getStudentsBySearch?searchText=' + value,
+            success: function(response){
+                $('#studList').empty();
+                console.log(response.studList);
+                $.each(response.studList, function(key,value){
+                    console.log(value);
+                    $('#studList').append('<option>' + value.firstName + ' ' + value.middleName + ' ' + value.lastName + '</option>');
+                })
+            },
+            error: function(response){
+                console.log("Error.")
+            }
+
+        });
+    });
 
 
     //    function bySection1() {
