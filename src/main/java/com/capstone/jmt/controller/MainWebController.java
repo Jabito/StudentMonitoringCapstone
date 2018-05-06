@@ -340,6 +340,24 @@ public class MainWebController {
 
     }
 
+    @RequestMapping(value = "/getStudentsBySearch", method = RequestMethod.GET)
+    public ResponseEntity<?> getStudentsBySearch(@RequestParam(value = "searchText") String searchText) {
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("Search Text: " + searchText);
+
+        List<Student> studentList = mainService.getStudentsBySearch(searchText);
+        if(studentList.isEmpty()) {
+            response.put("responseCode", 404);
+            response.put("responseDesc", HttpStatus.NOT_FOUND);
+        }else {
+            response.put("responseCode", 200);
+            response.put("studList", studentList);
+        }
+
+        return new ResponseEntity<>( response, HttpStatus.OK);
+
+    }
+
     @RequestMapping(value = "/getStudents", method = RequestMethod.GET)
     public String getStudentList(Model model) {
 
