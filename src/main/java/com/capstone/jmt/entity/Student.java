@@ -63,6 +63,8 @@ public class Student implements Serializable {
     private Date updatedOn;
     private PictureObject pictureObject;
     private String logDateTime;
+    @JsonProperty("fullName")
+    private String fullName;
 
 
     public PictureObject getPictureObject() {
@@ -258,5 +260,13 @@ public class Student implements Serializable {
 
     public void setLogDateTime(String logDateTime) {
         this.logDateTime = logDateTime;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

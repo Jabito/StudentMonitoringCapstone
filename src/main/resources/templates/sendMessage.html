@@ -269,7 +269,7 @@
                     <br/>
 
                 </div>
-                <button type="submit" onclick="sendSms()" class="btn btn-primary" style="padding: 20px " >SEND</button>
+                <button type="submit" onclick="sendSms()" class="btn btn-primary" style="padding: 20px ">SEND</button>
             </div>
             <!--<textarea  style="margin: 0px; width: 446px; height: 85px;" maxlength="140"></textarea>-->
         </div>
@@ -341,6 +341,7 @@
 //            return ret;
 //        }
     }
+
     function byAll() {
         var x = document.getElementById("byAll");
         var y = document.getElementById("byParent");
@@ -353,6 +354,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass() {
         var x = document.getElementById("byClass");
         var y = document.getElementById("byParent");
@@ -365,6 +367,7 @@
             x.style.display = "none";
         }
     }
+
     function byParent() {
         var x = document.getElementById("byParent");
         var y = document.getElementById("byClass");
@@ -426,6 +429,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass2() {
         var x = document.getElementById("byClass2");
         if (x.style.display === "none") {
@@ -449,6 +453,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass3() {
         var x = document.getElementById("byClass3");
         if (x.style.display === "none") {
@@ -472,6 +477,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass4() {
         var x = document.getElementById("byClass4");
         if (x.style.display === "none") {
@@ -495,6 +501,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass5() {
         var x = document.getElementById("byClass5");
         if (x.style.display === "none") {
@@ -518,6 +525,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass6() {
         var x = document.getElementById("byClass6");
         if (x.style.display === "none") {
@@ -541,6 +549,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass7() {
         var x = document.getElementById("byClass7");
         if (x.style.display === "none") {
@@ -564,6 +573,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass8() {
         var x = document.getElementById("byClass8");
         if (x.style.display === "none") {
@@ -587,6 +597,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass9() {
         var x = document.getElementById("byClass9");
         if (x.style.display === "none") {
@@ -610,6 +621,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass10() {
         var x = document.getElementById("byClass10");
         if (x.style.display === "none") {
@@ -633,6 +645,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass11() {
         var x = document.getElementById("byClass11");
         if (x.style.display === "none") {
@@ -656,6 +669,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass12() {
         var x = document.getElementById("byClass12");
         if (x.style.display === "none") {
@@ -679,6 +693,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass13() {
         var x = document.getElementById("byClass13");
         if (x.style.display === "none") {
@@ -702,6 +717,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass14() {
         var x = document.getElementById("byClass14");
         if (x.style.display === "none") {
@@ -725,6 +741,7 @@
             x.style.display = "none";
         }
     }
+
     function byClass15() {
         var x = document.getElementById("byClass15");
         if (x.style.display === "none") {
@@ -756,15 +773,16 @@
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             url: '/getStudentsBySearch?searchText=' + value,
-            success: function(response){
+            success: function (response) {
                 $('#studList').empty();
-                console.log(response.studList);
-                $.each(response.studList, function(key,value){
-                    console.log(value);
-                    $('#studList').append('<option value="">' + value.firstName + ' ' + value.middleName + ' ' + value.lastName + '</option>');
-                })
+                $.each(response.studList, function (key, value) {
+                    var option = '<option id="' + value.id + '">' + value.fullName +'</option>';
+                    console.log(option);
+                    $('#studList').append(option);
+
+                });
             },
-            error: function(response){
+            error: function (response) {
                 console.log("Error.")
             }
 
