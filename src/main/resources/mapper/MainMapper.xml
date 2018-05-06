@@ -470,8 +470,7 @@ AND #{userId} IN (
 )
     </select>
 
-
-    <select id="getStudentsBySearchString" resultType="com.capstone.jmt.entity.Student">
+    <select id="getStudentsBySearchString" resultMap="StudentMap" resultType="java.util.List">
         SELECT * FROM data_students
         WHERE first_name LIKE #{searchString}
         OR last_name LIKE #{searchString}

@@ -118,18 +118,18 @@ public class MainWebController {
     @RequestMapping(value = "loginWebUser", method = RequestMethod.POST)
     public String loginWebUser(@ModelAttribute("appUser") User user, Model model) {
 
-
-        System.out.println("USERNAME: " + user.getUsername());
-        System.out.println("PASSWORD: " + user.getPassword());
-
-        HashMap<String, Object> returnJson = mainService.loginUser(user.getUsername(), user.getPassword());
-        User returnedUser = (User) returnJson.get("User");
-        if (null == returnedUser) {
-            return "redirect:/login?error=1";
-        }
-
-        System.out.println("RETURNED USER: " + returnedUser.getUsername());
-        model.addAttribute("User", returnedUser);
+//
+//        System.out.println("USERNAME: " + user.getUsername());
+//        System.out.println("PASSWORD: " + user.getPassword());
+//
+//        HashMap<String, Object> returnJson = mainService.loginUser(user.getUsername(), user.getPassword());
+//        User returnedUser = (User) returnJson.get("User");
+//        if (null == returnedUser) {
+//            return "redirect:/login?error=1";
+//        }
+//
+//        System.out.println("RETURNED USER: " + returnedUser.getUsername());
+//        model.addAttribute("User", returnedUser);
 
         return "redirect:/homepage";
     }
@@ -325,6 +325,14 @@ public class MainWebController {
         return "attendanceLogs";
     }
 
+
+    @RequestMapping(value = "/guidanceReport", method = RequestMethod.GET)
+    public String guidanceReport(Model model) {
+
+
+        return "guidanceReport";
+    }
+
     @RequestMapping(value = "/getAttendanceLogsDetails", method = RequestMethod.GET)
     public ResponseEntity<?> getAttendanceLogsDetails(@RequestParam(value = "studId") String studId) {
         HashMap<String, Object> response = new HashMap<>();
@@ -337,6 +345,24 @@ public class MainWebController {
 //        }
 //        response.put("tapLogList", returnList);
         return new ResponseEntity<>((List<TapLog>) mainService.getTapLogOfStudent(studId).get("tapListDetails"), HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value = "/getStudentsBySearch", method = RequestMethod.GET)
+    public ResponseEntity<?> getStudentsBySearch(@RequestParam(value = "searchText") String searchText) {
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("Search Text: " + searchText);
+
+        List<Student> studentList = mainService.getStudentsBySearch(searchText);
+        if(studentList.isEmpty()) {
+            response.put("responseCode", 404);
+            response.put("responseDesc", HttpStatus.NOT_FOUND);
+        }else {
+            response.put("responseCode", 200);
+            response.put("studList", studentList);
+        }
+
+        return new ResponseEntity<>( response, HttpStatus.OK);
 
     }
 
