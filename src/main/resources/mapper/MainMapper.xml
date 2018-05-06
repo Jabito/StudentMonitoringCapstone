@@ -69,6 +69,7 @@
         <result column="created_on" property="createdOn" jdbcType="TIMESTAMP"/>
         <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
         <result column="log_datetime" property="logDateTime" jdbcType="VARCHAR" />
+        <result column="fullName" property="fullName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <resultMap id="UserMap" type="com.capstone.jmt.entity.User">
@@ -471,7 +472,7 @@ AND #{userId} IN (
     </select>
 
     <select id="getStudentsBySearchString" resultMap="StudentMap" resultType="java.util.List">
-        SELECT * FROM data_students
+        SELECT *, (first_name || ' ' || last_name) AS fullName FROM data_students
         WHERE first_name LIKE #{searchString}
         OR last_name LIKE #{searchString}
         OR middle_name LIKE #{searchString}
