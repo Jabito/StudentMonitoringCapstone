@@ -40,7 +40,7 @@
                             <button onclick="byParent()" class="btn btn-primary">By Parent</button>
                         </div>
                         <div class="form-group" id="byParent" style="display: none; padding: 20px ">
-                            <label>Input Parent Id</label>
+                            <label>Search Student:</label>
                             <input class="form-control" id="searchText" list="studList"/>
                         </div>
                         <datalist id="studList">
@@ -761,7 +761,7 @@
                 console.log(response.studList);
                 $.each(response.studList, function(key,value){
                     console.log(value);
-                    $('#studList').append('<option>' + value.firstName + ' ' + value.middleName + ' ' + value.lastName + '</option>');
+                    $('#studList').append('<option value="">' + value.firstName + ' ' + value.middleName + ' ' + value.lastName + '</option>');
                 })
             },
             error: function(response){
