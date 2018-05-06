@@ -749,7 +749,7 @@
         }
     }
 
-    $("#searchText").on("keyup", function () {
+    $("#searchText").on("input", function () {
         var value = $(this).val();
         console.log(value);
         $.ajax({
@@ -761,7 +761,7 @@
                 console.log(response.studList);
                 $.each(response.studList, function(key,value){
                     console.log(value);
-                    $('#studList').append('<option>' + value.address + '</option>')
+                    $('#studList').append('<option>' + value.firstName + ' ' + value.middleName + ' ' + value.lastName + '</option>');
                 })
             },
             error: function(response){
