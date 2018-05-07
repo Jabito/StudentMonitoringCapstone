@@ -367,4 +367,8 @@ public class MainService {
     public List<Student> getStudentsBySearch(String searchString){
         return mainMapper.getStudentsBySearchString("%"+ searchString + "%");
     }
+
+    public List<RefUserType> getUserType() {
+        return mainMapper.getUserType();
+    }
 }

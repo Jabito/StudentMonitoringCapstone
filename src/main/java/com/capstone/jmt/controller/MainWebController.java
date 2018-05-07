@@ -248,6 +248,8 @@ public class MainWebController {
         //TODO ADD VALIDATION OF NULL VALUES
 
         model.addAttribute("newUser", new User());
+        model.addAttribute("userType", mainService.getUserType());
+
         return "addUser";
     }
 
