@@ -248,6 +248,8 @@ public class MainWebController {
         //TODO ADD VALIDATION OF NULL VALUES
 
         model.addAttribute("newUser", new User());
+        model.addAttribute("userType", mainService.getUserType());
+
         return "addUser";
     }
 
@@ -331,6 +333,13 @@ public class MainWebController {
 
 
         return "guidanceReport";
+    }
+
+    @RequestMapping(value = "/summaryReport", method = RequestMethod.GET)
+    public String summaryReport(Model model) {
+
+
+        return "summaryReport";
     }
 
     @RequestMapping(value = "/getAttendanceLogsDetails", method = RequestMethod.GET)

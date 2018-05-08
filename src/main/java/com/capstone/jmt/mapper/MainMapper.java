@@ -86,4 +86,6 @@ public interface MainMapper {
     List<MessageJson> getAnnouncementsByUserId(@Param("userId") String userId);
 
     List<Student> getStudentsBySearchString(@Param("searchString") String searchString);
+
+    List<RefUserType> getUserType();
 }

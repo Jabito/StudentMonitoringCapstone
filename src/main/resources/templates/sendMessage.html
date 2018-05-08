@@ -292,6 +292,9 @@
     //    var sentTo = pref + to;
 
     function sendSms() {
+        var studId = $("#searchText").val();
+
+        console.log("VALUE OF STUDENT ID: " + studId);
 //        var announcement = document.getElementById('message').value;
 //        var to = '63'+document.getElementById('to').value;
 ////        var pref = document.getElementById('prefix').value;
@@ -316,16 +319,17 @@
 //            alert("Data: " + data + "\nStatus: " + status);
 //        });
 
-        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
-            apiusername: "APIXV4PYFBUJJ",
-            apipassword: "APIXV4PYFBUJJBLB47",
-            mobileno: "09176996988",
-            senderid: "292903149",
-            languagetype: "1",
-            message: "HI ALFRED VARGAS IV, SAW YOUR PROFILE AND THIS IS TO INFORM YOU THAT YOU ONLY HAVE 1 HOUR LEFT TO TELL EVERYBODY THAT IT IS THE END OF THE WORLD - ANONYMOUS"
-        }, function (data, status) {
-            alert("Data: " + data + "\nStatus: " + status);
-        });
+//        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
+//            apiusername: "APIXV4PYFBUJJ",
+//            apipassword: "APIXV4PYFBUJJBLB47",
+//            mobileno: "09176996988",
+//            senderid: "292903149",
+//            languagetype: "1",
+//            message: "HI ALFRED VARGAS IV, SAW YOUR PROFILE AND THIS IS TO INFORM YOU THAT YOU ONLY HAVE 1 HOUR LEFT TO TELL EVERYBODY THAT IT IS THE END OF THE WORLD - ANONYMOUS"
+//        }, function (data, status) {
+//            alert("Data: " + data + "\nStatus: " + status);
+//        });
+    }
 //        function guid() {
 //            function s4() {
 //                return Math.floor((1 + Math.random()) * 0x10000)
@@ -340,7 +344,7 @@
 //            }
 //            return ret;
 //        }
-    }
+
 
     function byAll() {
         var x = document.getElementById("byAll");
@@ -788,6 +792,8 @@
 
         });
     });
+
+
 
 
     //    function bySection1() {
