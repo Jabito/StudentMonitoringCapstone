@@ -335,6 +335,13 @@ public class MainWebController {
         return "guidanceReport";
     }
 
+    @RequestMapping(value = "/summaryReport", method = RequestMethod.GET)
+    public String summaryReport(Model model) {
+
+
+        return "summaryReport";
+    }
+
     @RequestMapping(value = "/getAttendanceLogsDetails", method = RequestMethod.GET)
     public ResponseEntity<?> getAttendanceLogsDetails(@RequestParam(value = "studId") String studId) {
         HashMap<String, Object> response = new HashMap<>();
