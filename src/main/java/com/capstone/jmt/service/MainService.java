@@ -371,4 +371,8 @@ public class MainService {
     public List<RefUserType> getUserType() {
         return mainMapper.getUserType();
     }
+
+    public String getGradelevelStringById(Integer gradeLvlId) {
+        return mainMapper.getGradelevelStringById(gradeLvlId);
+    }
 }
