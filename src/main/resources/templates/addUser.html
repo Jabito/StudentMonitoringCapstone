@@ -34,7 +34,7 @@
                             <div class="col-lg-6">
                                 <form  role="form" th:object="${newUser}" th:action="@{/addNewUser}" method="post">
                                     <div class="form-group">
-                                        <label>Section</label>
+                                        <label>User Type</label>
                                         <select id="section">
                                             <option  th:each="userType  : ${userType}" th:text="${userType.user_type}" th:value="${userType.id}" th:field="*{userTypeId}">
                                             </option>

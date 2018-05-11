@@ -450,6 +450,17 @@ public class MainWebController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/selectUserTypeList", method = RequestMethod.GET)
+    public ResponseEntity<?> selectUserTypeList(@RequestParam(value = "userTypeId") int userTypeId) {
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("SELECTED USER TYPE: " + userTypeId);
+        List<RefSection> returnList = mainService.getSectionList(userTypeId);
+
+        response.put("section", returnList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
     @RequestMapping(value = "/showStudentInfo", method = RequestMethod.GET)
     public String showStudentInfo(Model model, @RequestParam(value = "id") String id) {
         Student student = mainService.getStudentById(id);
