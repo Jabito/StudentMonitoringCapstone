@@ -188,13 +188,9 @@ public class MainWebController {
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
     public String addStudent(@ModelAttribute("appUser") User appUser, @Valid Student student, BindingResult bindingResult, Model model) {
 
-
-        System.out.println("student first name: " + student.getFirstName());
-        System.out.println("student last name: " + student.getLastName());
         try {
             student.setCreatedBy(appUser.getUsername());
             mainService.addStudent(student);
-            System.out.println("SUCCESS!!");
 
             return "redirect:/homepage?added=Student";
         } catch (Exception e) {

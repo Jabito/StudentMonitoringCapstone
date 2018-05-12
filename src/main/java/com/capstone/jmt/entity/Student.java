@@ -3,6 +3,7 @@ package com.capstone.jmt.entity;
 import com.capstone.jmt.data.PictureObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import java.io.Serializable;
@@ -24,6 +25,7 @@ public class Student implements Serializable {
     private String middleName;
     @JsonProperty("bday")
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date bday;
     @JsonProperty("place")
     private String place;

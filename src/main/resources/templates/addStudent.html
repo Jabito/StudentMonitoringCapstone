@@ -81,7 +81,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Section</label>
-                                        <select id="section">
+                                        <select id="section" name="section">
                                             <option  th:each="section  : ${section}" th:text="${section.section}" th:value="${section.id}" th:field="*{section}">
                                             </option>
                                         </select>
@@ -96,26 +96,6 @@
                         <!-- /.col-lg-6 (nested) -->
                             <div th:if="${message}">
                                 <h2 th:text="${message}"/>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <form method="POST" enctype="multipart/form-data" th:action="${'/upImage'}">
-                                    <table>
-                                        <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
-                                        <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
-                                    </table>
-                                </form>
-
-                                <a href="/gellallfiles">Get List Files</a>
-                                <!--<form th:action="@{/savePhoto}" enctype="multipart/form-data" method="post">-->
-
-
-                                    <!--<h5><label><i class="glyph-icon icon-paperclip" style="color: black"></i>Upload Picture</label></h5>-->
-                                    <!--<input class="form-control"  id="files-upload" type="file" name="myFile"/>-->
-
-
-                                    <!--<button type="submit" class="btn btn-success btn-lg">Upload Photo</button>-->
-                                <!--</form>-->
                             </div>
                         <!-- /.col-lg-6 (nested) -->
                         </div>
@@ -138,7 +118,6 @@
 
     $("body").on("change", "#selected", function() {
         var gradeLvlId = $(this).val();
-        alert("SELECTED GRADE LEVEL" + gradeLvlId);
         $.ajax({
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
