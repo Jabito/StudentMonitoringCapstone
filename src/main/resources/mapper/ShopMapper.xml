@@ -291,3 +291,6 @@
         WHERE id = #{shop.id, jdbcType=VARCHAR}
     </update>
 </mapper>
+
+
+

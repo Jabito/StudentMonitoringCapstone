@@ -138,7 +138,7 @@ public class MainWebController {
 
     private User setUserRole(User user, Model model) {
         User userRet = mainService.getUser(user.getUsername());
-        if(null != userRet) {
+        if (null != userRet) {
             model.addAttribute("User", userRet);
             model.addAttribute("role", userRet.getUserTypeId() == 0);
         }
@@ -157,7 +157,7 @@ public class MainWebController {
     @RequestMapping(value = "/getStudent", method = RequestMethod.GET)
     public String shopAddStudent(@ModelAttribute("appUser") User user, @RequestParam(value = "gradeLvlId", required = false) Integer gradeLvlId, Model model, @RequestBody(required = false) PictureObject pictureObject) {
         user = setUserRole(user, model);
-        if( null == user)
+        if (null == user)
             return "redirect:/login";
 
         System.out.println("GET STUDENT GRADE LEVEL ID: " + gradeLvlId);
@@ -179,7 +179,7 @@ public class MainWebController {
     @RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
     public String sendMessage(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        if( null == user)
+        if (null == user)
             return "redirect:/login";
 
         return "sendMessage";
@@ -223,7 +223,7 @@ public class MainWebController {
     @RequestMapping(value = "/getParent", method = RequestMethod.GET)
     public String getParentOfStudent(@Valid Parent parent, @ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        if( null == user)
+        if (null == user)
             return "redirect:/login";
 
         model.addAttribute("students", mainService.getAllStudents());
@@ -265,7 +265,7 @@ public class MainWebController {
     @RequestMapping(value = "/getGuidance", method = RequestMethod.GET)
     public String getGuidanceData(@ModelAttribute("appUser") User user, @Valid Guidance guidance, Model model) {
         user = setUserRole(user, model);
-        if( null == user)
+        if (null == user)
             return "redirect:/login";
 
         model.addAttribute("newGuidance", new Guidance());
@@ -287,9 +287,13 @@ public class MainWebController {
     public String shopMonitor(@RequestParam(value = "rfid", required = false) String rfid, Model model) {
         mainService.tapStudent(rfid);
         Student studIn = mainService.getStudentByRfidIn();
+        String gradelevel = mainService.getGradelevelStringById(studIn.getGradeLvlId());
         Student studOut = mainService.getStudentByRfidOut();
+        String gradelevel1 = mainService.getGradelevelStringById(studOut.getGradeLvlId());
 
         model.addAttribute("student", new Student());
+        model.addAttribute("studGradelvl", gradelevel);
+        model.addAttribute("studGradelvl1", gradelevel1);
         model.addAttribute("stud", null != studIn ? studIn : new Student());
         model.addAttribute("stud1", null != studOut ? studOut : new Student());
 
@@ -376,7 +380,7 @@ public class MainWebController {
     @RequestMapping(value = "/getStudents", method = RequestMethod.GET)
     public String getStudentList(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        if( null == user)
+        if (null == user)
             return "redirect:/login";
 
         List<Student> studentList = mainService.getStudentList();
@@ -445,6 +449,17 @@ public class MainWebController {
         response.put("section", returnList);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/selectUserTypeList", method = RequestMethod.GET)
+    public ResponseEntity<?> selectUserTypeList(@RequestParam(value = "userTypeId") int userTypeId) {
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("SELECTED USER TYPE: " + userTypeId);
+        List<RefSection> returnList = mainService.getSectionList(userTypeId);
+
+        response.put("section", returnList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 
     @RequestMapping(value = "/showStudentInfo", method = RequestMethod.GET)
     public String showStudentInfo(Model model, @RequestParam(value = "id") String id) {

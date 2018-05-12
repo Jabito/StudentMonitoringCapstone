@@ -88,4 +88,6 @@ public interface MainMapper {
     List<Student> getStudentsBySearchString(@Param("searchString") String searchString);
 
     List<RefUserType> getUserType();
+
+    String getGradelevelStringById(@Param("gradeLvlId") Integer gradeLvlId);
 }
