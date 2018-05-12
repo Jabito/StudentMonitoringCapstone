@@ -90,4 +90,6 @@ public interface MainMapper {
     List<RefUserType> getUserType();
 
     String getGradelevelStringById(@Param("gradeLvlId") Integer gradeLvlId);
+
+    List<AttendanceRow> getWeeklyAttendance();
 }

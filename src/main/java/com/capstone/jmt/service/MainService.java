@@ -375,4 +375,8 @@ public class MainService {
     public String getGradelevelStringById(Integer gradeLvlId) {
         return mainMapper.getGradelevelStringById(gradeLvlId);
     }
+
+    public List<AttendanceRow> getWeeklyAttendance(){
+        return mainMapper.getWeeklyAttendance();
+    }
 }

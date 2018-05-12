@@ -148,6 +148,8 @@ public class MainWebController {
 
     @RequestMapping(value = "/homepage", method = RequestMethod.GET)
     public String showDashboard(@RequestParam(value = "added", required = false, defaultValue = "") String added, @ModelAttribute("appUser") User user, Model model) {
+        if(user.getUsername().equals("monitorAdmin"))
+            return "redirect:/monitor";
         model.addAttribute("added", added);
         user = setUserRole(user, model);
         return null == user ? "redirect:/login" : "dashboard";
@@ -287,9 +289,13 @@ public class MainWebController {
     public String shopMonitor(@RequestParam(value = "rfid", required = false) String rfid, Model model) {
         mainService.tapStudent(rfid);
         Student studIn = mainService.getStudentByRfidIn();
-        String gradelevel = mainService.getGradelevelStringById(studIn.getGradeLvlId());
+        String gradelevel = "";
+        String gradelevel1 = "";
+        if(null != studIn)
+            gradelevel = mainService.getGradelevelStringById(studIn.getGradeLvlId());
         Student studOut = mainService.getStudentByRfidOut();
-        String gradelevel1 = mainService.getGradelevelStringById(studOut.getGradeLvlId());
+        if(null != studOut)
+            gradelevel1 = mainService.getGradelevelStringById(studOut.getGradeLvlId());
 
         model.addAttribute("student", new Student());
         model.addAttribute("studGradelvl", gradelevel);
@@ -531,5 +537,10 @@ public class MainWebController {
     }
 
     /** END FILE STORAGE */
+
+    @RequestMapping(value = "/getWeeklyAttendance", method = RequestMethod.GET)
+    public ResponseEntity<?> getWeeklyAttendance(){
+        return new ResponseEntity<>(mainService.getWeeklyAttendance(), HttpStatus.OK);
+    }
 
 }
