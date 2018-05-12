@@ -120,18 +120,14 @@ public class MainWebController {
     @RequestMapping(value = "loginWebUser", method = RequestMethod.POST)
     public String loginWebUser(@ModelAttribute("appUser") User user, Model model) {
 
-//
-//        System.out.println("USERNAME: " + user.getUsername());
-//        System.out.println("PASSWORD: " + user.getPassword());
-//
-//        HashMap<String, Object> returnJson = mainService.loginUser(user.getUsername(), user.getPassword());
-//        User returnedUser = (User) returnJson.get("User");
-//        if (null == returnedUser) {
-//            return "redirect:/login?error=1";
-//        }
-//
-//        System.out.println("RETURNED USER: " + returnedUser.getUsername());
-//        model.addAttribute("User", returnedUser);
+        HashMap<String, Object> returnJson = mainService.loginUser(user.getUsername(), user.getPassword());
+        User returnedUser = (User) returnJson.get("User");
+        if(returnJson.get("responseCode") != HttpStatus.OK)
+            return "redirect:/login?error=1";
+
+
+        System.out.println("RETURNED USER: " + returnedUser.getUsername());
+        model.addAttribute("appUser", returnedUser);
 
         return "redirect:/homepage";
     }
@@ -286,8 +282,12 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/monitor", method = RequestMethod.GET)
-    public String shopMonitor(@RequestParam(value = "rfid", required = false) String rfid, Model model) {
-        mainService.tapStudent(rfid);
+    public String shopMonitor(@ModelAttribute("appUser") User user, @RequestParam(value = "rfid", required = false) String rfid, Model model) {
+        if(!user.getUsername().equalsIgnoreCase("monitorAdmin"))
+            return "redirect:/login";
+
+        if(null != rfid && rfid != "")
+            mainService.tapStudent(rfid);
         Student studIn = mainService.getStudentByRfidIn();
         String gradelevel = "";
         String gradelevel1 = "";
@@ -522,7 +522,11 @@ public class MainWebController {
     public ResponseEntity<byte[]> loadImage(@RequestParam("studId") String studId) {
         HashMap<String, Object> response = new HashMap<>();
         HttpHeaders headers = new HttpHeaders();
-        Resource file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
+        Resource file = null;
+        if(null == studId)
+            file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
+        if(null == file)
+            file = storageService.loadFile("default.png");
         try {
             InputStream in = file.getInputStream();
             byte[] media = IOUtils.toByteArray(in);
