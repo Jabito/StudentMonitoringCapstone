@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
+
 import java.util.Base64;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -134,32 +136,29 @@ public class MainWebController {
         return "redirect:/homepage";
     }
 
+    private User setUserRole(User user, Model model) {
+        User userRet = mainService.getUser(user.getUsername());
+        if (null != userRet) {
+            model.addAttribute("User", userRet);
+            model.addAttribute("role", userRet.getUserTypeId() == 0);
+        }
+        return userRet;
+    }
+
 
     @RequestMapping(value = "/homepage", method = RequestMethod.GET)
     public String showDashboard(@RequestParam(value = "added", required = false, defaultValue = "") String added, @ModelAttribute("appUser") User user, Model model) {
         model.addAttribute("added", added);
-
-        User user1 = mainService.getUser(user.getUsername());
-
-        System.out.println("HOMEPAGE: " + user.getUsername());
-        System.out.println("USERTYPEID: " + user1.getUserTypeId());
-        if (null != user.getUsername()) {
-            if(user1.getUserTypeId() == 0) {
-                model.addAttribute("role", true);
-                model.addAttribute("User", user);
-                return "dashboard";
-            }else {
-                model.addAttribute("role", false);
-                model.addAttribute("User", user);
-                return "dashboard";
-            }
-        }
-        return "redirect:/login";
+        user = setUserRole(user, model);
+        return null == user ? "redirect:/login" : "dashboard";
     }
 
 
     @RequestMapping(value = "/getStudent", method = RequestMethod.GET)
-    public String shopAddStudent(@RequestParam(value = "gradeLvlId", required = false) Integer gradeLvlId, Model model, @RequestBody(required = false) PictureObject pictureObject) {
+    public String shopAddStudent(@ModelAttribute("appUser") User user, @RequestParam(value = "gradeLvlId", required = false) Integer gradeLvlId, Model model, @RequestBody(required = false) PictureObject pictureObject) {
+        user = setUserRole(user, model);
+        if (null == user)
+            return "redirect:/login";
 
         System.out.println("GET STUDENT GRADE LEVEL ID: " + gradeLvlId);
         model.addAttribute("student", getStudent());
@@ -178,9 +177,10 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
-    public String sendMessage(Model model) {
-
-
+    public String sendMessage(@ModelAttribute("appUser") User user, Model model) {
+        user = setUserRole(user, model);
+        if (null == user)
+            return "redirect:/login";
 
         return "sendMessage";
     }
@@ -225,7 +225,10 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getParent", method = RequestMethod.GET)
-    public String getParentOfStudent(@Valid Parent parent, Model model) {
+    public String getParentOfStudent(@Valid Parent parent, @ModelAttribute("appUser") User user, Model model) {
+        user = setUserRole(user, model);
+        if (null == user)
+            return "redirect:/login";
 
         model.addAttribute("students", mainService.getAllStudents());
         model.addAttribute("parent", new Parent());
@@ -264,7 +267,10 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getGuidance", method = RequestMethod.GET)
-    public String getGuidanceData(@Valid Guidance guidance, Model model) {
+    public String getGuidanceData(@ModelAttribute("appUser") User user, @Valid Guidance guidance, Model model) {
+        user = setUserRole(user, model);
+        if (null == user)
+            return "redirect:/login";
 
         model.addAttribute("newGuidance", new Guidance());
         return "addGuidance";
@@ -285,9 +291,13 @@ public class MainWebController {
     public String shopMonitor(@RequestParam(value = "rfid", required = false) String rfid, Model model) {
         mainService.tapStudent(rfid);
         Student studIn = mainService.getStudentByRfidIn();
+        String gradelevel = mainService.getGradelevelStringById(studIn.getGradeLvlId());
         Student studOut = mainService.getStudentByRfidOut();
+        String gradelevel1 = mainService.getGradelevelStringById(studOut.getGradeLvlId());
 
         model.addAttribute("student", new Student());
+        model.addAttribute("studGradelvl", gradelevel);
+        model.addAttribute("studGradelvl1", gradelevel1);
         model.addAttribute("stud", null != studIn ? studIn : new Student());
         model.addAttribute("stud1", null != studOut ? studOut : new Student());
 
@@ -306,9 +316,9 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
-    public String shopInventory(@ModelAttribute("shopUser") User user, Model model) {
-//        if (shopUser.getId() == null)
-//            return "redirect:/login";
+    public String shopInventory(@ModelAttribute("appUser") User user, Model model) {
+        user = setUserRole(user, model);
+        return null == user ? "redirect:/login" : "inventory";
 //
 //
 //        model.addAttribute("shop1", new ShopSalesInformation());
@@ -316,30 +326,26 @@ public class MainWebController {
 //        model.addAttribute("water", new ShopSalesInformation());
 //        model.addAttribute("username", shopUser.getUsername());
 //        model.addAttribute("inventory", shopService.getShopSalesInformationById(shopUser.getStaffOf()));
-
-        return "inventory";
     }
 
     @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
-    public String showSales(Model model) {
-
-
-        return "attendanceLogs";
+    public String showSales(@ModelAttribute("appUser") User user, Model model) {
+        user = setUserRole(user, model);
+        return null == user ? "redirect:/login" : "attendanceLogs";
     }
 
 
     @RequestMapping(value = "/guidanceReport", method = RequestMethod.GET)
-    public String guidanceReport(Model model) {
+    public String guidanceReport(@ModelAttribute("appUser") User user, Model model) {
+        user = setUserRole(user, model);
+        return null == user ? "redirect:/login" : "guidanceReport";
 
-
-        return "guidanceReport";
     }
 
     @RequestMapping(value = "/summaryReport", method = RequestMethod.GET)
-    public String summaryReport(Model model) {
-
-
-        return "summaryReport";
+    public String summaryReport(@ModelAttribute("appUser") User user, Model model) {
+        user = setUserRole(user, model);
+        return null == user ? "redirect:/login" : "summaryReport";
     }
 
     @RequestMapping(value = "/getAttendanceLogsDetails", method = RequestMethod.GET)
@@ -363,25 +369,28 @@ public class MainWebController {
         System.out.println("Search Text: " + searchText);
 
         List<Student> studentList = mainService.getStudentsBySearch(searchText);
-        if(studentList.isEmpty()) {
+        if (studentList.isEmpty()) {
             response.put("responseCode", 404);
             response.put("responseDesc", HttpStatus.NOT_FOUND);
-        }else {
+        } else {
             response.put("responseCode", 200);
             response.put("studList", studentList);
         }
 
-        return new ResponseEntity<>( response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
     @RequestMapping(value = "/getStudents", method = RequestMethod.GET)
-    public String getStudentList(Model model) {
+    public String getStudentList(@ModelAttribute("appUser") User user, Model model) {
+        user = setUserRole(user, model);
+        if (null == user)
+            return "redirect:/login";
 
         List<Student> studentList = mainService.getStudentList();
-        if(null == studentList) {
+        if (null == studentList) {
             return "redirect:/login";
-        }else{
+        } else {
             model.addAttribute("studList", studentList);
             return "students";
         }
@@ -430,14 +439,9 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
-    public String showBottleSales(@ModelAttribute("user") User user, Model model) {
-//        if (shopUser.getId() == null)
-//            return "redirect:/login";
-//
-//        model.addAttribute("username", shopUser.getUsername());
-//        model.addAttribute("bottleSalesRecord", orderService.getBottleSales());
-
-        return "bottlesales";
+    public String showBottleSales(@ModelAttribute("appUser") User user, Model model) {
+        user = setUserRole(user, model);
+        return null == user ? "redirect:/login" : "bottlesales";
     }
 
     @RequestMapping(value = "/selectGradeLevel", method = RequestMethod.GET)
@@ -450,13 +454,24 @@ public class MainWebController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/selectUserTypeList", method = RequestMethod.GET)
+    public ResponseEntity<?> selectUserTypeList(@RequestParam(value = "userTypeId") int userTypeId) {
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("SELECTED USER TYPE: " + userTypeId);
+        List<RefSection> returnList = mainService.getSectionList(userTypeId);
+
+        response.put("section", returnList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
     @RequestMapping(value = "/showStudentInfo", method = RequestMethod.GET)
     public String showStudentInfo(Model model, @RequestParam(value = "id") String id) {
         Student student = mainService.getStudentById(id);
-        if(null == student) {
+        if (null == student) {
             System.out.println("NULL PURCHASE REQUEST");
             return "studentInfo";
-        }else{
+        } else {
             model.addAttribute("student", student);
             return "studentInfo";
         }
@@ -464,7 +479,7 @@ public class MainWebController {
 
     /**
      * For File Storage
-     * */
+     */
 
     @Autowired
     StorageService storageService;
@@ -477,7 +492,7 @@ public class MainWebController {
             storageService.store(file);
             model.addAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
             PictureObject po = new PictureObject();
-            po.setStudentId(null == userId? "SID15":userId);
+            po.setStudentId(null == userId ? "SID15" : userId);
             po.setOriginalFileName(file.getOriginalFilename());
             mainService.saveImage(po);
         } catch (Exception e) {
@@ -488,7 +503,7 @@ public class MainWebController {
     }
 
     @RequestMapping("/getPictureFilename")
-    public ResponseEntity<?> getPictureObject(@RequestParam("userId") String userId){
+    public ResponseEntity<?> getPictureObject(@RequestParam("userId") String userId) {
         return new ResponseEntity<>(mainService.retrieveImage(userId).getOriginalFileName(), HttpStatus.OK);
     }
 
@@ -502,7 +517,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/loadImage", method = RequestMethod.GET)
-        public ResponseEntity<byte[]> loadImage(@RequestParam("studId") String studId){
+    public ResponseEntity<byte[]> loadImage(@RequestParam("studId") String studId) {
         HashMap<String, Object> response = new HashMap<>();
         HttpHeaders headers = new HttpHeaders();
         Resource file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
@@ -512,7 +527,7 @@ public class MainWebController {
 //            headers.setCacheControl(CacheControl.noCache().getHeaderValue());
             headers.setContentType(MediaType.IMAGE_JPEG);
             return new ResponseEntity<byte[]>(Base64.getEncoder().encode(media), headers, HttpStatus.OK);
-        }catch(IOException e){
+        } catch (IOException e) {
             response.put("responseDesc", "Failed to retrieve image.");
             return new ResponseEntity<byte[]>(new byte[1], HttpStatus.OK);
         }

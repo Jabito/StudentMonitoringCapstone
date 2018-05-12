@@ -268,6 +268,10 @@
         WHERE id = #{id}
     </select>
 
+    <select id="getGradelevelStringById" resultType="string">
+        SELECT grade_level from ref_grade_level where id = #{gradeLvlId}
+    </select>
+
     <resultMap id="MessageMap" type="com.capstone.jmt.data.MessageJson">
         <result column="posted_by" property="postedBy" jdbcType="VARCHAR"/>
         <result column="message_type" property="messageTypeId" jdbcType="VARCHAR"/>
