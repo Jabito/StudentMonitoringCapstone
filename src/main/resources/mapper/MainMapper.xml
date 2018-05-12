@@ -287,6 +287,16 @@
         ORDER BY date_posted DESC
     </select>
 
+    <resultMap id="AttendanceRowMap" type="com.capstone.jmt.data.AttendanceRow">
+        <result column="date" property="date" jdbcType="DATE" />
+        <result column="attendance" property="attendanceCount" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="getWeeklyAttendance" resultMap="AttendanceRowMap" resultType="java.util.List">
+        SELECT
+
+    </select>
+
     <insert id="addUser" flushCache="true">
         INSERT INTO data_users(
         id, username, password, reference_id, user_type_id,  email, is_locked, created_by
