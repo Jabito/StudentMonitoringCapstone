@@ -14,7 +14,7 @@
 
 <div th:fragment="header">
     <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0; height: 130px; background-color: #122b40;">
+    <nav class="navbar navbar-default navbar-static-top" admin="navigation" style="margin-bottom: 0; height: 130px; background-color: #122b40;">
         <div class="navbar-header" >
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -56,15 +56,15 @@
                     <li><a href="" th:href="@{/homepage}"><i class="fa fa-dashboard fa-fw"></i> Homepage</a></li>
                     <li><a href="" th:href="@{/attendanceLogs}"><i class="fa fa-calendar fa-fw"></i> Attendance Logs</a></li>
                     <li><a href="" th:href="@{/messages}"><i class="fa fa-envelope"></i> Messages</a></li>
-                    <li><a href="" th:if="${role}" th:href="@{/settings}"><i class="fa fa-cog"></i> SMS Settings</a></li>
-                    <li><a href="" th:if="${role}" th:href="@{/guidanceReport}"><i class="fa fa-bullhorn"></i> Post Guidance Report</a></li>
-                    <li><a href="" th:if="${role}" target="_blank" th:href="@{/monitor}"><i class="fa fa-desktop"></i> Monitor</a></li>
-                    <li><a href="" th:if="${role}" th:href="@{/getStudent}"><i class="fa fa-child"></i> Add Student</a></li>
-                    <li><a href="" th:if="${role}" th:href="@{/getParent}"><i class="fa fa-user"></i> Add Parent</a></li>
-                    <li><a href="" th:if="${role}" th:href="@{/getUser}"><i class="fa fa-user"></i> Add User</a></li>
-                    <li><a href="" th:if="${role}" th:href="@{/getGuidance}"><i class="fa fa-legal"></i> Add Guidance</a></li>
-                    <li><a href="" th:if="${role}" th:href="@{/getStudents}"><i class="fa fa-users"></i> View Students</a></li>
-                    <li><a href="" th:if="${role}" th:href="@{/summaryReport}"><i class="fa fa-users"></i>View Summary Report</a></li>
+                    <li><a href="" th:if="${admin}" th:href="@{/settings}"><i class="fa fa-cog"></i> SMS Settings</a></li>
+                    <li><a href="" th:if="${guidance}" th:href="@{/guidanceReport}"><i class="fa fa-bullhorn"></i> Post Guidance Report</a></li>
+                    <li><a href="" th:if="${admin}" target="_blank" th:href="@{/monitor}"><i class="fa fa-desktop"></i> Monitor</a></li>
+                    <li><a href="" th:if="${admin}" th:href="@{/getStudent}"><i class="fa fa-child"></i> Add Student</a></li>
+                    <li><a href="" th:if="${admin}" th:href="@{/getParent}"><i class="fa fa-user"></i> Add Parent</a></li>
+                    <li><a href="" th:if="${admin}" th:href="@{/getUser}"><i class="fa fa-user"></i> Add User</a></li>
+                    <li><a href="" th:if="${admin}" th:href="@{/getGuidance}"><i class="fa fa-legal"></i> Add Guidance</a></li>
+                    <li><a href="" th:if="${admin}" th:href="@{/getStudents}"><i class="fa fa-users"></i> View Students</a></li>
+                    <li><a href="" th:if="${admin}" th:href="@{/summaryReport}"><i class="fa fa-users"></i>View Summary Report</a></li>
 
                     <li><a href="" th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
                 </ul>

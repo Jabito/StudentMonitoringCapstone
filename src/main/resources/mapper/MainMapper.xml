@@ -500,4 +500,24 @@ AND #{userId} IN (
     <select id="getUserType" resultMap="RefUserTypeMap" resultType="java.util.List">
         SELECT * FROM ref_user_type
     </select>
+
+    <resultMap id="UserTypeMap" type="com.capstone.jmt.data.UserList">
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="userId" property="userId" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="getUsersByUserTypeId" resultMap="UserTypeMap" resultType="com.capstone.jmt.data.UserList">
+      <choose>
+          <when test="userTypeId == 1">
+              SELECT (teacher_fname || teacher_lname) as name, id as userId
+              FROM data_guidance
+
+          </when>
+          <when test="userTypeId == 2">
+              SELECT parent_name as name, id as userId
+              FROM data_parents
+          </when>
+      </choose>
+        ORDER BY name asc
+    </select>
 </mapper>

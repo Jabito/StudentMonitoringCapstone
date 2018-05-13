@@ -66,7 +66,7 @@ public class MainAppController {
     public ResponseEntity<?> downloadPicture(@RequestParam("userId") String userId) {
         HashMap<String, Object> response = new HashMap<>();
         try {
-            Resource file = storageService.loadFile(mainService.retrieveImage(userId).getOriginalFileName());
+            Resource file = storageService.loadFile(null == userId? mainService.retrieveImage(userId).getOriginalFileName(): "image.png");
             InputStream in = file.getInputStream();
             byte[] media = IOUtils.toByteArray(in);
 
@@ -199,8 +199,8 @@ public class MainAppController {
         HashMap<String, Object> response = new HashMap<>();
         User admin = mainService.getUser(user.getAppUsername());
         System.out.println(user.getAppUsername());
-        if (null != admin || user.getAppUsername().equalsIgnoreCase("admin")) {
-                if(user.getAppUsername().equalsIgnoreCase("admin") || 0 == admin.getUserTypeId()) {
+        if (null != admin) {
+                if(0 == admin.getUserTypeId()) {
                 User teacher = mainService.getUser(user.getUsername());
                 if (null != teacher) {
                     response.put("responseCode", 201);

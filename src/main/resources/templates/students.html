@@ -47,7 +47,7 @@
             </thead>
             <tbody id="tableBody" th:each="stud : ${studList}">
                 <tr>
-                    <td><input type="text" disabled="disabled" th:value="${stud.firstName}"/></td>
+                    <td th:text="${stud.firstName}"></td>
                     <td th:text="${stud.middleName}"></td>
                     <td th:text="${stud.lastName}"></td>
                     <td th:text="${stud.bday}"></td>

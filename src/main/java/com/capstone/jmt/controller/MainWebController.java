@@ -11,6 +11,7 @@ import com.capstone.jmt.entity.User;
 import com.capstone.jmt.service.AndroidPushNotificationsService;
 import com.capstone.jmt.service.MainService;
 import com.capstone.jmt.service.StorageService;
+import com.google.api.Http;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class MainWebController {
         return new User();
     }
 
-    @ModelAttribute("student")
+    @ModelAttribute("appStudent")
     public Student getStudent() {
         return new Student();
     }
@@ -112,6 +113,7 @@ public class MainWebController {
                 model.addAttribute("param.logout", true);
         }
         model.addAttribute("appUser", getShopUser());
+        model.addAttribute("appStudent", getStudent());
 
         return "login";
     }
@@ -136,7 +138,9 @@ public class MainWebController {
         User userRet = mainService.getUser(user.getUsername());
         if (null != userRet) {
             model.addAttribute("User", userRet);
-            model.addAttribute("role", userRet.getUserTypeId() == 0);
+            model.addAttribute("admin", userRet.getUserTypeId() == 0);
+            model.addAttribute("guidance", userRet.getUserTypeId() == 1);
+            model.addAttribute("parent", userRet.getUserTypeId() == 2);
         }
         return userRet;
     }
@@ -144,6 +148,8 @@ public class MainWebController {
 
     @RequestMapping(value = "/homepage", method = RequestMethod.GET)
     public String showDashboard(@RequestParam(value = "added", required = false, defaultValue = "") String added, @ModelAttribute("appUser") User user, Model model) {
+        if(null == user)
+            return "redirect:/login";
         if(user.getUsername().equals("monitorAdmin"))
             return "redirect:/monitor";
         model.addAttribute("added", added);
@@ -201,10 +207,6 @@ public class MainWebController {
     @RequestMapping(value = "/updateStudent", method = RequestMethod.POST)
     public String udpateStudent(@ModelAttribute("appUser") User appUser, @Valid Student student, BindingResult bindingResult, Model model) {
 
-
-        System.out.println("student ID: " + student.getId());
-        System.out.println("student first name: " + student.getFirstName());
-        System.out.println("student last name: " + student.getLastName());
         try {
             mainService.updateStudentInfo(student);
             System.out.println("SUCCESS!!");
@@ -229,6 +231,7 @@ public class MainWebController {
         return "addParent";
     }
 
+
     @RequestMapping(value = "/addNewParent", method = RequestMethod.POST)
     public String addNewParent(@ModelAttribute("appUser") User appUser, @Valid Parent parent, BindingResult bindingResult, Model model) {
 
@@ -240,8 +243,10 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public String getUserData(@Valid AddUserJson newUser, Model model) {
-
+    public String getUserData(@ModelAttribute("appUser") User user,@Valid AddUserJson newUser, Model model) {
+        user = setUserRole(user, model);
+        if (null == user)
+            return "redirect:/login";
         //TODO ADD VALIDATION OF NULL VALUES
 
         model.addAttribute("newUser", new User());
@@ -250,11 +255,13 @@ public class MainWebController {
         return "addUser";
     }
 
+    @RequestMapping(value = "/getListByUserTypeId", method = RequestMethod.GET)
+    public ResponseEntity<?> getListByUsertypeId(@RequestParam("userTypeId") int userTypeId){
+        return new ResponseEntity<>(mainService.getUsersByUserTypeId(userTypeId), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/addNewUser", method = RequestMethod.POST)
     public String postNewUser(@Valid AddUserJson newUser, BindingResult bindingResult, Model model) {
-
-        System.out.println("USER username: " + newUser.getUsername());
-        System.out.println("USER password: " + newUser.getPassword());
 
         mainService.addUser(newUser);
         return "redirect:/homepage?added=User";
@@ -307,7 +314,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/monitorStudent", method = RequestMethod.POST)
-    public String monitorStudent(@ModelAttribute("student") Student student, BindingResult bindingResult, Model model) {
+    public String monitorStudent(@ModelAttribute("appStudent") Student student, BindingResult bindingResult, Model model) {
         System.out.println("STUDENT RFID: " + student.getRfid());
 //        mainService.processRfidTap(student.getRfid());
 //        Student student1 = mainService.getStudentByRfid(student.getRfid());
@@ -350,21 +357,6 @@ public class MainWebController {
         return null == user ? "redirect:/login" : "summaryReport";
     }
 
-    @RequestMapping(value = "/getAttendanceLogsDetails", method = RequestMethod.GET)
-    public ResponseEntity<?> getAttendanceLogsDetails(@RequestParam(value = "studId") String studId) {
-        HashMap<String, Object> response = new HashMap<>();
-        System.out.println("Student Id selected: " + studId);
-//        List<TapLog> returnList = ;
-
-//        if(returnList.isEmpty()) {
-//            response.put("responseDesc", HttpStatus.NOT_FOUND);
-//            response.put("responseCode", 404);
-//        }
-//        response.put("tapLogList", returnList);
-        return new ResponseEntity<>((List<TapLog>) mainService.getTapLogOfStudent(studId).get("tapListDetails"), HttpStatus.OK);
-
-    }
-
     @RequestMapping(value = "/getStudentsBySearch", method = RequestMethod.GET)
     public ResponseEntity<?> getStudentsBySearch(@RequestParam(value = "searchText") String searchText) {
         HashMap<String, Object> response = new HashMap<>();
@@ -383,8 +375,24 @@ public class MainWebController {
 
     }
 
+    @RequestMapping(value = "/getAttendanceLogsDetails", method = RequestMethod.GET)
+    public ResponseEntity<?> getAttendanceLogsDetails(@RequestParam(value = "studId") String studId) {
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("Student Id selected: " + studId);
+//        List<TapLog> returnList = ;
+
+//        if(returnList.isEmpty()) {
+//            response.put("responseDesc", HttpStatus.NOT_FOUND);
+//            response.put("responseCode", 404);
+//        }
+//        response.put("tapLogList", returnList);
+        return new ResponseEntity<>((List<TapLog>) mainService.getTapLogOfStudent(studId).get("tapListDetails"), HttpStatus.OK);
+
+    }
+
     @RequestMapping(value = "/getStudents", method = RequestMethod.GET)
     public String getStudentList(@ModelAttribute("appUser") User user, Model model) {
+        model.addAttribute("student", getStudent());
         user = setUserRole(user, model);
         if (null == user)
             return "redirect:/login";
@@ -395,48 +403,6 @@ public class MainWebController {
         } else {
             model.addAttribute("studList", studentList);
             return "students";
-        }
-    }
-
-    @RequestMapping(value = "/savePhoto", method = RequestMethod.POST)
-    public String showSavedPhoto(@RequestParam(value = "myFile", required = false) MultipartFile multipartFile) {
-
-
-        if (null == multipartFile) {
-            return "addStudent";
-        } else {
-            try {
-                PictureObject pictureObject = new PictureObject();
-
-
-                pictureObject.setOriginalFileName(multipartFile.getOriginalFilename());
-                System.out.println("NAME : " + multipartFile.getName());
-                System.out.println("CONTENT TYPE : " + multipartFile.getContentType());
-                System.out.println("SIZE : " + multipartFile.getSize());
-                System.out.println("CONTENT BYTES : " + multipartFile.getBytes().toString());
-                System.out.println("ORIGINAL NAME : " + multipartFile.getOriginalFilename());
-
-//                pictureObject.setContent(multipartFile.getBytes());
-                pictureObject.setContentType(multipartFile.getContentType());
-                pictureObject.setFileId("sample");
-                pictureObject.setOriginalFileName(multipartFile.getOriginalFilename());
-                pictureObject.setStudentId("SID10");
-
-                mainService.saveImage(pictureObject);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-//            PictureObject pictureObject = new PictureObject();
-//            try {
-//                pictureObject.setContent(multipartFile.getBytes());
-//                pictureObject.setContentType(multipartFile.getContentType());
-//                pictureObject.setOriginalFileName(multipartFile.getOriginalFilename());
-//            }catch (IOException e){
-//                e.printStackTrace();
-//            }
-
-
-            return "redirect:/login";
         }
     }
 
@@ -468,13 +434,16 @@ public class MainWebController {
 
 
     @RequestMapping(value = "/showStudentInfo", method = RequestMethod.GET)
-    public String showStudentInfo(Model model, @RequestParam(value = "id") String id) {
-        Student student = mainService.getStudentById(id);
+    public String showStudentInfo(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
+
+        if(null == student.getId())
+            student = mainService.getStudentById(id);
+        System.out.println("SID " + student.getId());
         if (null == student) {
-            System.out.println("NULL PURCHASE REQUEST");
             return "studentInfo";
         } else {
             model.addAttribute("student", student);
+            model.addAttribute("appStudent", student);
             return "studentInfo";
         }
     }
@@ -501,7 +470,7 @@ public class MainWebController {
             model.addAttribute("message", "FAIL to upload " + file.getOriginalFilename() + "!");
         }
 
-        return "addStudent";
+        return "redirect:/homepage?added=StudImage";
     }
 
     @RequestMapping("/getPictureFilename")
@@ -526,7 +495,7 @@ public class MainWebController {
         if(null == studId)
             file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
         if(null == file)
-            file = storageService.loadFile("default.png");
+            file = storageService.loadFile("image.png");
         try {
             InputStream in = file.getInputStream();
             byte[] media = IOUtils.toByteArray(in);
