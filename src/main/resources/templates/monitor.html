@@ -4,7 +4,7 @@
     <title>St. Mark's Institute</title>
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
-<body style="background-color: #122b40">
+<body style="background-color: #122b40" id="body">
 <div class="container-fluid" style="background-color:#122b40;">
     <div class="page-wrapper">
         <div class="row">
@@ -14,9 +14,9 @@
             </div>
             <div class="row">
                 <form class="col-md-6" th:object="${student}" th:action="@{/monitorStudent}" th:method="POST">
-                    Please tap the rfid: <input id="rfidTag" th:field="*{rfid}" class="form-control"
+                    <input id="rfidTag" th:field="*{rfid}" class="form-control"
                                                 autofocus="true"
-                                                style="border-color: transparent; color: transparent"/>
+                                                style="alpha: 0; border-color: transparent; color: transparent"/>
 
                     <input type="submit" id="submit" hidden="hidden" style="color:#122b40; opacity: 0;"/>
                 </form>
@@ -112,13 +112,48 @@
     </div>
 </div>
 <script>
+    //<![CDATA[
     $(document).ready(function () {
+        $('#body').on('click', function(){
+            console.log("this");
+            toggleFullScreen(this);
+        });
+
         var studIn = $('#studInId').text();
         var studOut = $('#studOutId').text();
         loadImage(studIn, 1);
         loadImage(studOut, 2);
-        console.log("StudNo - " + studIn);
     });
+
+    function toggleFullScreen(elem) {
+        console.log(document);
+        console.log(elem);
+        // ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+        if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) ||
+            (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) ||
+            (document.mozFullScreen !== undefined && !document.mozFullScreen) ||
+            (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
+            if (elem.requestFullScreen) {
+                elem.requestFullScreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullScreen) {
+                elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        } else {
+            if (document.cancelFullScreen) {
+                document.cancelFullScreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+    }
 
     var loadImage = function (studId, mode) {
         $.ajax({
@@ -135,10 +170,11 @@
                 }
             },
             error: function (response) {
-                console.log("error", response);
+                console.log("Error pulling image.");
             }
         });
     }
+    //]]>
 </script>
 
 </body>
