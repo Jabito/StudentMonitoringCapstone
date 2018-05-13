@@ -5,7 +5,7 @@
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
     <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
 </head>
-<body id="addStudent">
+<body id="studentInfo">
 <div class="container-fluid">
     <div class="row">
         <div class="">
@@ -87,15 +87,17 @@
                             </div>
                             <!-- /.col-lg-6 (nested) -->
                             <div class="col-lg-6">
-                                <form th:action="@{/savePhoto}" enctype="multipart/form-data" method="post">
-
-
-                                    <h5><label><i class="glyph-icon icon-paperclip" style="color: black"></i>Upload
-                                        Picture</label></h5>
-                                    <input class="form-control" id="files-upload" type="file" name="myFile"/>
-
-
-                                    <button type="submit" class="btn btn-success btn-lg">Upload Photo</button>
+                                <form method="POST" enctype="multipart/form-data" th:action="${'/upImage'}">
+                                    <table>
+                                        <tr>
+                                            <td>File to upload:</td>
+                                            <td><input type="file" name="file"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td><input type="submit" value="Upload"/></td>
+                                        </tr>
+                                    </table>
                                 </form>
                             </div>
                             <!-- /.col-lg-6 (nested) -->

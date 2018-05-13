@@ -379,4 +379,8 @@ public class MainService {
     public List<AttendanceRow> getWeeklyAttendance(){
         return mainMapper.getWeeklyAttendance();
     }
+
+    public List<UserList> getUsersByUserTypeId(int userTypeId) {
+        return mainMapper.getUsersByUserTypeId(userTypeId);
+    }
 }
