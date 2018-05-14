@@ -389,6 +389,7 @@
 
     <select id="getGradeLevelList" resultMap="GradeLevelMap" resultType="java.util.List">
         SELECT * FROM ref_grade_level
+        ORDER BY id ASC
     </select>
 
     <select id="getSectionList" resultMap="SectionMap" resultType="java.util.List">

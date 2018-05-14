@@ -116,9 +116,7 @@
 
 
 
-    $("body").on("change", "#selected", onChange());
-
-    function onChange() {
+    $("body").on("change", "#selected", function() {
         var gradeLvlId = $(this).val();
         $.ajax({
             type: 'GET',
@@ -126,16 +124,13 @@
             url: '/selectGradeLevel',
             data: {gradeLvlId: gradeLvlId},
             success: function (response) {
-                console.log(response);
                 $('#section').empty();
                 response.section.forEach(function (item) {
                     $('#section').append(new Option(item.section, item.id));
                 });
             }
         });
-    }
-
-    onChange();
+    });
 </script>
 </body>
 </html>
