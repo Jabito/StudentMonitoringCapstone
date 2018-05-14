@@ -166,12 +166,6 @@ public class MainWebController {
         gradeLvlId = 0;
         model.addAttribute("section", mainService.getSectionList(gradeLvlId));
 
-        if (null == pictureObject) {
-            System.out.println("walang laman");
-        } else {
-            System.out.println("mays laman");
-        }
-
         return "addStudent";
     }
 
