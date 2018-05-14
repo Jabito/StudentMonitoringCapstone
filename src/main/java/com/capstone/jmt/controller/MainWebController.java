@@ -1,9 +1,6 @@
 package com.capstone.jmt.controller;
 
-import com.capstone.jmt.data.AddUserJson;
-import com.capstone.jmt.data.PictureObject;
-import com.capstone.jmt.data.RefSection;
-import com.capstone.jmt.data.TapLog;
+import com.capstone.jmt.data.*;
 import com.capstone.jmt.entity.Guidance;
 import com.capstone.jmt.entity.Parent;
 import com.capstone.jmt.entity.Student;
@@ -19,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 
-import java.util.Base64;
+import java.util.*;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,13 +29,11 @@ import javax.validation.Valid;
 import javax.xml.ws.Response;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.io.IOUtils;
+import sun.plugin2.message.Message;
 
 /**
  * Created by Jabito on 08/08/2017.
@@ -327,14 +322,10 @@ public class MainWebController {
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
     public String shopInventory(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
+        List<MessageJson> messages = (List<MessageJson>) mainService.getAnnouncements(user.getId()).get("announcements");
+
+        model.addAttribute("messages", messages);
         return null == user ? "redirect:/login" : "inventory";
-//
-//
-//        model.addAttribute("shop1", new ShopSalesInformation());
-//        model.addAttribute("shop2", new ShopSalesInformation());
-//        model.addAttribute("water", new ShopSalesInformation());
-//        model.addAttribute("username", shopUser.getUsername());
-//        model.addAttribute("inventory", shopService.getShopSalesInformationById(shopUser.getStaffOf()));
     }
 
     @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
@@ -515,5 +506,4 @@ public class MainWebController {
     public ResponseEntity<?> getWeeklyAttendance(){
         return new ResponseEntity<>(mainService.getWeeklyAttendance(), HttpStatus.OK);
     }
-
 }

@@ -289,12 +289,15 @@
 
     <resultMap id="AttendanceRowMap" type="com.capstone.jmt.data.AttendanceRow">
         <result column="date" property="date" jdbcType="DATE" />
-        <result column="attendance" property="attendanceCount" jdbcType="VARCHAR" />
+        <result column="attendance_count" property="attendanceCount" jdbcType="INTEGER" />
     </resultMap>
 
     <select id="getWeeklyAttendance" resultMap="AttendanceRowMap" resultType="java.util.List">
-        SELECT
-
+        SELECT CAST(A.log_datetime AS DATE) as date, COUNT(A.*) as attendance_count
+        FROM log_taps A
+        WHERE log_type = 'IN'
+        GROUP by date
+        ORDER BY DATE DESC LIMIT 7
     </select>
 
     <insert id="addUser" flushCache="true">
