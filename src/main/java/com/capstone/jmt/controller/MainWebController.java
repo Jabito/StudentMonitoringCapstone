@@ -33,7 +33,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.io.IOUtils;
-import sun.plugin2.message.Message;
 
 /**
  * Created by Jabito on 08/08/2017.
@@ -417,11 +416,10 @@ public class MainWebController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
     @RequestMapping(value = "/showStudentInfo", method = RequestMethod.GET)
     public String showStudentInfo(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
 
-        if(null == student.getId())
+        if(null != id)
             student = mainService.getStudentById(id);
         System.out.println("SID " + student.getId());
         if (null == student) {
