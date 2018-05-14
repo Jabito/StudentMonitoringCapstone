@@ -91,9 +91,7 @@
 <script th:inline="javascript">
 
 
-    $("body").on("change", "#section", onChange());
-
-    function onChange() {
+    $("body").on("change", "#section", function onChange() {
         var userId = $(this).val();
         console.log(userId);
         $.ajax({
@@ -104,12 +102,13 @@
             success: function (response) {
                 console.log(response);
                 $('#users').empty();
-                response.section.forEach(function (item) {
+                response.forEach(function (item) {
                     $('#users').append(new Option(item.name, item.id));
                 });
             }
         });
-    }
+    });
+
 
 </script>
 </body>

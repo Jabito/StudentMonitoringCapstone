@@ -15,7 +15,7 @@
             <div class="row">
                 <form class="col-md-6" th:object="${student}" th:action="@{/monitorStudent}" th:method="POST">
                     <input id="rfidTag" th:field="*{rfid}" class="form-control"
-                                                autofocus="true"
+                                                autofocus="true" hidden="true"
                                                 style="alpha: 0; border-color: transparent; color: transparent"/>
 
                     <input type="submit" id="submit" hidden="hidden" style="color:#122b40; opacity: 0;"/>
@@ -153,6 +153,7 @@
                 document.msExitFullscreen();
             }
         }
+        $('#rfidTag').focus();
     }
 
     var loadImage = function (studId, mode) {

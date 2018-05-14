@@ -515,5 +515,4 @@ public class MainWebController {
     public ResponseEntity<?> getWeeklyAttendance(){
         return new ResponseEntity<>(mainService.getWeeklyAttendance(), HttpStatus.OK);
     }
-
 }
