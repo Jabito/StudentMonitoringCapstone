@@ -304,10 +304,7 @@ public class MainWebController {
     @RequestMapping(value = "/monitorStudent", method = RequestMethod.POST)
     public String monitorStudent(@ModelAttribute("appStudent") Student student, BindingResult bindingResult, Model model) {
         System.out.println("STUDENT RFID: " + student.getRfid());
-//        mainService.processRfidTap(student.getRfid());
-//        Student student1 = mainService.getStudentByRfid(student.getRfid());
-//        System.out.println("STUDENT RETRIEVED: " + student1.getFirstName());
-//        model.addAttribute("student", student1);
+
 
         return "redirect:/monitor?rfid=" + student.getRfid();
     }
@@ -489,7 +486,6 @@ public class MainWebController {
             response.put("responseDesc", "Failed to retrieve image.");
             return new ResponseEntity<byte[]>(new byte[1], HttpStatus.OK);
         }
-
     }
 
     /** END FILE STORAGE */
