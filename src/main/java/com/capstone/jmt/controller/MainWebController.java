@@ -305,6 +305,7 @@ public class MainWebController {
             Student stud = mainService.getStudentByRfid(student.getRfid());
             if(null != stud)
                 mainService.tapStudent(student.getRfid());
+            mainService.sendSMSLogin(student.getId());
         }
 
         return "redirect:/monitor";
@@ -348,7 +349,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value="/postGuidanceReport", method = RequestMethod.POST)
-    public ResponseEntity<?> postGuidanceReport(@ModelAttribute("appUser") User user, @RequestParam("guidanceReportModel") AddReportModel reportModel){
+    public ResponseEntity<?> postGuidanceReport(@ModelAttribute("appUser") User user,@RequestBody AddReportModel reportModel){
         HashMap<String, Object> response = new HashMap<>();
         GuidanceRecord gr = new GuidanceRecord();
         gr.setCreatedBy(user.getUsername());
@@ -360,11 +361,15 @@ public class MainWebController {
         gr.setNameOfGuardian(reportModel.getGuardianName());
         Parent parent = mainService.getParentByStudentId(reportModel.getStudentId());
 
-        if(parent.getSmsNotif())
-            response.put("contactNo", parent.getOfficeNo());
+        if(null != parent)
+            if(parent.getSmsNotif())
+                response.put("contactNo", parent.getOfficeNo());
 
-        mainService.sendFirebase(reportModel.getMessage());
+        try {
+            mainService.sendFirebase(reportModel.getMessage());
+        }catch(Exception e){}
 
+        mainService.addGuidanceRecord(gr);
         response.put("message", reportModel.getMessage());
         response.put("responseCode", 200);
 
@@ -445,6 +450,20 @@ public class MainWebController {
         response.put("section", returnList);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @RequestMapping(value = "/getStudentByStudId", method = RequestMethod.GET)
+    public ResponseEntity<?> getStudentByStudId(@RequestParam(value = "id") String id) {
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("SELECTED USER TYPE " + id);
+
+        Student student = mainService.getStudentById(id);
+        if(null== student){
+            response.put("responseCode", 404);
+        }else{
+            response.put("stud", student);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 
     @RequestMapping(value = "/showStudentInfo", method = RequestMethod.GET)
     public String showStudentInfo(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
@@ -460,6 +479,7 @@ public class MainWebController {
             return "studentInfo";
         }
     }
+
 
     /**
      * For File Storage

@@ -4,6 +4,16 @@
     <title>St. Mark's | Guidance Report</title>
     <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+    <link rel="stylesheet" href="/resources/demos/style.css"/>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+           $('#datePicker').datepicker();
+        });
+    </script>
+
 </head>
 <body>
 
@@ -35,7 +45,7 @@
                         <h5>Student ID:</h5>
                     </div>
                     <div class="col-md-8">
-                        <input class="form-control" placeholder="Input Student ID" id="studId"/>
+                        <input class="form-control" placeholder="Input Student ID" onkeypress="return runScript(event)"  id="studId"/>
                     </div>
                 </div>
                 <div class="row">
@@ -43,7 +53,7 @@
                         <h5>Name:</h5>
                     </div>
                     <div class="col-md-8">
-                        <input disabled="disabled" class="form-control" placeholder="Input Student Name" id="studName"/>
+                        <input disabled="disabled" class="form-control" placeholder="Input Student Name" id="studName" th:required="required"/>
                     </div>
                 </div>
                 <div class="row">
@@ -51,7 +61,7 @@
                         <h5>Year/Level:</h5>
                     </div>
                     <div class="col-md-8">
-                        <input disabled="disabled" class="form-control" placeholder="Input Year/Level"/>
+                        <input disabled="disabled" class="form-control" placeholder="Input Year/Level" id="studYear"/>
                     </div>
                 </div>
                 <div class="row">
@@ -59,7 +69,7 @@
                         <h5>Parent/Guardian:</h5>
                     </div>
                     <div class="col-md-8">
-                        <input disabled="disabled" class="form-control" placeholder="Input Parent/Guardian:"/>
+                        <input type="text" id="studGuardian" th:required="required" class="form-control" placeholder="Input Parent/Guardian:"/>
                     </div>
                 </div>
             </div>
@@ -69,15 +79,7 @@
                         <h5>Date of Incident:</h5>
                     </div>
                     <div class="col-md-8">
-                        <input class="form-control" placeholder="mm/dd/yyyy"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <h5>Time of Incident:</h5>
-                    </div>
-                    <div class="col-md-8">
-                        <input class="form-control" placeholder="hh:mm"/>
+                        <input type="text" id="datePicker" class="form-control" placeholder="mm/dd/yyyy"/>
                     </div>
                 </div>
                 <div class="row">
@@ -85,10 +87,10 @@
                         <h5>Case of Incident:</h5>
                     </div>
                     <div class="col-md-8">
-                        <select class="form-control">
+                        <select id="selected" class="form-control">
                             <option></option>
-                            <option>Minor</option>
-                            <option>Major</option>
+                            <option id="1" value="Minor">Minor</option>
+                            <option id="2" value="Major">Major</option>
                         </select>
                     </div>
                 </div>
@@ -128,9 +130,67 @@
 
     //    var from = "63"+ document.getElementById('from').value;
     //    var sentTo = pref + to;
+    function runScript(e) {
+        if (e.keyCode == 13) {
+            var studId = $("#studId").val();
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json',
+                url: '/getStudentByStudId?id=' + studId ,
+                success: function (response) {
+                    console.log("FIRST NAME: " + response.stud.firstName);
+                    console.log("LAST NAME: " + response.stud.lastName);
+                    $("#studName").val(response.stud.firstName + ' ' + response.stud.lastName);
+                    $("#studYear").val(response.stud.gradeLvlId);
+                },
+                error: function () {
+                    alert("FAILED");
+                }
+            });
+            return true;
+        }
+    }
 
 
     function sendSms() {
+
+        console.log($("#selected option:selected").val());
+        console.log($("#studId").val());
+        console.log($("#studGuardian").val());
+        console.log($("#datePicker").val());
+        console.log($("#message").val());
+
+
+
+        var studId = $("#studId").val();
+        var guardianName = $("#studGuardian").val();
+        var message = $("#message").val();
+        var dateOfIncident = $("#datePicker").val();
+        var caseOfIncident = $("#selected option:selected").val();
+
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            url: '/postGuidanceReport',
+            data: JSON.stringify({
+                studentId: studId,
+                guardianName: guardianName,
+                message: message,
+                dateOfIncident: dateOfIncident,
+                caseOfIncident: caseOfIncident
+            }),
+            success: function (response) {
+                console.log("response" + response);
+                alert("SUCCESS");
+            },
+            error: function () {
+                alert("FAILED");
+            }
+        });
+
 //        var announcement = document.getElementById('message').value;
 //        var to = '63'+document.getElementById('to').value;
 ////        var pref = document.getElementById('prefix').value;
@@ -155,16 +215,16 @@
 //            alert("Data: " + data + "\nStatus: " + status);
 //        });
 
-        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
-            apiusername: "APIXV4PYFBUJJ",
-            apipassword: "APIXV4PYFBUJJBLB47",
-            mobileno: "09176996988",
-            senderid: "292903149",
-            languagetype: "1",
-            message: "HI ALFRED VARGAS IV, SAW YOUR PROFILE AND THIS IS TO INFORM YOU THAT YOU ONLY HAVE 1 HOUR LEFT TO TELL EVERYBODY THAT IT IS THE END OF THE WORLD - ANONYMOUS"
-        }, function (data, status) {
-            alert("Data: " + data + "\nStatus: " + status);
-        });
+//        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
+//            apiusername: "APIXV4PYFBUJJ",
+//            apipassword: "APIXV4PYFBUJJBLB47",
+//            mobileno: "09176996988",
+//            senderid: "292903149",
+//            languagetype: "1",
+//            message: "HI ALFRED VARGAS IV, SAW YOUR PROFILE AND THIS IS TO INFORM YOU THAT YOU ONLY HAVE 1 HOUR LEFT TO TELL EVERYBODY THAT IT IS THE END OF THE WORLD - ANONYMOUS"
+//        }, function (data, status) {
+//            alert("Data: " + data + "\nStatus: " + status);
+//        });
 //        function guid() {
 //            function s4() {
 //                return Math.floor((1 + Math.random()) * 0x10000)

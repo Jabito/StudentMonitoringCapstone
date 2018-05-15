@@ -37,31 +37,29 @@
                                     <div class=" pgit form-group">
                                         <label>Parent Of</label>
                                         <select >
-                                            <option th:each="student : ${students}" th:text="${student.firstName + '  ' + student.lastName}" th:value="${student.id}"></option>
+                                            <option th:each="student : ${students}" th:text="${student.firstName + '  ' + student.lastName}" th:value="${student.id}" th:field="*{parentOf}"></option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label>Relationship</label>
-                                        <input class="form-control" placeholder="Relationship" th:field="*{relationship}"/>
+                                        <input th:required="required" class="form-control" placeholder="Relationship" th:field="*{relationship}"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Parent Name</label>
-                                        <input class="form-control" placeholder="Parent Name" th:field="*{parentName}"/>
+                                        <input th:required="required" class="form-control" placeholder="Parent Name" th:field="*{parentName}"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Email Address</label>
-                                        <input type="email" class="form-control" placeholder="Email Address" th:field="*{email}"/>
+                                        <input type="email" th:required="required" class="form-control" placeholder="Email Address" th:field="*{email}"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Occupation</label>
-                                        <input class="form-control" placeholder="Occupation" th:field="*{occupation}"/>
+                                        <input class="form-control" placeholder="Occupation" th:required="required" th:field="*{occupation}"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Office No</label>
-                                        <input class="form-control" placeholder="Office No" th:field="*{officeNo}"/>
+                                        <input class="form-control" placeholder="Office No" th:required="required" th:field="*{officeNo}"/>
                                     </div>
-
-
                                     <button th:type="submit" class="btn btn-success btn-lg">Save</button>
                                 </form>
                             </div>

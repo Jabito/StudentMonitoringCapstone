@@ -399,4 +399,8 @@ public class MainService {
     public void sendFirebase(String message) {
 
     }
+
+    public void sendSMSLogin(String id) {
+
+    }
 }
