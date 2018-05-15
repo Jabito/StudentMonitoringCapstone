@@ -4,6 +4,15 @@
     <title>St. Mark's | Student</title>
     <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+    <link rel="stylesheet" type="text/css" href="../../static/css/jquery.dataTables.css"/>
+    <script type="text/javascript" charset="utf8" src="../../static/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/css/jquery.dataTables.min.css"/>
+    <script>
+        $(document).ready(function () {
+            $('#dataTables-example').DataTable();
+        });
+    </script>
 </head>
 <body>
 
@@ -45,8 +54,8 @@
                 <th>Actions</th>
             </tr>
             </thead>
-            <tbody id="tableBody" th:each="stud : ${studList}">
-                <tr>
+            <tbody>
+                <tr th:each="stud : ${studList}">
                     <td th:text="${stud.firstName}"></td>
                     <td th:text="${stud.middleName}"></td>
                     <td th:text="${stud.lastName}"></td>
