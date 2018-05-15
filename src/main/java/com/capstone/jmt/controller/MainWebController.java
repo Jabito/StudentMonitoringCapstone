@@ -446,6 +446,20 @@ public class MainWebController {
         response.put("section", returnList);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @RequestMapping(value = "/getStudentByStudId", method = RequestMethod.GET)
+    public ResponseEntity<?> getStudentByStudId(@RequestParam(value = "id") String id) {
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("SELECTED USER TYPE " + id);
+
+        Student student = mainService.getStudentById(id);
+        if(null== student){
+            response.put("responseCode", 404);
+        }else{
+            response.put("stud", student);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 
     @RequestMapping(value = "/showStudentInfo", method = RequestMethod.GET)
     public String showStudentInfo(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
@@ -461,6 +475,7 @@ public class MainWebController {
             return "studentInfo";
         }
     }
+
 
     /**
      * For File Storage
