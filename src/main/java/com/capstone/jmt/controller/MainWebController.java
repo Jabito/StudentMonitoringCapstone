@@ -305,6 +305,7 @@ public class MainWebController {
             Student stud = mainService.getStudentByRfid(student.getRfid());
             if(null != stud)
                 mainService.tapStudent(student.getRfid());
+            mainService.sendSMSLogin(student.getId());
         }
 
         return "redirect:/monitor";
