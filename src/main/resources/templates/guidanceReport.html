@@ -170,25 +170,26 @@
         var caseOfIncident = $("#selected option:selected").val();
 
 
-//        $.ajax({
-//            type: 'POST',
-//            dataType: 'json',
-//            contentType: 'application/json',
-//            url: '/postGuidanceReport',
-//            data: JSON.stringify({
-//                studentId: studId,
-//                guardianName: guardianName,
-//                message: message,
-//                dateOfIncident: dateOfIncident,
-//                caseOfIncident: caseOfIncident
-//            }),
-//            success: function (response) {
-//
-//            },
-//            error: function () {
-//                alert("FAILED");
-//            }
-//        });
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            url: '/postGuidanceReport',
+            data: JSON.stringify({
+                studentId: studId,
+                guardianName: guardianName,
+                message: message,
+                dateOfIncident: dateOfIncident,
+                caseOfIncident: caseOfIncident
+            }),
+            success: function (response) {
+                console.log("response" + response);
+                alert("SUCCESS");
+            },
+            error: function () {
+                alert("FAILED");
+            }
+        });
 
 //        var announcement = document.getElementById('message').value;
 //        var to = '63'+document.getElementById('to').value;

@@ -348,7 +348,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value="/postGuidanceReport", method = RequestMethod.POST)
-    public ResponseEntity<?> postGuidanceReport(@ModelAttribute("appUser") User user, @RequestParam("guidanceReportModel") AddReportModel reportModel){
+    public ResponseEntity<?> postGuidanceReport(@ModelAttribute("appUser") User user,@RequestBody AddReportModel reportModel){
         HashMap<String, Object> response = new HashMap<>();
         GuidanceRecord gr = new GuidanceRecord();
         gr.setCreatedBy(user.getUsername());
