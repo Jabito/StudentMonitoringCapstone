@@ -36,41 +36,41 @@
                                 <form  role="form" th:object="${student}" th:action="@{/addStudent}" method="post" >
                                     <div class="form-group">
                                         <label>First Name</label>
-                                        <input class="form-control" placeholder="First Name" th:field="*{firstName}"/>
+                                        <input th:required="required" class="form-control" placeholder="First Name" th:field="*{firstName}"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Last Name</label>
-                                        <input class="form-control" placeholder="Last Name" th:field="*{lastName}"/>
+                                        <input th:required="required" class="form-control" placeholder="Last Name" th:field="*{lastName}"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Middle Initial</label>
-                                        <input class="form-control" placeholder="Middle Name" th:field="*{middleName}"/>
+                                        <input th:required="required" class="form-control" placeholder="Middle Name" th:field="*{middleName}"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Birthdate</label>
-                                        <input type="date" class="form-control" placeholder="BirthDate" th:field="*{bday}"/>
+                                        <input th:required="required" type="date" class="form-control" placeholder="BirthDate" th:field="*{bday}"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Birth place</label>
-                                        <input class="form-control" placeholder="BirthPlace" th:field="*{place}"/>
+                                        <input th:required="required" class="form-control" placeholder="BirthPlace" th:field="*{place}"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Male</label>
-                                        <input type="radio" name="gender" th:value="0"/>
+                                        <input type="radio" name="gender" checked="checked" th:value="0"/>
                                         <label>Female</label>
                                         <input type="radio" name="gender" th:value="1"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Citizenship</label>
-                                        <input  class="form-control" placeholder="Citizenship" th:field="*{citizenship}" />
+                                        <input th:required="required" class="form-control" placeholder="Citizenship" th:field="*{citizenship}" />
                                     </div>
                                     <div class="form-group">
                                         <label>Address</label>
-                                        <input class="form-control" placeholder="Student Address" th:field="*{address}"/>
+                                        <input th:required="required" class="form-control" placeholder="Student Address" th:field="*{address}"/>
                                     </div>
                                     <div class="form-group">
                                         <label>Contact Number</label>
-                                        <input class="form-control" placeholder="Contact Number" th:field="*{contactNo}"/>
+                                        <input th:required="required" class="form-control" placeholder="Contact Number" th:field="*{contactNo}"/>
                                     </div>
                                     <div class="form-group">
                                         <label style="color: black">Grade Level</label>
@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Tap Card</label>
-                                        <input class="form-control" placeholder="Please Tap Card Once" th:field="*{rfid}"/>
+                                        <input th:required="required" class="form-control" placeholder="Please Tap Card Once" th:field="*{rfid}"/>
                                     </div>
                                     <button th:type="submit" class="btn btn-success btn-lg">Save</button>
                                 </form>
