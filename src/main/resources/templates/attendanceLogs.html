@@ -4,6 +4,15 @@
     <title>St. Mark's | Attendance Logs</title>
     <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+    <link rel="stylesheet" type="text/css" href="../../static/css/jquery.dataTables.css"/>
+    <script type="text/javascript" charset="utf8" src="../../static/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/css/jquery.dataTables.min.css"/>
+    <script>
+        $(document).ready(function () {
+            $('#table_id').DataTable();
+        });
+    </script>
 </head>
 <body>
 
@@ -27,15 +36,8 @@
         </div>
 
         <!-- /.row -->
-
-        <div class="row" style="padding: 20px">
-            Search Student ID: <input type="text" id="studId"/>
-            <button type="button" id="btnSearch">Search</button>
-        </div>
-
-
         <table width="100%" class="table table-striped table-bordered table-hover"
-               id="">
+               id="table_id">
             <thead>
             <tr>
                 <th>Log IN/OUT</th>
@@ -48,11 +50,13 @@
                 <th>Total Cost</th>-->
             </tr>
             </thead>
-            <tbody id="tableBody">
-            <!--<tr class="odd gradeX">-->
-                <!--<td th:text="${attendance.logType}"></td>-->
-                <!--<td th:text="${attendance.logDateTime}"></td>-->
-            <!--</tr>-->
+            <tbody>
+            <tr class="odd gradeX" th:each="log: ${logs}">
+                <td th:text="${log.logType}"></td>
+                <td th:text="${log.logDateTime}"></td>
+                <td th:text="${log.firstName}"></td>
+                <td th:text="${log.lastName}"></td>
+            </tr>
             </tbody>
         </table>
 
@@ -68,31 +72,6 @@
 
     var studId;
 
-    $("#btnSearch").on("click", function () {
-        console.log("Clicked");
-        studId = $("#studId").val();
-        $.ajax({
-            type: 'GET',
-            contentType: 'application/json; charset=utf-8',
-            url: '/getAttendanceLogsDetails',
-            data: {studId: studId},
-            success: function(response){
-                $('#tableBody').empty();
-                console.log(response);
-                $.each(response, function(key,value){
-                    console.log(value);
-                    $('#tableBody').append('<tr class="odd gradeX"><td>' + value.logType + '</td>' +
-                        '<td>' + value.logDateTime + '</td>' +
-                        '<td>' + value.firstName + '</td>' +
-                        '<td>' + value.lastName + '</td></tr>')
-                })
-            },
-            error: function(response){
-                console.log("Error.")
-            }
-
-        });
-    });
     $(document).ready( function () {
         $('#myTable').DataTable();
     } );
