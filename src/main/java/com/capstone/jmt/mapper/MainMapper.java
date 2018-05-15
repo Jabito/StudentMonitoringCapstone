@@ -96,4 +96,6 @@ public interface MainMapper {
     List<UserList> getUsersByUserTypeId(@Param("userTypeId") int userTypeId);
 
     List<TapLog> getTapAllTopLogs();
+
+    Parent getParentByStudentId(@Param("studentId") String studentId);
 }

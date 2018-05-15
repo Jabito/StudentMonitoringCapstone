@@ -321,6 +321,9 @@ public class MainWebController {
 
     @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
     public String showSales(@ModelAttribute("appUser") User user, Model model) {
+        user = setUserRole(user, model);
+        if(null == user)
+            return "redirect:/login";
         List<TapLog> tapLogs = mainService.getTapAllTopLogs();
         if(tapLogs.isEmpty()){
             user = setUserRole(user, model);
@@ -336,13 +339,36 @@ public class MainWebController {
     public String guidanceReport(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
         return null == user ? "redirect:/login" : "guidanceReport";
-
     }
 
     @RequestMapping(value = "/summaryReport", method = RequestMethod.GET)
     public String summaryReport(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
         return null == user ? "redirect:/login" : "summaryReport";
+    }
+
+    @RequestMapping(value="/postGuidanceReport", method = RequestMethod.POST)
+    public ResponseEntity<?> postGuidanceReport(@ModelAttribute("appUser") User user, @RequestParam("guidanceReportModel") AddReportModel reportModel){
+        HashMap<String, Object> response = new HashMap<>();
+        GuidanceRecord gr = new GuidanceRecord();
+        gr.setCreatedBy(user.getUsername());
+        gr.setReason(reportModel.getMessage());
+        gr.setStudentId(reportModel.getStudentId());
+        gr.setCreatedOn(new Date());
+        gr.setDateOfIncident(reportModel.getDateOfIncident());
+        gr.setCaseOfIncident(reportModel.getCaseOfIncident());
+        gr.setNameOfGuardian(reportModel.getGuardianName());
+        Parent parent = mainService.getParentByStudentId(reportModel.getStudentId());
+
+        if(parent.getSmsNotif())
+            response.put("contactNo", parent.getOfficeNo());
+
+        mainService.sendFirebase(reportModel.getMessage());
+
+        response.put("message", reportModel.getMessage());
+        response.put("responseCode", 200);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/getStudentsBySearch", method = RequestMethod.GET)

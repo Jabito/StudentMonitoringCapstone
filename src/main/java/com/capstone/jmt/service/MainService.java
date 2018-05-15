@@ -391,4 +391,12 @@ public class MainService {
     public List<TapLog> getTapAllTopLogs() {
         return mainMapper.getTapAllTopLogs();
     }
+
+    public Parent getParentByStudentId(String studentId) {
+        return mainMapper.getParentByStudentId(studentId);
+    }
+
+    public void sendFirebase(String message) {
+
+    }
 }
