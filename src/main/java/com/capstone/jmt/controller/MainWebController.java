@@ -304,10 +304,7 @@ public class MainWebController {
     @RequestMapping(value = "/monitorStudent", method = RequestMethod.POST)
     public String monitorStudent(@ModelAttribute("appStudent") Student student, BindingResult bindingResult, Model model) {
         System.out.println("STUDENT RFID: " + student.getRfid());
-//        mainService.processRfidTap(student.getRfid());
-//        Student student1 = mainService.getStudentByRfid(student.getRfid());
-//        System.out.println("STUDENT RETRIEVED: " + student1.getFirstName());
-//        model.addAttribute("student", student1);
+
 
         return "redirect:/monitor?rfid=" + student.getRfid();
     }
@@ -323,8 +320,14 @@ public class MainWebController {
 
     @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
     public String showSales(@ModelAttribute("appUser") User user, Model model) {
-        user = setUserRole(user, model);
-        return null == user ? "redirect:/login" : "attendanceLogs";
+        List<TapLog> tapLogs = mainService.getTapAllTopLogs();
+        if(tapLogs.isEmpty()){
+            user = setUserRole(user, model);
+            return "redirect:/login";
+        }else {
+            model.addAttribute("logs", tapLogs);
+            return "attendanceLogs";
+        }
     }
 
 
@@ -489,7 +492,6 @@ public class MainWebController {
             response.put("responseDesc", "Failed to retrieve image.");
             return new ResponseEntity<byte[]>(new byte[1], HttpStatus.OK);
         }
-
     }
 
     /** END FILE STORAGE */

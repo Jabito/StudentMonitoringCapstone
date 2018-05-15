@@ -383,4 +383,8 @@ public class MainService {
     public List<UserList> getUsersByUserTypeId(int userTypeId) {
         return mainMapper.getUsersByUserTypeId(userTypeId);
     }
+
+    public List<TapLog> getTapAllTopLogs() {
+        return mainMapper.getTapAllTopLogs();
+    }
 }

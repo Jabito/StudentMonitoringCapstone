@@ -94,4 +94,6 @@ public interface MainMapper {
     List<AttendanceRow> getWeeklyAttendance();
 
     List<UserList> getUsersByUserTypeId(@Param("userTypeId") int userTypeId);
+
+    List<TapLog> getTapAllTopLogs();
 }
