@@ -277,12 +277,9 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/monitor", method = RequestMethod.GET)
-    public String shopMonitor(@ModelAttribute("appUser") User user, @RequestParam(value = "rfid", required = false) String rfid, Model model) {
+    public String shopMonitor(@ModelAttribute("appUser") User user, Model model) {
         if(!user.getUsername().equalsIgnoreCase("monitorAdmin"))
             return "redirect:/login";
-
-        if(null != rfid && rfid != "")
-            mainService.tapStudent(rfid);
         Student studIn = mainService.getStudentByRfidIn();
         String gradelevel = "";
         String gradelevel1 = "";
@@ -302,11 +299,15 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/monitorStudent", method = RequestMethod.POST)
-    public String monitorStudent(@ModelAttribute("appStudent") Student student, BindingResult bindingResult, Model model) {
-        System.out.println("STUDENT RFID: " + student.getRfid());
+    public String monitorStudent(@Valid Student student, BindingResult bindingResult, Model model) {
+        System.out.println("TAP" + student.getRfid());
+        if(null != student.getRfid() && student.getRfid() != ""){
+            Student stud = mainService.getStudentByRfid(student.getRfid());
+            if(null != stud)
+                mainService.tapStudent(student.getRfid());
+        }
 
-
-        return "redirect:/monitor?rfid=" + student.getRfid();
+        return "redirect:/monitor";
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
@@ -469,20 +470,21 @@ public class MainWebController {
 
     @RequestMapping(value = "/loadImage", method = RequestMethod.GET)
     public ResponseEntity<byte[]> loadImage(@RequestParam("studId") String studId) {
+        System.out.println("LOAD" + studId);
         HashMap<String, Object> response = new HashMap<>();
         HttpHeaders headers = new HttpHeaders();
-        Resource file = null;
-        if(null == studId)
-            file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
+        try {
+        Resource file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
         if(null == file)
             file = storageService.loadFile("image.png");
-        try {
+
             InputStream in = file.getInputStream();
             byte[] media = IOUtils.toByteArray(in);
 //            headers.setCacheControl(CacheControl.noCache().getHeaderValue());
             headers.setContentType(MediaType.IMAGE_JPEG);
             return new ResponseEntity<byte[]>(Base64.getEncoder().encode(media), headers, HttpStatus.OK);
         } catch (IOException e) {
+            System.out.println("ERROR LOADING IMAGE");
             response.put("responseDesc", "Failed to retrieve image.");
             return new ResponseEntity<byte[]>(new byte[1], HttpStatus.OK);
         }
