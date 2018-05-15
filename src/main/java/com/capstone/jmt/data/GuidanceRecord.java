@@ -29,6 +29,12 @@ public class GuidanceRecord implements Serializable{
     private Date updatedOn;
     @JsonProperty("updatedBy")
     private String updatedBy;
+    @JsonProperty("caseOfIncident")
+    private String caseOfIncident;
+    @JsonProperty("dateOfIncident")
+    private String dateOfIncident;
+    @JsonProperty("nameOfGuardian")
+    private String nameOfGuardian;
 
     public String getId() {
         return id;
@@ -92,5 +98,29 @@ public class GuidanceRecord implements Serializable{
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    public String getCaseOfIncident() {
+        return caseOfIncident;
+    }
+
+    public void setCaseOfIncident(String caseOfIncident) {
+        this.caseOfIncident = caseOfIncident;
+    }
+
+    public String getDateOfIncident() {
+        return dateOfIncident;
+    }
+
+    public void setDateOfIncident(String dateOfIncident) {
+        this.dateOfIncident = dateOfIncident;
+    }
+
+    public String getNameOfGuardian() {
+        return nameOfGuardian;
+    }
+
+    public void setNameOfGuardian(String nameOfGuardian) {
+        this.nameOfGuardian = nameOfGuardian;
     }
 }

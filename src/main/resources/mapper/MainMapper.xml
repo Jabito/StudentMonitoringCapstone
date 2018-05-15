@@ -529,4 +529,7 @@ AND #{userId} IN (
       </choose>
         ORDER BY name asc
     </select>
+    <select id="getParentByStudentId" resultMap="ParentMap" resultType="com.capstone.jmt.entity.Parent">
+        SELECT * FROM data_parents WHERE parent_of = #{studentId}
+    </select>
 </mapper>
