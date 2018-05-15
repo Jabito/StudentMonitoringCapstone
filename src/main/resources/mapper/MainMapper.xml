@@ -505,6 +505,10 @@ AND #{userId} IN (
         SELECT * FROM ref_user_type
     </select>
 
+    <select id="getTapAllTopLogs" resultMap="TapLogMap" resultType="java.util.List">
+        SELECT * FROM log_taps
+    </select>
+
     <resultMap id="UserTypeMap" type="com.capstone.jmt.data.UserList">
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="userId" property="userId" jdbcType="VARCHAR" />

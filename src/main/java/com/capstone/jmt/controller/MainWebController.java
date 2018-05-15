@@ -321,8 +321,14 @@ public class MainWebController {
 
     @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
     public String showSales(@ModelAttribute("appUser") User user, Model model) {
-        user = setUserRole(user, model);
-        return null == user ? "redirect:/login" : "attendanceLogs";
+        List<TapLog> tapLogs = mainService.getTapAllTopLogs();
+        if(tapLogs.isEmpty()){
+            user = setUserRole(user, model);
+            return "redirect:/login";
+        }else {
+            model.addAttribute("logs", tapLogs);
+            return "attendanceLogs";
+        }
     }
 
 

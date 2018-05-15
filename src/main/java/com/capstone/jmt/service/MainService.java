@@ -387,4 +387,8 @@ public class MainService {
     public Student getStudentByRfid(String rfid) {
         return mainMapper.getStudentByRfid(rfid);
     }
+
+    public List<TapLog> getTapAllTopLogs() {
+        return mainMapper.getTapAllTopLogs();
+    }
 }
