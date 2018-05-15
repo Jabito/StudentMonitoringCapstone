@@ -277,12 +277,9 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/monitor", method = RequestMethod.GET)
-    public String shopMonitor(@ModelAttribute("appUser") User user, @RequestParam(value = "rfid", required = false) String rfid, Model model) {
+    public String shopMonitor(@ModelAttribute("appUser") User user, Model model) {
         if(!user.getUsername().equalsIgnoreCase("monitorAdmin"))
             return "redirect:/login";
-
-        if(null != rfid && rfid != "")
-            mainService.tapStudent(rfid);
         Student studIn = mainService.getStudentByRfidIn();
         String gradelevel = "";
         String gradelevel1 = "";
@@ -302,14 +299,15 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/monitorStudent", method = RequestMethod.POST)
-    public String monitorStudent(@ModelAttribute("appStudent") Student student, BindingResult bindingResult, Model model) {
-        System.out.println("STUDENT RFID: " + student.getRfid());
-//        mainService.processRfidTap(student.getRfid());
-//        Student student1 = mainService.getStudentByRfid(student.getRfid());
-//        System.out.println("STUDENT RETRIEVED: " + student1.getFirstName());
-//        model.addAttribute("student", student1);
+    public String monitorStudent(@Valid Student student, BindingResult bindingResult, Model model) {
+        System.out.println("TAP" + student.getRfid());
+        if(null != student.getRfid() && student.getRfid() != ""){
+            Student stud = mainService.getStudentByRfid(student.getRfid());
+            if(null != stud)
+                mainService.tapStudent(student.getRfid());
+        }
 
-        return "redirect:/monitor?rfid=" + student.getRfid();
+        return "redirect:/monitor";
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
@@ -324,7 +322,16 @@ public class MainWebController {
     @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
     public String showSales(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        return null == user ? "redirect:/login" : "attendanceLogs";
+        if(null == user)
+            return "redirect:/login";
+        List<TapLog> tapLogs = mainService.getTapAllTopLogs();
+        if(tapLogs.isEmpty()){
+            user = setUserRole(user, model);
+            return "redirect:/login";
+        }else {
+            model.addAttribute("logs", tapLogs);
+            return "attendanceLogs";
+        }
     }
 
 
@@ -332,13 +339,36 @@ public class MainWebController {
     public String guidanceReport(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
         return null == user ? "redirect:/login" : "guidanceReport";
-
     }
 
     @RequestMapping(value = "/summaryReport", method = RequestMethod.GET)
     public String summaryReport(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
         return null == user ? "redirect:/login" : "summaryReport";
+    }
+
+    @RequestMapping(value="/postGuidanceReport", method = RequestMethod.POST)
+    public ResponseEntity<?> postGuidanceReport(@ModelAttribute("appUser") User user, @RequestParam("guidanceReportModel") AddReportModel reportModel){
+        HashMap<String, Object> response = new HashMap<>();
+        GuidanceRecord gr = new GuidanceRecord();
+        gr.setCreatedBy(user.getUsername());
+        gr.setReason(reportModel.getMessage());
+        gr.setStudentId(reportModel.getStudentId());
+        gr.setCreatedOn(new Date());
+        gr.setDateOfIncident(reportModel.getDateOfIncident());
+        gr.setCaseOfIncident(reportModel.getCaseOfIncident());
+        gr.setNameOfGuardian(reportModel.getGuardianName());
+        Parent parent = mainService.getParentByStudentId(reportModel.getStudentId());
+
+        if(parent.getSmsNotif())
+            response.put("contactNo", parent.getOfficeNo());
+
+        mainService.sendFirebase(reportModel.getMessage());
+
+        response.put("message", reportModel.getMessage());
+        response.put("responseCode", 200);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/getStudentsBySearch", method = RequestMethod.GET)
@@ -472,24 +502,24 @@ public class MainWebController {
 
     @RequestMapping(value = "/loadImage", method = RequestMethod.GET)
     public ResponseEntity<byte[]> loadImage(@RequestParam("studId") String studId) {
+        System.out.println("LOAD" + studId);
         HashMap<String, Object> response = new HashMap<>();
         HttpHeaders headers = new HttpHeaders();
-        Resource file = null;
-        if(null == studId)
-            file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
+        try {
+        Resource file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
         if(null == file)
             file = storageService.loadFile("image.png");
-        try {
+
             InputStream in = file.getInputStream();
             byte[] media = IOUtils.toByteArray(in);
 //            headers.setCacheControl(CacheControl.noCache().getHeaderValue());
             headers.setContentType(MediaType.IMAGE_JPEG);
             return new ResponseEntity<byte[]>(Base64.getEncoder().encode(media), headers, HttpStatus.OK);
         } catch (IOException e) {
+            System.out.println("ERROR LOADING IMAGE");
             response.put("responseDesc", "Failed to retrieve image.");
             return new ResponseEntity<byte[]>(new byte[1], HttpStatus.OK);
         }
-
     }
 
     /** END FILE STORAGE */

@@ -383,4 +383,20 @@ public class MainService {
     public List<UserList> getUsersByUserTypeId(int userTypeId) {
         return mainMapper.getUsersByUserTypeId(userTypeId);
     }
+
+    public Student getStudentByRfid(String rfid) {
+        return mainMapper.getStudentByRfid(rfid);
+    }
+
+    public List<TapLog> getTapAllTopLogs() {
+        return mainMapper.getTapAllTopLogs();
+    }
+
+    public Parent getParentByStudentId(String studentId) {
+        return mainMapper.getParentByStudentId(studentId);
+    }
+
+    public void sendFirebase(String message) {
+
+    }
 }

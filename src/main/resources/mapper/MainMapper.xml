@@ -505,6 +505,11 @@ AND #{userId} IN (
         SELECT * FROM ref_user_type
     </select>
 
+    <select id="getTapAllTopLogs" resultMap="TapLogMap" resultType="java.util.List">
+        SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
+        ON A.rfid = B.rfid
+    </select>
+
     <resultMap id="UserTypeMap" type="com.capstone.jmt.data.UserList">
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="userId" property="userId" jdbcType="VARCHAR" />
@@ -523,5 +528,8 @@ AND #{userId} IN (
           </when>
       </choose>
         ORDER BY name asc
+    </select>
+    <select id="getParentByStudentId" resultMap="ParentMap" resultType="com.capstone.jmt.entity.Parent">
+        SELECT * FROM data_parents WHERE parent_of = #{studentId}
     </select>
 </mapper>
