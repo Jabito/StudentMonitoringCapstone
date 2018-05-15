@@ -361,11 +361,15 @@ public class MainWebController {
         gr.setNameOfGuardian(reportModel.getGuardianName());
         Parent parent = mainService.getParentByStudentId(reportModel.getStudentId());
 
-        if(parent.getSmsNotif())
-            response.put("contactNo", parent.getOfficeNo());
+        if(null != parent)
+            if(parent.getSmsNotif())
+                response.put("contactNo", parent.getOfficeNo());
 
-        mainService.sendFirebase(reportModel.getMessage());
+        try {
+            mainService.sendFirebase(reportModel.getMessage());
+        }catch(Exception e){}
 
+        mainService.addGuidanceRecord(gr);
         response.put("message", reportModel.getMessage());
         response.put("responseCode", 200);
 

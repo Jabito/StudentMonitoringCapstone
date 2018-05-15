@@ -421,7 +421,7 @@
     </resultMap>
 
     <insert id="addGuidanceRecord">
-        INSERT INTO log_guidance(id, student_id, reason, title, created_on, created_by)
+        INSERT INTO log_guidance(id, student_id, reason, title, created_on, created_by, date_of_incident, case_of_incident, name_of_guardian)
         VALUES
         (
         #{gr.id, jdbcType=VARCHAR},
@@ -429,7 +429,10 @@
         #{gr.reason, jdbcType=VARCHAR},
         #{gr.title, jdbcType=VARCHAR},
         #{gr.created_on, jdbcType=TIMESTAMP},
-        #{gr.created_by, jdbcType=TIMESTAMP}
+        #{gr.created_by, jdbcType=TIMESTAMP},
+        #{gr.dateOfIncident, jdbcType=VARCHAR},
+        #{gr.caseOfIncident, jdbcType=VARCHAR},
+        #{gr.nameOfGuardian, jdbcType=VARCHAR}
         )
     </insert>
 
