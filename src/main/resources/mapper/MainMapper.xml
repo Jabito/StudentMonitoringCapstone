@@ -40,6 +40,7 @@
         <result column="id" property="id" jdbcType="VARCHAR"/>
         <result column="parent_of" property="parentOf" jdbcType="VARCHAR"/>
         <result column="relationship" property="relationship" jdbcType="VARCHAR"/>
+        <result column="sms_notif" property="smsNotif" jdbcType="BIT" />
         <result column="occupation" property="occupation" jdbcType="VARCHAR"/>
         <result column="contact_no" property="officeNo" jdbcType="VARCHAR"/>
         <result column="created_on" property="createdOn" jdbcType="TIMESTAMP"/>
@@ -428,8 +429,8 @@
         #{gr.studentId, jdbcType=VARCHAR},
         #{gr.reason, jdbcType=VARCHAR},
         #{gr.title, jdbcType=VARCHAR},
-        #{gr.created_on, jdbcType=TIMESTAMP},
-        #{gr.created_by, jdbcType=TIMESTAMP},
+        #{gr.createdOn, jdbcType=TIMESTAMP},
+        #{gr.createdBy, jdbcType=TIMESTAMP},
         #{gr.dateOfIncident, jdbcType=VARCHAR},
         #{gr.caseOfIncident, jdbcType=VARCHAR},
         #{gr.nameOfGuardian, jdbcType=VARCHAR}
