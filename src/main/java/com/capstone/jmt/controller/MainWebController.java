@@ -118,7 +118,7 @@ public class MainWebController {
 
         HashMap<String, Object> returnJson = mainService.loginUser(user.getUsername(), user.getPassword());
         User returnedUser = (User) returnJson.get("User");
-        if(returnJson.get("responseCode") != HttpStatus.OK)
+        if (returnJson.get("responseCode") != HttpStatus.OK)
             return "redirect:/login?error=1";
 
 
@@ -142,9 +142,9 @@ public class MainWebController {
 
     @RequestMapping(value = "/homepage", method = RequestMethod.GET)
     public String showDashboard(@RequestParam(value = "added", required = false, defaultValue = "") String added, @ModelAttribute("appUser") User user, Model model) {
-        if(null == user)
+        if (null == user)
             return "redirect:/login";
-        if(user.getUsername().equals("monitorAdmin"))
+        if (user.getUsername().equals("monitorAdmin"))
             return "redirect:/monitor";
         model.addAttribute("added", added);
         user = setUserRole(user, model);
@@ -231,7 +231,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public String getUserData(@ModelAttribute("appUser") User user,@Valid AddUserJson newUser, Model model) {
+    public String getUserData(@ModelAttribute("appUser") User user, @Valid AddUserJson newUser, Model model) {
         user = setUserRole(user, model);
         if (null == user)
             return "redirect:/login";
@@ -244,7 +244,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getListByUserTypeId", method = RequestMethod.GET)
-    public ResponseEntity<?> getListByUsertypeId(@RequestParam("userTypeId") int userTypeId){
+    public ResponseEntity<?> getListByUsertypeId(@RequestParam("userTypeId") int userTypeId) {
         return new ResponseEntity<>(mainService.getUsersByUserTypeId(userTypeId), HttpStatus.OK);
     }
 
@@ -278,15 +278,15 @@ public class MainWebController {
 
     @RequestMapping(value = "/monitor", method = RequestMethod.GET)
     public String shopMonitor(@ModelAttribute("appUser") User user, Model model) {
-        if(!user.getUsername().equalsIgnoreCase("monitorAdmin"))
+        if (!user.getUsername().equalsIgnoreCase("monitorAdmin"))
             return "redirect:/login";
         Student studIn = mainService.getStudentByRfidIn();
         String gradelevel = "";
         String gradelevel1 = "";
-        if(null != studIn)
+        if (null != studIn)
             gradelevel = mainService.getGradelevelStringById(studIn.getGradeLvlId());
         Student studOut = mainService.getStudentByRfidOut();
-        if(null != studOut)
+        if (null != studOut)
             gradelevel1 = mainService.getGradelevelStringById(studOut.getGradeLvlId());
 
         model.addAttribute("student", new Student());
@@ -298,17 +298,22 @@ public class MainWebController {
         return "monitor";
     }
 
-    @RequestMapping(value = "/monitorStudent", method = RequestMethod.POST)
-    public String monitorStudent(@Valid Student student, BindingResult bindingResult, Model model) {
-        System.out.println("TAP" + student.getRfid());
-        if(null != student.getRfid() && student.getRfid() != ""){
-            Student stud = mainService.getStudentByRfid(student.getRfid());
-            if(null != stud)
-                mainService.tapStudent(student.getRfid());
-            mainService.sendSMSLogin(student.getId());
+    @RequestMapping(value = "/monitorStudent", method = RequestMethod.GET)
+    public ResponseEntity<?> monitorStudent(@RequestParam("rfid") String rfid) {
+        System.out.println("RFID" + rfid);
+        HashMap<String, Object> response = new HashMap<>();
+        Student stud = mainService.getStudentByRfid(rfid);
+        String contactNo = "";
+        if (null != stud) {
+            mainService.tapStudent(rfid);
+            Parent parent = mainService.getParentByStudentId(stud.getId());
+            contactNo = parent.getOfficeNo();
         }
-
-        return "redirect:/monitor";
+        TapLog tap = (TapLog)mainService.getLastTapEntry(stud.getId()).get("tapDetails");
+        response.put("student", stud);
+        response.put("contactNo", contactNo);
+        response.put("tapMode", tap.getLogType());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
@@ -323,13 +328,13 @@ public class MainWebController {
     @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
     public String showSales(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        if(null == user)
+        if (null == user)
             return "redirect:/login";
         List<TapLog> tapLogs = mainService.getTapAllTopLogs();
-        if(tapLogs.isEmpty()){
+        if (tapLogs.isEmpty()) {
             user = setUserRole(user, model);
             return "redirect:/login";
-        }else {
+        } else {
             model.addAttribute("logs", tapLogs);
             return "attendanceLogs";
         }
@@ -349,8 +354,8 @@ public class MainWebController {
         return null == user ? "redirect:/login" : "summaryReport";
     }
 
-    @RequestMapping(value="/postGuidanceReport", method = RequestMethod.POST)
-    public ResponseEntity<?> postGuidanceReport(@ModelAttribute("appUser") User user,@RequestBody AddReportModel reportModel){
+    @RequestMapping(value = "/postGuidanceReport", method = RequestMethod.POST)
+    public ResponseEntity<?> postGuidanceReport(@ModelAttribute("appUser") User user, @RequestBody AddReportModel reportModel) {
         HashMap<String, Object> response = new HashMap<>();
         GuidanceRecord gr = new GuidanceRecord();
         gr.setCreatedBy(user.getUsername());
@@ -363,18 +368,19 @@ public class MainWebController {
         Parent parent = mainService.getParentByStudentId(reportModel.getStudentId());
         System.out.println("CONTACT NO: " + parent.getOfficeNo());
 
-        if(null != parent)
-            if(parent.getSmsNotif()) {
+        if (null != parent)
+            if (parent.getSmsNotif()) {
                 System.out.println("CONTACT NO: " + parent.getOfficeNo());
                 response.put("contactNo", parent.getOfficeNo());
             }
 
         try {
             mainService.sendFirebase(reportModel.getMessage());
-        }catch(Exception e){}
+        } catch (Exception e) {
+        }
 
         mainService.addGuidanceRecord(gr);
-        String message = "Dear " + (null != parent? parent.getParentName():"parent") + ", this is a message from the Guidance: **";
+        String message = "Dear " + (null != parent ? parent.getParentName() : "parent") + ", this is a message from the Guidance: **";
         message += reportModel.getMessage();
         message += "** This message is free. Please do not reply.";
         response.put("message", message);
@@ -457,15 +463,16 @@ public class MainWebController {
         response.put("section", returnList);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @RequestMapping(value = "/getStudentByStudId", method = RequestMethod.GET)
     public ResponseEntity<?> getStudentByStudId(@RequestParam(value = "id") String id) {
         HashMap<String, Object> response = new HashMap<>();
         System.out.println("SELECTED USER TYPE " + id);
 
         Student student = mainService.getStudentById(id);
-        if(null== student){
+        if (null == student) {
             response.put("responseCode", 404);
-        }else{
+        } else {
             response.put("stud", student);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -475,7 +482,7 @@ public class MainWebController {
     @RequestMapping(value = "/showStudentInfo", method = RequestMethod.GET)
     public String showStudentInfo(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
 
-        if(null != id)
+        if (null != id)
             student = mainService.getStudentById(id);
         System.out.println("SID " + student.getId());
         model.addAttribute("gradeLevel", mainService.getGradeLevelList());
@@ -535,9 +542,9 @@ public class MainWebController {
         HashMap<String, Object> response = new HashMap<>();
         HttpHeaders headers = new HttpHeaders();
         try {
-        Resource file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
-        if(null == file)
-            file = storageService.loadFile("image.png");
+            Resource file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
+            if (null == file)
+                file = storageService.loadFile("image.png");
 
             InputStream in = file.getInputStream();
             byte[] media = IOUtils.toByteArray(in);
@@ -551,10 +558,12 @@ public class MainWebController {
         }
     }
 
-    /** END FILE STORAGE */
+    /**
+     * END FILE STORAGE
+     */
 
     @RequestMapping(value = "/getWeeklyAttendance", method = RequestMethod.GET)
-    public ResponseEntity<?> getWeeklyAttendance(){
+    public ResponseEntity<?> getWeeklyAttendance() {
         return new ResponseEntity<>(mainService.getWeeklyAttendance(), HttpStatus.OK);
     }
 }

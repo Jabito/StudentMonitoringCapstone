@@ -13,13 +13,13 @@
                 <h1 class="page-header" style="color: white">Monitoring</h1>
             </div>
             <div class="row">
-                <form class="col-md-6" th:object="${student}" th:action="@{/monitorStudent}" th:method="POST">
-                    <input id="rfidTag" th:field="*{rfid}" class="form-control"
-                                                autofocus="true" hidden="true"
-                                                style="alpha: 0; border-color: transparent; color: transparent"/>
+                <!--<form class="col-md-6" th:object="${student}" th:action="@{/monitorStudent}" th:method="POST">-->
+                    <!--<input id="rfidTag" th:field="*{rfid}"-->
+                                                <!--autofocus="true" hidden="true"-->
+                                                <!--style="alpha: 0; border-color: transparent; color: transparent"/>-->
 
-                    <input type="submit" id="submit" hidden="hidden" style="color:#122b40; opacity: 0;"/>
-                </form>
+                    <!--<input type="submit" id="submit" hidden="hidden" style="color:#122b40; opacity: 0;"/>-->
+                <!--</form>-->
             </div>
         </div>
 
@@ -113,10 +113,12 @@
 </div>
 <script>
     //<![CDATA[
+    var isFullScreen = false;
     $(document).ready(function () {
         $('#body').on('click', function(){
             console.log("this");
-            toggleFullScreen(this);
+            if(!isFullScreen)
+                toggleFullScreen(this);
         });
 
         var studIn = $('#studInId').text();
@@ -126,6 +128,7 @@
     });
 
     function toggleFullScreen(elem) {
+        isFullScreen = true;
         console.log(document);
         console.log(elem);
         // ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
@@ -154,6 +157,54 @@
             // }
         }
         $('#rfidTag').focus();
+    }
+
+    var charArray = [];
+    window.onkeyup = function(e) {
+        console.log(charArray.join(''));
+        if(e.key === 'Enter') {
+            var toSend = charArray.join('');
+            if(charArray.length >= 10){
+                var studIn = $('#studInId').text();
+                var studOut = $('#studOutId').text();
+                loadImage(studIn, 1);
+                loadImage(studOut, 2);
+
+                $.ajax({
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    url: '/monitorStudent',
+                    data: {rfid: toSend},
+                    success: function (response) {
+                        console.log(response);
+                        if(response.contactNo != '')
+                            proceedSMS(response.contactNo, response.student.firstName + ' ' + response.student.lastName, response.tapMode);
+                    },
+                    error: function (response) {
+                        console.log("Error pulling image.");
+                    }
+                });
+            }
+            charArray = [];
+        }else
+            charArray.push(e.key);
+    }
+
+    function proceedSMS(contactNo, name, tapMode) {
+        var message = 'Your child ' + name + ' has tapped ' + tapMode;
+        message += ' the school. ** This is a free message. Please do not reply.';
+        if(null != contactNo) {
+            $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
+                apiusername: "APIE4DYUT3XMS",
+                apipassword: "APIE4DYUT3XMSE4DYU",
+                mobileno: contactNo,
+                senderid: "292903166",
+                languagetype: "1",
+                message: message
+            }, function (data, status) {
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+        }
     }
 
     var loadImage = function (studId, mode) {
