@@ -304,12 +304,13 @@ public class MainWebController {
         HashMap<String, Object> response = new HashMap<>();
         Student stud = mainService.getStudentByRfid(rfid);
         String contactNo = "";
+        TapLog tap = new TapLog();
         if (null != stud) {
             mainService.tapStudent(rfid);
             Parent parent = mainService.getParentByStudentId(stud.getId());
             contactNo = parent.getOfficeNo();
+            tap = (TapLog)mainService.getLastTapEntry(stud.getId()).get("tapDetails");
         }
-        TapLog tap = (TapLog)mainService.getLastTapEntry(stud.getId()).get("tapDetails");
         response.put("student", stud);
         response.put("contactNo", contactNo);
         response.put("tapMode", tap.getLogType());
