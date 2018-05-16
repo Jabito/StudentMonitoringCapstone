@@ -471,6 +471,8 @@ public class MainWebController {
         if(null != id)
             student = mainService.getStudentById(id);
         System.out.println("SID " + student.getId());
+        model.addAttribute("gradeLevel", mainService.getGradeLevelList());
+        model.addAttribute("section", mainService.getSectionList(0));
         if (null == student) {
             return "studentInfo";
         } else {

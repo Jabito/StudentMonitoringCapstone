@@ -86,17 +86,21 @@
 
                             </div>
                             <!-- /.col-lg-6 (nested) -->
+                            <div class="form-group">
+                                <label style="color: black">Grade Level</label>
+                                <select id="selected" name="gradeLvlId">
+                                    <option  th:each="gradeLevel  : ${gradeLevel}" th:text="${gradeLevel.gradeLevel}" th:value="${gradeLevel.id}" th:field="*{gradeLvlId}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Section</label>
+                                <select id="section" name="section">
+                                    <option  th:each="section  : ${section}" th:text="${section.section}" th:value="${section.id}" th:field="*{section}">
+                                    </option>
+                                </select>
+                            </div>
                             <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Grade</label>
-                                    <input disabled="disabled" class="form-control" placeholder="Grade" th:field="*{gradeLvlId}"
-                                         />
-                                </div>
-                                <div class="form-group">
-                                    <label>Section</label>
-                                    <input disabled="disabled" class="form-control" placeholder="Section" th:field="*{section}"
-                                          />
-                                </div>
                                 <form method="POST" enctype="multipart/form-data" th:action="${'/upImage'}">
                                     <table>
                                         <tr>
@@ -145,6 +149,22 @@
     //    };
     //
     //    firebase.initializeApp(config);
+
+    $("body").on("change", "#selected", function() {
+        var gradeLvlId = $(this).val();
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            url: '/selectGradeLevel',
+            data: {gradeLvlId: gradeLvlId},
+            success: function (response) {
+                $('#section').empty();
+                response.section.forEach(function (item) {
+                    $('#section').append(new Option(item.section, item.id));
+                });
+            }
+        });
+    });
 
 </script>
 </body>

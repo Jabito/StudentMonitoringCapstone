@@ -345,6 +345,7 @@ public class MainService {
 
     public void addGuidanceRecord(GuidanceRecord gr){
         gr.setId("GR" + mainMapper.getLastId(5));
+        mainMapper.incrementId(5);
         mainMapper.addGuidanceRecord(gr);
     }
 
