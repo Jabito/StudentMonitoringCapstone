@@ -360,10 +360,13 @@ public class MainWebController {
         gr.setCaseOfIncident(reportModel.getCaseOfIncident());
         gr.setNameOfGuardian(reportModel.getGuardianName());
         Parent parent = mainService.getParentByStudentId(reportModel.getStudentId());
+        System.out.println("CONTACT NO: " + parent.getOfficeNo());
 
         if(null != parent)
-            if(parent.getSmsNotif())
+            if(parent.getSmsNotif()) {
+                System.out.println("CONTACT NO: " + parent.getOfficeNo());
                 response.put("contactNo", parent.getOfficeNo());
+            }
 
         try {
             mainService.sendFirebase(reportModel.getMessage());

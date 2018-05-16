@@ -428,8 +428,8 @@
         #{gr.studentId, jdbcType=VARCHAR},
         #{gr.reason, jdbcType=VARCHAR},
         #{gr.title, jdbcType=VARCHAR},
-        #{gr.created_on, jdbcType=TIMESTAMP},
-        #{gr.created_by, jdbcType=TIMESTAMP},
+        #{gr.createdOn, jdbcType=TIMESTAMP},
+        #{gr.createdBy, jdbcType=TIMESTAMP},
         #{gr.dateOfIncident, jdbcType=VARCHAR},
         #{gr.caseOfIncident, jdbcType=VARCHAR},
         #{gr.nameOfGuardian, jdbcType=VARCHAR}
