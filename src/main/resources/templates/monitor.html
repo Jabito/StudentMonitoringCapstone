@@ -109,15 +109,6 @@
                 <label id="studOutId" th:text="${stud1.id}" hidden="false"></label>
             </div>
         </div>
-        <div class="row">
-            <form class="col-md-6" th:object="${student}" th:action="@{/monitorStudent}" th:method="POST">
-                <input id="rfidTag" th:field="*{rfid}" class="form-control"
-                       autofocus="true" hidden="true"
-                       style="alpha: 0;  color: transparent;  border:none; box-shadow: none; "/>
-
-                <input type="submit" id="submit" hidden="hidden" style="color:#122b40; opacity: 0; border: none;"/>
-            </form>
-        </div>
     </div>
 </div>
 <script>
