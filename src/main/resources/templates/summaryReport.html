@@ -4,6 +4,15 @@
     <title>St. Mark's | Summary Report</title>
     <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+    <link rel="stylesheet" type="text/css" href="../../static/css/jquery.dataTables.css"/>
+    <script type="text/javascript" charset="utf8" src="../../static/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/css/jquery.dataTables.min.css"/>
+    <script>
+        $(document).ready(function () {
+            $('#summaryReportId').DataTable();
+        });
+    </script>
 </head>
 <body>
 
@@ -32,7 +41,7 @@
 
 
         <table width="100%" class="table table-striped table-bordered table-hover"
-               id="">
+               id="summaryReportId">
             <thead>
             <tr>
                 <th>Date</th>
@@ -47,7 +56,15 @@
                 <th>Total Cost</th>-->
             </tr>
             </thead>
-            <tbody id="tableBody">
+            <tbody >
+            <tr th:each="sums : ${summaryList}">
+                <td th:text="${sums.dateOfIncident}"></td>
+                <td th:text="${sums.caseOfIncident}"></td>
+                <td th:text="${sums.caseOfIncident}"></td>
+                <td th:text="${sums.dateOfIncident}"></td>
+                <td th:text="${sums.dateOfIncident}"></td>
+                <td th:text="${sums.dateOfIncident}"></td>
+            </tr>
             <!--<tr class="odd gradeX">-->
             <!--<td th:text="${attendance.logType}"></td>-->
             <!--<td th:text="${attendance.logDateTime}"></td>-->
