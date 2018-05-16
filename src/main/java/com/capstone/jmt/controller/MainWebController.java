@@ -311,7 +311,13 @@ public class MainWebController {
             contactNo = parent.getOfficeNo();
             tap = (TapLog)mainService.getLastTapEntry(stud.getId()).get("tapDetails");
         }
+        Student studIn = mainService.getStudentByRfidIn();
+        Student studOut = mainService.getStudentByRfidOut();
         response.put("student", stud);
+        response.put("studIn", studIn);
+        response.put("studOut",studOut);
+        response.put("timeIn", mainService.getLastTapDate("IN"));
+        response.put("timeOut",mainService.getLastTapDate("OUT"));
         response.put("contactNo", contactNo);
         response.put("tapMode", tap.getLogType());
         return new ResponseEntity<>(response, HttpStatus.OK);

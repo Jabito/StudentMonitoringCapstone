@@ -408,4 +408,8 @@ public class MainService {
     public void sendSMSLogin(String id) {
 
     }
+
+    public String getLastTapDate(String mode) {
+        return mainMapper.getLastTapDate(mode);
+    }
 }

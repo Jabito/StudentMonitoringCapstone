@@ -67,6 +67,8 @@ public class Student implements Serializable {
     private String logDateTime;
     @JsonProperty("fullName")
     private String fullName;
+    @JsonProperty("sectionDesc")
+    private String sectionDesc;
 
 
     public PictureObject getPictureObject() {
@@ -270,5 +272,13 @@ public class Student implements Serializable {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getSectionDesc() {
+        return sectionDesc;
+    }
+
+    public void setSectionDesc(String sectionDesc) {
+        this.sectionDesc = sectionDesc;
     }
 }
