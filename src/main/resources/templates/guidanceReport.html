@@ -10,7 +10,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         $(function () {
-           $('#datePicker').datepicker();
+            $('#datePicker').datepicker();
         });
     </script>
 
@@ -45,7 +45,8 @@
                         <h5>Student ID:</h5>
                     </div>
                     <div class="col-md-8">
-                        <input class="form-control" placeholder="Input Student ID" onkeypress="return runScript(event)"  id="studId"/>
+                        <input class="form-control" placeholder="Input Student ID" onkeypress="return runScript(event)"
+                               id="studId"/>
                     </div>
                 </div>
                 <div class="row">
@@ -53,7 +54,8 @@
                         <h5>Name:</h5>
                     </div>
                     <div class="col-md-8">
-                        <input disabled="disabled" class="form-control" placeholder="Input Student Name" id="studName" th:required="required"/>
+                        <input disabled="disabled" class="form-control" placeholder="Input Student Name" id="studName"
+                               th:required="required"/>
                     </div>
                 </div>
                 <div class="row">
@@ -69,7 +71,8 @@
                         <h5>Parent/Guardian:</h5>
                     </div>
                     <div class="col-md-8">
-                        <input type="text" id="studGuardian" th:required="required" class="form-control" placeholder="Input Parent/Guardian:"/>
+                        <input type="text" id="studGuardian" th:required="required" class="form-control"
+                               placeholder="Input Parent/Guardian:"/>
                     </div>
                 </div>
             </div>
@@ -137,7 +140,7 @@
                 type: 'GET',
                 dataType: 'json',
                 contentType: 'application/json',
-                url: '/getStudentByStudId?id=' + studId ,
+                url: '/getStudentByStudId?id=' + studId,
                 success: function (response) {
                     console.log("FIRST NAME: " + response.stud.firstName);
                     console.log("LAST NAME: " + response.stud.lastName);
@@ -162,7 +165,6 @@
         console.log($("#message").val());
 
 
-
         var studId = $("#studId").val();
         var guardianName = $("#studGuardian").val();
         var message = $("#message").val();
@@ -183,63 +185,82 @@
                 caseOfIncident: caseOfIncident
             }),
             success: function (response) {
-                console.log("response" + response);
+                console.log(response);
                 alert("SUCCESS");
+                proceedSMS(response.contactNo);
             },
             error: function () {
                 alert("FAILED");
             }
         });
-
-//        var announcement = document.getElementById('message').value;
-//        var to = '63'+document.getElementById('to').value;
-////        var pref = document.getElementById('prefix').value;
-//
-//        var msgId = guid();
-//        var xhr = new XMLHttpRequest();
-//        var url = "https://post.chikka.com/smsapi/request";
-//        xhr.open("POST", url, true);
-//        xhr.setRequestHeader("Content-type", "application/json");
-//
-//        var data = JSON.stringify({"message_type": "SEND", "mobile_number": "639954835023", "shortcode": "292903147", "message_id": "ccc81279fcc048d1a6fcc52ed4c14255", "message": "HI", "client_id": "230d0648f6672956b8fc2bed85a480ebb32b296a412e2672714096c37bebebcd", "secret_key": "da51dc811a15e7f7b10784f1e7266b350efe07d13792c0735a4b406e1332c490"});
-//        xhr.send(data);
-//        $.post("https://post.chikka.com/smsapi/request", {
-//            message_type: "SEND",
-//            mobile_number: to,
-//            shortcode: "292903147",
-//            message_id: msgId,
-//            message: announcement,
-//            client_id: "230d0648f6672956b8fc2bed85a480ebb32b296a412e2672714096c37bebebcd",
-//            secret_key: "da51dc811a15e7f7b10784f1e7266b350efe07d13792c0735a4b406e1332c490"
-//        }, function (data, status) {
-//            alert("Data: " + data + "\nStatus: " + status);
-//        });
-
-//        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
-//            apiusername: "APIXV4PYFBUJJ",
-//            apipassword: "APIXV4PYFBUJJBLB47",
-//            mobileno: "09176996988",
-//            senderid: "292903149",
-//            languagetype: "1",
-//            message: "HI ALFRED VARGAS IV, SAW YOUR PROFILE AND THIS IS TO INFORM YOU THAT YOU ONLY HAVE 1 HOUR LEFT TO TELL EVERYBODY THAT IT IS THE END OF THE WORLD - ANONYMOUS"
-//        }, function (data, status) {
-//            alert("Data: " + data + "\nStatus: " + status);
-//        });
-//        function guid() {
-//            function s4() {
-//                return Math.floor((1 + Math.random()) * 0x10000)
-//                    .toString(16)
-//                    .substring(1);
-//            }
-//            var ret = '';
-//            var x=0;
-//            while(x != 8){
-//                ret += s4();
-//                x++;
-//            }
-//            return ret;
-//        }
     }
+
+    function proceedSMS(contactNo) {
+        var message = $("#message").val();
+        if(null != contactNo) {
+            $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
+                apiusername: "APIE4DYUT3XMS",
+                apipassword: "APIE4DYUT3XMSE4DYU",
+                mobileno: contactNo,
+                senderid: "292903166",
+                languagetype: "1",
+                message: message
+            }, function (data, status) {
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+            window.location.replace('http://www.aquajmt.com:8080/homepage');
+        }
+    }
+
+    //        var announcement = document.getElementById('message').value;
+    //        var to = '63'+document.getElementById('to').value;
+    ////        var pref = document.getElementById('prefix').value;
+    //
+    //        var msgId = guid();
+    //        var xhr = new XMLHttpRequest();
+    //        var url = "https://post.chikka.com/smsapi/request";
+    //        xhr.open("POST", url, true);
+    //        xhr.setRequestHeader("Content-type", "application/json");
+    //
+    //        var data = JSON.stringify({"message_type": "SEND", "mobile_number": "639954835023", "shortcode": "292903147", "message_id": "ccc81279fcc048d1a6fcc52ed4c14255", "message": "HI", "client_id": "230d0648f6672956b8fc2bed85a480ebb32b296a412e2672714096c37bebebcd", "secret_key": "da51dc811a15e7f7b10784f1e7266b350efe07d13792c0735a4b406e1332c490"});
+    //        xhr.send(data);
+    //        $.post("https://post.chikka.com/smsapi/request", {
+    //            message_type: "SEND",
+    //            mobile_number: to,
+    //            shortcode: "292903147",
+    //            message_id: msgId,
+    //            message: announcement,
+    //            client_id: "230d0648f6672956b8fc2bed85a480ebb32b296a412e2672714096c37bebebcd",
+    //            secret_key: "da51dc811a15e7f7b10784f1e7266b350efe07d13792c0735a4b406e1332c490"
+    //        }, function (data, status) {
+    //            alert("Data: " + data + "\nStatus: " + status);
+    //        });
+
+    //        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
+    //            apiusername: "APIXV4PYFBUJJ",
+    //            apipassword: "APIXV4PYFBUJJBLB47",
+    //            mobileno: "09176996988",
+    //            senderid: "292903149",
+    //            languagetype: "1",
+    //            message: "HI ALFRED VARGAS IV, SAW YOUR PROFILE AND THIS IS TO INFORM YOU THAT YOU ONLY HAVE 1 HOUR LEFT TO TELL EVERYBODY THAT IT IS THE END OF THE WORLD - ANONYMOUS"
+    //        }, function (data, status) {
+    //            alert("Data: " + data + "\nStatus: " + status);
+    //        });
+    //        function guid() {
+    //            function s4() {
+    //                return Math.floor((1 + Math.random()) * 0x10000)
+    //                    .toString(16)
+    //                    .substring(1);
+    //            }
+    //            var ret = '';
+    //            var x=0;
+    //            while(x != 8){
+    //                ret += s4();
+    //                x++;
+    //            }
+    //            return ret;
+    //        }
+
 
     function byClass15() {
         var x = document.getElementById("byClass15");

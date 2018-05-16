@@ -345,11 +345,16 @@ public class MainService {
 
     public void addGuidanceRecord(GuidanceRecord gr){
         gr.setId("GR" + mainMapper.getLastId(5));
+        mainMapper.incrementId(5);
         mainMapper.addGuidanceRecord(gr);
     }
 
     public List<GuidanceRecord> getGuidanceRecord(String studentId){
         return mainMapper.getGuidanceRecord(studentId);
+    }
+
+    public List<GuidanceRecord> getGuidanceRecordList(){
+        return mainMapper.getGuidanceRecordList();
     }
 
     public PictureObject retrieveImage(String fileId) {

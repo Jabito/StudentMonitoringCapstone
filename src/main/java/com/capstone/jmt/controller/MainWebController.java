@@ -345,6 +345,7 @@ public class MainWebController {
     @RequestMapping(value = "/summaryReport", method = RequestMethod.GET)
     public String summaryReport(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
+        model.addAttribute("summaryList", mainService.getGuidanceRecordList());
         return null == user ? "redirect:/login" : "summaryReport";
     }
 
@@ -360,17 +361,23 @@ public class MainWebController {
         gr.setCaseOfIncident(reportModel.getCaseOfIncident());
         gr.setNameOfGuardian(reportModel.getGuardianName());
         Parent parent = mainService.getParentByStudentId(reportModel.getStudentId());
+        System.out.println("CONTACT NO: " + parent.getOfficeNo());
 
         if(null != parent)
-            if(parent.getSmsNotif())
+            if(parent.getSmsNotif()) {
+                System.out.println("CONTACT NO: " + parent.getOfficeNo());
                 response.put("contactNo", parent.getOfficeNo());
+            }
 
         try {
             mainService.sendFirebase(reportModel.getMessage());
         }catch(Exception e){}
 
         mainService.addGuidanceRecord(gr);
-        response.put("message", reportModel.getMessage());
+        String message = "Dear " + (null != parent? parent.getParentName():"parent") + ", this is a message from the Guidance: **";
+        message += reportModel.getMessage();
+        message += "** This message is free. Please do not reply.";
+        response.put("message", message);
         response.put("responseCode", 200);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -471,6 +478,8 @@ public class MainWebController {
         if(null != id)
             student = mainService.getStudentById(id);
         System.out.println("SID " + student.getId());
+        model.addAttribute("gradeLevel", mainService.getGradeLevelList());
+        model.addAttribute("section", mainService.getSectionList(0));
         if (null == student) {
             return "studentInfo";
         } else {
