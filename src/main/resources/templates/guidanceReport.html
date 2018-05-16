@@ -197,16 +197,19 @@
 
     function proceedSMS(contactNo) {
         var message = $("#message").val();
-        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
-                        apiusername: "APIE4DYUT3XMS",
-                        apipassword: "APIE4DYUT3XMSE4DYU",
-                        mobileno: contactNo,
-                        senderid: "292903166",
-                        languagetype: "1",
-                        message: message
-                    }, function (data, status) {
-                        alert("Data: " + data + "\nStatus: " + status);
-                    });
+        if(null != contactNo) {
+            $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
+                apiusername: "APIE4DYUT3XMS",
+                apipassword: "APIE4DYUT3XMSE4DYU",
+                mobileno: contactNo,
+                senderid: "292903166",
+                languagetype: "1",
+                message: message
+            }, function (data, status) {
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+            window.location.replace('http://www.aquajmt.com:8080/homepage');
+        }
     }
 
     //        var announcement = document.getElementById('message').value;

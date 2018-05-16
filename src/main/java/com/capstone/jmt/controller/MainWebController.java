@@ -345,6 +345,7 @@ public class MainWebController {
     @RequestMapping(value = "/summaryReport", method = RequestMethod.GET)
     public String summaryReport(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
+        model.addAttribute("summaryList", mainService.getGuidanceRecordList());
         return null == user ? "redirect:/login" : "summaryReport";
     }
 
@@ -373,7 +374,10 @@ public class MainWebController {
         }catch(Exception e){}
 
         mainService.addGuidanceRecord(gr);
-        response.put("message", reportModel.getMessage());
+        String message = "Dear " + (null != parent? parent.getParentName():"parent") + ", this is a message from the Guidance: **";
+        message += reportModel.getMessage();
+        message += "** This message is free. Please do not reply.";
+        response.put("message", message);
         response.put("responseCode", 200);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

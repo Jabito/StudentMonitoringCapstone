@@ -42,7 +42,7 @@
         <result column="relationship" property="relationship" jdbcType="VARCHAR"/>
         <result column="sms_notif" property="smsNotif" jdbcType="BIT" />
         <result column="occupation" property="occupation" jdbcType="VARCHAR"/>
-        <result column="contact_no" property="officeNo" jdbcType="VARCHAR"/>
+        <result column="office_no" property="officeNo" jdbcType="VARCHAR"/>
         <result column="created_on" property="createdOn" jdbcType="TIMESTAMP"/>
         <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
         <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
@@ -458,6 +458,11 @@
     <select id="getGuidanceRecord" resultMap="GuidanceLogMap" resultType="java.util.List">
         SELECT * FROM log_guidance
         WHERE student_id = #{studentId}
+    </select>
+
+    <select id="getGuidanceRecordList" resultMap="GuidanceLogMap" resultType="java.util.List">
+        SELECT * FROM log_guidance
+        ORDER BY date_of_incident DESC
     </select>
 
     <resultMap id="PictureObjectMap" type="com.capstone.jmt.data.PictureObject">
