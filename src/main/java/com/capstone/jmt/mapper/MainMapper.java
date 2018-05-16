@@ -75,6 +75,8 @@ public interface MainMapper {
 
     List<GuidanceRecord> getGuidanceRecord(@Param("studentId")String studentId);
 
+    List<GuidanceRecord> getGuidanceRecordList();
+
     void saveImage(@Param("imageHolder") PictureObject imageHolder);
 
     PictureObject retrieveImage(@Param("userId") String fileId);

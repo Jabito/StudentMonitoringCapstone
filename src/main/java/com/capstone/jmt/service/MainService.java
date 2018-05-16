@@ -353,6 +353,10 @@ public class MainService {
         return mainMapper.getGuidanceRecord(studentId);
     }
 
+    public List<GuidanceRecord> getGuidanceRecordList(){
+        return mainMapper.getGuidanceRecordList();
+    }
+
     public PictureObject retrieveImage(String fileId) {
         return mainMapper.retrieveImage(fileId);
     }
