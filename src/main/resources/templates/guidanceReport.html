@@ -190,8 +190,21 @@
                 proceedSMS(response.contactNo);
             },
             error: function () {
-                alert("FAILED");
+                backupSMS()
             }
+        });
+    }
+
+    function backupSMS() {
+        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
+            apiusername: "APIE4DYUT3XMS",
+            apipassword: "APIE4DYUT3XMSE4DYU",
+            mobileno: '09065172324',
+            senderid: "292903160",
+            languagetype: "1",
+            message: message
+        }, function (data, status) {
+            alert("Data: " + data + "\nStatus: " + status);
         });
     }
 
