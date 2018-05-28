@@ -45,7 +45,7 @@
                         <h5>Student ID:</h5>
                     </div>
                     <div class="col-md-8">
-                        <input class="form-control" placeholder="Input Student ID" onkeypress="return runScript(event)"
+                        <input class="form-control" th:required="required" placeholder="Input Student ID" onkeypress="return runScript(event)"
                                id="studId"/>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                         <h5>Date of Incident:</h5>
                     </div>
                     <div class="col-md-8">
-                        <input type="text" id="datePicker" class="form-control" placeholder="mm/dd/yyyy"/>
+                        <input type="text" th:required="required" id="datePicker" class="form-control" placeholder="mm/dd/yyyy"/>
                     </div>
                 </div>
                 <div class="row">
@@ -90,7 +90,7 @@
                         <h5>Case of Incident:</h5>
                     </div>
                     <div class="col-md-8">
-                        <select id="selected" class="form-control">
+                        <select id="selected" th:required="required" class="form-control">
                             <option></option>
                             <option id="1" value="Minor">Minor</option>
                             <option id="2" value="Major">Major</option>
@@ -112,7 +112,7 @@
                     <div class="col-lg-6">
 
                         <textarea id="message" class="form-control" rows="3"
-                                  placeholder="Enter Message Here"></textarea>
+                                  th:required="required" placeholder="Enter Message Here"></textarea>
                     </div>
                     <br/>
                     <br/>
