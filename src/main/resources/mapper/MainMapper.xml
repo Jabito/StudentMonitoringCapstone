@@ -548,4 +548,11 @@ AND #{userId} IN (
         SELECT log_datetime FROM log_taps WHERE log_type = #{mode}
         ORDER BY log_datetime DESC LIMIT 1
     </select>
+
+    <select id="getTapLogsByParentId" resultMap="TapLogMap" resultType="list">
+        SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
+        ON A.rfid = B.rfid
+        WHERE B.id = (SELECT parent_of FROM data_parents WHERE id = #{parentId})
+        ORDER BY A.log_datetime DESC
+    </select>
 </mapper>

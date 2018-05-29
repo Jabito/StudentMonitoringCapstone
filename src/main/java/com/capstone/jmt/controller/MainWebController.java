@@ -342,7 +342,10 @@ public class MainWebController {
             user = setUserRole(user, model);
             return "redirect:/login";
         } else {
-            model.addAttribute("logs", tapLogs);
+            if(user.getUserTypeId() != 2)
+                model.addAttribute("logs", tapLogs);
+            else
+                model.addAttribute("logs", mainService.getTapLogsByParentId(user.getId()));
             return "attendanceLogs";
         }
     }

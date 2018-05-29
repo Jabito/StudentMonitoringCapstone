@@ -412,4 +412,8 @@ public class MainService {
     public String getLastTapDate(String mode) {
         return mainMapper.getLastTapDate(mode);
     }
+
+    public List<TapLog> getTapLogsByParentId(String id) {
+        return mainMapper.getTapLogsByParentId(id);
+    }
 }
