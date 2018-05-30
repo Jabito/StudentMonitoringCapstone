@@ -102,4 +102,6 @@ public interface MainMapper {
     Parent getParentByStudentId(@Param("studentId") String studentId);
 
     String getLastTapDate(@Param("mode")String mode);
+
+    List<TapLog> getTapLogsByParentId(@Param("parentId") String id);
 }
