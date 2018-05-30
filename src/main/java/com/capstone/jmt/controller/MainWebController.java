@@ -169,12 +169,24 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
-    public String sendMessage(@ModelAttribute("appUser") User user, Model model) {
+    public String sendMessage(@RequestParam(value = "gradeLevel", defaultValue = "Nursery") String gradeLevel,  @ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        if (null == user)
-            return "redirect:/login";
 
-        return "sendMessage";
+        List<RefGradeLevel> gradeLevels = mainService.getGradeLevelList();
+        int gradeLvlId = mainService.getGradeLvlIdByGradeLevel(gradeLevel);
+        System.out.println("GRADE LEVEL ID : " + gradeLvlId);
+        List<RefSection> sections = mainService.getSectionList(gradeLvlId);
+
+        if (null == user){
+            return "redirect:/login";
+        }else {
+            for(RefSection refSection: sections) {
+                System.out.println("SECTION NAME : " + refSection.getSection());
+            }
+            model.addAttribute("gradeLevels", gradeLevels);
+            model.addAttribute("sections",sections);
+            return "sendMessage";
+        }
     }
 
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
@@ -245,6 +257,11 @@ public class MainWebController {
 
     @RequestMapping(value = "/getListByUserTypeId", method = RequestMethod.GET)
     public ResponseEntity<?> getListByUsertypeId(@RequestParam("userTypeId") int userTypeId) {
+        return new ResponseEntity<>(mainService.getUsersByUserTypeId(userTypeId), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getSectionByGradeLvlId", method = RequestMethod.GET)
+    public ResponseEntity<?> getSectionByGradeLvlId(@RequestParam("userTypeId") int userTypeId) {
         return new ResponseEntity<>(mainService.getUsersByUserTypeId(userTypeId), HttpStatus.OK);
     }
 

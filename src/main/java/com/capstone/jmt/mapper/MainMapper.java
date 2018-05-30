@@ -104,4 +104,8 @@ public interface MainMapper {
     String getLastTapDate(@Param("mode")String mode);
 
     List<TapLog> getTapLogsByParentId(@Param("parentId") String id);
+
+    List<RefSection> getSectionListByGradeLevel(String gradeLevel);
+
+    int getGradeLvlIdByGradeLevel(@Param("gradeLevel") String gradeLevel);
 }

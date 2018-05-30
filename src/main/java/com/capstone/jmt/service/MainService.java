@@ -416,4 +416,12 @@ public class MainService {
     public List<TapLog> getTapLogsByParentId(String id) {
         return mainMapper.getTapLogsByParentId(id);
     }
+
+    public List<RefSection> getSectionListByGradeLevel(String gradeLevel) {
+        return mainMapper.getSectionListByGradeLevel(gradeLevel);
+    }
+
+    public int getGradeLvlIdByGradeLevel(String gradeLevel) {
+        return mainMapper.getGradeLvlIdByGradeLevel(gradeLevel);
+    }
 }

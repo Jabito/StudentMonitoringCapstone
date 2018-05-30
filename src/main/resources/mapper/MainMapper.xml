@@ -400,6 +400,14 @@ ORDER BY B.log_datetime DESC LIMIT 1
         SELECT * FROM ref_section WHERE ref_grade_level_id = #{gradeLvlId}
     </select>
 
+    <select id="getSectionListByGradeLevel" resultMap="SectionMap" resultType="java.util.List">
+        SELECT * FROM ref_section WHERE ref_grade_level_id = #{gradeLvlId}
+    </select>
+
+    <select id="getGradeLvlIdByGradeLevel" resultType="integer">
+        SELECT * FROM ref_grade_level WHERE grade_level= #{gradeLevel}
+    </select>
+
     <insert id="addTeacher" flushCache="true">
         INSERT INTO data_guidance(id, teacher_fname, teacher_lname, position, contact_no, created_by)
         VALUES
