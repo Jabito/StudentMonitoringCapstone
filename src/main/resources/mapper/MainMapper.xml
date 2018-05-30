@@ -408,6 +408,15 @@ ORDER BY B.log_datetime DESC LIMIT 1
         SELECT * FROM ref_grade_level WHERE grade_level= #{gradeLevel}
     </select>
 
+    <select id="getContactNumbersByStudentId" resultType="string">
+        SELECT DICTINCT office_no FROM data_parents
+        WHERE sms_notif = true
+        AND parent_of IN (
+        SELECT id FROM data_students
+        WHERE section = #{sectionId}
+        )
+    </select>
+
     <insert id="addTeacher" flushCache="true">
         INSERT INTO data_guidance(id, teacher_fname, teacher_lname, position, contact_no, created_by)
         VALUES

@@ -424,4 +424,8 @@ public class MainService {
     public int getGradeLvlIdByGradeLevel(String gradeLevel) {
         return mainMapper.getGradeLvlIdByGradeLevel(gradeLevel);
     }
+
+    public List<String> getContactNumbersByStudentId(String sectionId){
+        return mainMapper.getContactNumbersByStudentId(sectionId);
+    }
 }
