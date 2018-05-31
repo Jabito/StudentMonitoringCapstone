@@ -385,6 +385,7 @@ public class MainWebController {
     public ResponseEntity<?> postGuidanceReport(@ModelAttribute("appUser") User user, @RequestBody AddReportModel reportModel) {
         HashMap<String, Object> response = new HashMap<>();
         GuidanceRecord gr = new GuidanceRecord();
+        gr.setGuidance(user.getUsername());
         gr.setCreatedBy(user.getUsername());
         gr.setReason(reportModel.getMessage());
         gr.setStudentId(reportModel.getStudentId());
