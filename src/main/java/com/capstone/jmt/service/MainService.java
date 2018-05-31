@@ -234,9 +234,8 @@ public class MainService {
         return response;
     }
 
-    public void addUser(AddUserJson userJson) {
-        User user = new User(userJson);
-        Guidance guidance = mainMapper.getGuidance(userJson.getReferenceId());
+    public void addUser(User user) {
+        Guidance guidance = mainMapper.getGuidance(user.getReferenceId());
         Parent parent = mainMapper.getParent(user.getReferenceId());
         user.setId(guidance != null ? "GID" + String.valueOf(mainMapper.getLastId(1)) :
                 parent != null ? "PID" + String.valueOf(mainMapper.getLastId(2)) :
@@ -252,7 +251,7 @@ public class MainService {
             user.setUserTypeId(0);
             mainMapper.incrementId(0);
         }
-        user.setPassword(passwordEncoder.encode(userJson.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         mainMapper.addUser(user);
     }
 
