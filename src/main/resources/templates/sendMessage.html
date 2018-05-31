@@ -106,6 +106,23 @@
             }
         });
 
+        $("#sub_groups").on("change", function () {
+            firstSection = $("#sub_groups").val();
+
+            $.ajax({
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                url: '/getContactNumbersBySectionId?sectionId=' + firstSection,
+                success: function (response) {
+                    $('#stud_group').empty();
+                    $('#stud_group').append(new Option("ALL", 99));
+                    response.students.forEach(function (item) {
+                        $('#stud_group').append(new Option(item.firstName + " " + item.lastName, item.id));
+                    });
+                }
+            });
+        });
+
         function sendSms() {
             var studId = $("#searchText").val();
 
@@ -170,6 +187,9 @@
                 url: '/selectGradeLevel?gradeLvlId=' + gradeLevel,
                 success: function (response) {
                     $('#sub_groups').empty();
+                    $('#sub_groups').append(new Option("---Select a section---", 101)); // 101 is just a default id
+                    $('#sub_groups').append(new Option("All", 102)); // 102 is a default id
+                    $('#stud_group').empty();
                     response.section.forEach(function (item) {
                         $('#sub_groups').append(new Option(item.section, item.id));
                     });
