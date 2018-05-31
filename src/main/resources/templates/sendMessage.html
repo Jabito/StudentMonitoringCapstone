@@ -42,12 +42,12 @@
                     <div class="col-lg-3">
                         <label>Select Section</label>
                         <select id="sub_groups" class="form-control" name="">
-                            <option th:each="sec : ${sections}" th:id="${sec.id}" th:text="${sec.section}"></option>
+                            <option th:each="sec : ${sections}" th:value="${sec.id}" th:text="${sec.section}"></option>
                         </select>
                     </div>
                     <div class="col-lg-3">
 
-                        <select class="form-control" name="" id="">
+                        <select class="form-control" name="" id="stud_group">
                             <option value="0">ALL</option>
                             <option></option>
 
@@ -89,6 +89,22 @@
 
         //    var from = "63"+ document.getElementById('from').value;
         //    var sentTo = pref + to;
+
+
+        var firstSection = $("#sub_groups").val();
+
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            url: '/getContactNumbersBySectionId?sectionId=' + firstSection,
+            success: function (response) {
+                $('#stud_group').empty();
+                $('#stud_group').append(new Option("ALL", 99));
+                response.students.forEach(function (item) {
+                    $('#stud_group').append(new Option(item.firstName + " " + item.lastName, item.id));
+                });
+            }
+        });
 
         function sendSms() {
             var studId = $("#searchText").val();

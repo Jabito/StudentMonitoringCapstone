@@ -177,17 +177,17 @@ public class MainWebController {
         System.out.println("GRADE LEVEL ID : " + gradeLvlId);
         List<RefSection> sections = mainService.getSectionList(gradeLvlId);
 
+
         if (null == user){
             return "redirect:/login";
         }else {
-            for(RefSection refSection: sections) {
-                System.out.println("SECTION NAME : " + refSection.getSection());
-            }
+
             model.addAttribute("gradeLevels", gradeLevels);
             model.addAttribute("sections",sections);
             return "sendMessage";
         }
     }
+
 
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
     public String addStudent(@ModelAttribute("appUser") User appUser, @Valid Student student, BindingResult bindingResult, Model model) {
@@ -482,6 +482,18 @@ public class MainWebController {
         List<RefSection> returnList = mainService.getSectionList(gradeLvlId);
 
         response.put("section", returnList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getContactNumbersBySectionId", method = RequestMethod.GET)
+    public ResponseEntity<?> getContactNumbersBySectionId(@RequestParam(value = "sectionId") String sectionId) {
+        HashMap<String, Object> response = new HashMap<>();
+//        List<String> numbersList = mainService.getContactNumbersByStudentId(sectionId);
+        List<Student> studentList = mainService.getStudentListBySectionId(sectionId);
+
+        System.out.println("STUDENT LIST COUN = : " + studentList.size());
+//        response.put("numbers", numbersList);
+        response.put("students", studentList);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

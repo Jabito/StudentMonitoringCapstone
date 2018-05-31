@@ -427,4 +427,9 @@ public class MainService {
     public List<String> getContactNumbersByStudentId(String sectionId){
         return mainMapper.getContactNumbersByStudentId(sectionId);
     }
+
+
+    public List<Student> getStudentListBySectionId(String sectionId) {
+        return mainMapper.getStudentListBySectionId(sectionId);
+    }
 }

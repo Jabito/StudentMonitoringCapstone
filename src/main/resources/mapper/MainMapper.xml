@@ -535,6 +535,10 @@ AND #{userId} IN (
         OR middle_name LIKE #{searchString}
     </select>
 
+    <select id="getStudentListBySectionId" resultMap="StudentMap" resultType="java.util.List">
+        SELECT * FROM data_students where "section" = #{sectionId}
+    </select>
+
     <select id="getUserType" resultMap="RefUserTypeMap" resultType="java.util.List">
         SELECT * FROM ref_user_type
     </select>
