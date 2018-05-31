@@ -190,21 +190,8 @@
                 proceedSMS(response.contactNo);
             },
             error: function () {
-                backupSMS()
+                console.log("Error sending SMS.");
             }
-        });
-    }
-
-    function backupSMS() {
-        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
-            apiusername: "APIE4DYUT3XMS",
-            apipassword: "APIE4DYUT3XMSE4DYU",
-            mobileno: '09165132692',
-            senderid: "292903160",
-            languagetype: "1",
-            message: message
-        }, function (data, status) {
-            alert("Data: " + data + "\nStatus: " + status);
         });
     }
 

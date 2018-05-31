@@ -439,6 +439,9 @@ ORDER BY B.log_datetime DESC LIMIT 1
         <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
         <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
         <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="date_of_incident" property="dateOfIncident" jdbcType="VARCHAR"/>
+        <result column="case_of_incident" property="caseOfIncident" jdbcType="VARCHAR"/>
+        <result column="name_of_guardian" property="nameOfGuardian" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="addGuidanceRecord">
