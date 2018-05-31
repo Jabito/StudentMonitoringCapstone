@@ -208,7 +208,8 @@ public class MainAppController {
                 } else {
                     response.put("responseCode", 200);
                     response.put("responseDesc", "Successfully created User.");
-                    mainService.addUser(user);
+                    User obj = new User(user);
+                    mainService.addUser(obj);
                 }
             }else{
                 response.put("responseCode", HttpStatus.UNAUTHORIZED);

@@ -36,14 +36,14 @@
                                     <div class="form-group">
                                         <label>User Type</label>
                                         <select id="section">
-                                            <option  th:each="userType  : ${userType}" th:text="${userType.user_type}" th:value="${userType.id}" th:field="*{userTypeId}">
+                                            <option th:each="userType  : ${userType}" th:text="${userType.user_type}" th:value="${userType.id}" th:field="*{userTypeId}">
                                             </option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label>Users</label>
                                         <select id="users">
-                                            <option  th:each="user  : ${users}" th:text="${user.name}" th:value="${user.id}" th:field="*{userId}">
+                                            <option  th:each="user  : ${users}" th:text="${user.name}" th:value="${user.id}" th:field="*{referenceId}">
                                             </option>
                                         </select>
                                     </div>

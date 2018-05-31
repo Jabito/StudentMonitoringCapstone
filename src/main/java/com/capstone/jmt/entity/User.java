@@ -50,6 +50,7 @@ public class User implements Serializable {
         this.password = userJson.getPassword();
         this.email = userJson.getEmail();
         this.createdBy = userJson.getAppUsername();
+        this.referenceId = userJson.getReferenceId();
     }
 
 

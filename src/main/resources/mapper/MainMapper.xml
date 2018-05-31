@@ -400,6 +400,23 @@ ORDER BY B.log_datetime DESC LIMIT 1
         SELECT * FROM ref_section WHERE ref_grade_level_id = #{gradeLvlId}
     </select>
 
+    <select id="getSectionListByGradeLevel" resultMap="SectionMap" resultType="java.util.List">
+        SELECT * FROM ref_section WHERE ref_grade_level_id = #{gradeLvlId}
+    </select>
+
+    <select id="getGradeLvlIdByGradeLevel" resultType="integer">
+        SELECT * FROM ref_grade_level WHERE grade_level= #{gradeLevel}
+    </select>
+
+    <select id="getContactNumbersByStudentId" resultType="string">
+        SELECT DICTINCT office_no FROM data_parents
+        WHERE sms_notif = true
+        AND parent_of IN (
+        SELECT id FROM data_students
+        WHERE section = #{sectionId}
+        )
+    </select>
+
     <insert id="addTeacher" flushCache="true">
         INSERT INTO data_guidance(id, teacher_fname, teacher_lname, position, contact_no, created_by)
         VALUES
@@ -422,6 +439,10 @@ ORDER BY B.log_datetime DESC LIMIT 1
         <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
         <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
         <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="date_of_incident" property="dateOfIncident" jdbcType="VARCHAR"/>
+        <result column="case_of_incident" property="caseOfIncident" jdbcType="VARCHAR"/>
+        <result column="name_of_guardian" property="nameOfGuardian" jdbcType="VARCHAR"/>
+        <result column="student_name" property="studentName" jdbcType="VARCHAR" />
     </resultMap>
 
     <insert id="addGuidanceRecord">
@@ -464,7 +485,8 @@ ORDER BY B.log_datetime DESC LIMIT 1
     </select>
 
     <select id="getGuidanceRecordList" resultMap="GuidanceLogMap" resultType="java.util.List">
-        SELECT * FROM log_guidance
+        SELECT A.*, (B.first_name || ' ' || b.middle_name || ' ' || b.last_name) as student_name FROM log_guidance A JOIN data_students B
+        ON A.student_id = B.id
         ORDER BY date_of_incident DESC
     </select>
 
@@ -547,5 +569,12 @@ AND #{userId} IN (
     <select id="getLastTapDate" resultType="java.lang.String">
         SELECT log_datetime FROM log_taps WHERE log_type = #{mode}
         ORDER BY log_datetime DESC LIMIT 1
+    </select>
+
+    <select id="getTapLogsByParentId" resultMap="TapLogMap" resultType="list">
+        SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
+        ON A.rfid = B.rfid
+        WHERE B.id = (SELECT parent_of FROM data_parents WHERE id = #{parentId})
+        ORDER BY A.log_datetime DESC
     </select>
 </mapper>

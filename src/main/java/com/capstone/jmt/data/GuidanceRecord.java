@@ -13,6 +13,8 @@ public class GuidanceRecord implements Serializable{
 
     @JsonProperty("id")
     private String id;
+    @JsonProperty("guidanceId")
+    private String guidance;
     @JsonProperty("studentId")
     private String studentId;
     @JsonProperty("title")
@@ -35,6 +37,8 @@ public class GuidanceRecord implements Serializable{
     private String dateOfIncident;
     @JsonProperty("nameOfGuardian")
     private String nameOfGuardian;
+    @JsonProperty("studentName")
+    private String studentName;
 
     public String getId() {
         return id;
@@ -42,6 +46,14 @@ public class GuidanceRecord implements Serializable{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getGuidance() {
+        return guidance;
+    }
+
+    public void setGuidance(String guidance) {
+        this.guidance = guidance;
     }
 
     public String getStudentId() {
@@ -122,5 +134,13 @@ public class GuidanceRecord implements Serializable{
 
     public void setNameOfGuardian(String nameOfGuardian) {
         this.nameOfGuardian = nameOfGuardian;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 }

@@ -169,12 +169,24 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
-    public String sendMessage(@ModelAttribute("appUser") User user, Model model) {
+    public String sendMessage(@RequestParam(value = "gradeLevel", defaultValue = "Nursery") String gradeLevel,  @ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        if (null == user)
-            return "redirect:/login";
 
-        return "sendMessage";
+        List<RefGradeLevel> gradeLevels = mainService.getGradeLevelList();
+        int gradeLvlId = mainService.getGradeLvlIdByGradeLevel(gradeLevel);
+        System.out.println("GRADE LEVEL ID : " + gradeLvlId);
+        List<RefSection> sections = mainService.getSectionList(gradeLvlId);
+
+        if (null == user){
+            return "redirect:/login";
+        }else {
+            for(RefSection refSection: sections) {
+                System.out.println("SECTION NAME : " + refSection.getSection());
+            }
+            model.addAttribute("gradeLevels", gradeLevels);
+            model.addAttribute("sections",sections);
+            return "sendMessage";
+        }
     }
 
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
@@ -248,9 +260,17 @@ public class MainWebController {
         return new ResponseEntity<>(mainService.getUsersByUserTypeId(userTypeId), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/addNewUser", method = RequestMethod.POST)
-    public String postNewUser(@Valid AddUserJson newUser, BindingResult bindingResult, Model model) {
+    @RequestMapping(value = "/getSectionByGradeLvlId", method = RequestMethod.GET)
+    public ResponseEntity<?> getSectionByGradeLvlId(@RequestParam("userTypeId") int userTypeId) {
+        return new ResponseEntity<>(mainService.getUsersByUserTypeId(userTypeId), HttpStatus.OK);
+    }
 
+    @RequestMapping(value = "/addNewUser", method = RequestMethod.POST)
+    public String postNewUser(@Valid User newUser, BindingResult bindingResult, Model model) {
+
+        System.out.println("UserTypeId " + String.valueOf(newUser.getUserTypeId()));
+        System.out.println("User ID " + newUser.getReferenceId());
+        System.out.println("Username" + newUser.getUsername());
         mainService.addUser(newUser);
         return "redirect:/homepage?added=User";
     }
@@ -342,7 +362,10 @@ public class MainWebController {
             user = setUserRole(user, model);
             return "redirect:/login";
         } else {
-            model.addAttribute("logs", tapLogs);
+            if(user.getUserTypeId() != 2)
+                model.addAttribute("logs", tapLogs);
+            else
+                model.addAttribute("logs", mainService.getTapLogsByParentId(user.getId()));
             return "attendanceLogs";
         }
     }
@@ -365,6 +388,7 @@ public class MainWebController {
     public ResponseEntity<?> postGuidanceReport(@ModelAttribute("appUser") User user, @RequestBody AddReportModel reportModel) {
         HashMap<String, Object> response = new HashMap<>();
         GuidanceRecord gr = new GuidanceRecord();
+        gr.setGuidance(user.getUsername());
         gr.setCreatedBy(user.getUsername());
         gr.setReason(reportModel.getMessage());
         gr.setStudentId(reportModel.getStudentId());
