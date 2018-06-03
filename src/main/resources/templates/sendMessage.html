@@ -115,7 +115,8 @@
                 url: '/getContactNumbersBySectionId?sectionId=' + firstSection,
                 success: function (response) {
                     $('#stud_group').empty();
-                    $('#stud_group').append(new Option("ALL", 99));
+                    $('#stud_group').append(new Option("---Select an option---", 104));
+                    $('#stud_group').append(new Option("ALL", 105));
                     response.students.forEach(function (item) {
                         $('#stud_group').append(new Option(item.firstName + " " + item.lastName, item.id));
                     });
@@ -124,9 +125,36 @@
         });
 
         function sendSms() {
-            var studId = $("#searchText").val();
+            var message = $("#message").val();
+            if($("#stud_group").val() == "105" || $("#sub_groups").val() == "102") {
+                $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
+                    apiusername: "APIE4DYUT3XMS",
+                    apipassword: "APIE4DYUT3XMSE4DYU",
+                    mobileno: "09165132692,639954835023,639058041794",
+                    senderid: "292903166",
+                    languagetype: "1",
+                    message: message
+                }, function (data, status) {
+                    alert("Data: " + data + "\nStatus: " + status);
+                });
+                alert('Message Sent!.');
+            }else {
+                $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
+                    apiusername: "APIE4DYUT3XMS",
+                    apipassword: "APIE4DYUT3XMSE4DYU",
+                    mobileno: "639058041794",
+                    senderid: "292903166",
+                    languagetype: "1",
+                    message: message
+                }, function (data, status) {
+                    alert("Data: " + data + "\nStatus: " + status);
+                });
+                alert('Message Sent!.');
+            }
 
-            console.log("VALUE OF STUDENT ID: " + studId);
+
+
+//            console.log("VALUE OF STUDENT ID: " + studId);
 //        var announcement = document.getElementById('message').value;
 //        var to = '63'+document.getElementById('to').value;
 ////        var pref = document.getElementById('prefix').value;
