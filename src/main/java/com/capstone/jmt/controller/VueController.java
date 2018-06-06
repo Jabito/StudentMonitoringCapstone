@@ -18,14 +18,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/vue")
 @SessionAttributes("appUser")
+@CrossOrigin
 public class VueController {
 
     @Autowired
-    private MainMapper mainMapper;
+    private MainService mainService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -34,7 +36,7 @@ public class VueController {
     public ResponseEntity<?> login(@RequestParam("username") String username, @RequestParam("password") String password){
         HashMap<String, Object> response = new HashMap<>();
 
-        User user = mainMapper.getUserByUsername(username);
+        User user = mainService.getUser(username);
         if(null == user){
             response.put("responseDesc","User not found.");
             response.put("responseCode", 404);
@@ -50,5 +52,10 @@ public class VueController {
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getAttendanceLogsDetails", method = RequestMethod.GET)
+    public ResponseEntity<?> getAttendanceLogsDetails(@RequestParam(value = "studId") String studId) {
+        return new ResponseEntity<>(mainService.getTapLogOfStudent(studId).get("tapListDetails"), HttpStatus.OK);
     }
 }
