@@ -33,19 +33,19 @@ public class VueController {
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ResponseEntity<?> login(@RequestParam("username") String username, @RequestParam("password") String password){
+    public ResponseEntity<?> login(@RequestParam("username") String username, @RequestParam("password") String password) {
         HashMap<String, Object> response = new HashMap<>();
 
         User user = mainService.getUser(username);
-        if(null == user){
-            response.put("responseDesc","User not found.");
+        if (null == user) {
+            response.put("responseDesc", "User not found.");
             response.put("responseCode", 404);
-        }else{
-            if(passwordEncoder.matches(password, user.getPassword())){
+        } else {
+            if (passwordEncoder.matches(password, user.getPassword())) {
                 response.put("responseCode", HttpStatus.OK);
                 response.put("responseDesc", "Successfully Logged in.");
                 response.put("user", user);
-            }else{
+            } else {
                 response.put("responseCode", 201);
                 response.put("responseDesc", "Invalid Password.");
             }
@@ -57,5 +57,22 @@ public class VueController {
     @RequestMapping(value = "/getAttendanceLogsDetails", method = RequestMethod.GET)
     public ResponseEntity<?> getAttendanceLogsDetails(@RequestParam(value = "studId") String studId) {
         return new ResponseEntity<>(mainService.getTapLogOfStudent(studId).get("tapListDetails"), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
+    public ResponseEntity<?> addStudent(@RequestBody AddStudentJson studentJson) {
+        HashMap<String, Object> response = new HashMap<>();
+        Student stud = new Student(studentJson);
+        mainService.addStudent(stud);
+        response.put("responseCode", 200);
+        response.put("responseDesc", "Successfully saved student.");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getGradeLevels", method = RequestMethod.GET)
+    public ResponseEntity<?> getGradeLevels() {
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("gradeLvls", mainService.getGradeLevelList());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
