@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>AquaJMT | GuidanceInfo</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="">
+            <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Edit Guidance</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        You can edit Guidance Details here.
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <form  role="form" th:object="${editGuidance}" th:action="@{/updateGuidance}" method="post">
+                                    <br/>
+
+                                    <div class="form-group">
+                                        <label>Guidance ID</label>
+                                        <input disabled="disabled" th:required="required" class="form-control" placeholder="Guidance ID" th:field="*{id}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>First Name</label>
+                                        <input disabled="disabled" th:required="required" class="form-control" placeholder="First Name" th:field="*{firstName}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Last Name</label>
+                                        <input disabled="disabled" th:required="required" class="form-control" placeholder="Last Name" th:field="*{lastName}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Contact Number</label>
+                                        <input disabled="disabled" th:required="required" class="form-control" placeholder="Contact No" th:field="*{contactNo}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Position</label>
+                                        <input disabled="disabled" th:required="required" class="form-control" placeholder="Position" th:field="*{position}"/>
+                                    </div>
+
+                                    <button th:type="submit" class="btn btn-success btn-lg" id="btnUpdate">UPDATE
+                                    </button>
+                                </form>
+                                <button class="btn btn-success btn-lg" id="btnEdit">EDIT</button>
+                            </div>
+                            <!-- /.col-lg-6 (nested) -->
+                            <div class="col-lg-6">
+                                <form role="form">
+
+
+                                    <h5><label><i class="glyph-icon icon-paperclip" style="color: black"></i>Upload Picture</label></h5>
+                                    <input class="form-control"  id="files-upload" type="file" style=" "/>
+
+
+                                    <button type="submit" class="btn btn-success btn-lg">Upload Photo</button>
+                                </form>
+                            </div>
+                            <!-- /.col-lg-6 (nested) -->
+                        </div>
+                        <!-- /.row (nested) -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+</div>
+<script type="text/javascript">
+
+    $("#btnUpdate").hide();
+    $("#btnEdit").on("click", function () {
+        $(".form-control").removeAttr('disabled');
+        $("#btnUpdate").show();
+        $("#btnEdit").hide();
+    });
+</script>
+</body>
+</html>

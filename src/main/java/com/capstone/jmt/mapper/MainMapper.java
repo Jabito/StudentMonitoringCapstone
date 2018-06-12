@@ -21,6 +21,8 @@ public interface MainMapper {
 
     void updateUser(@Param("user") User user);
 
+    void updateGuidance(@Param("guidance") Guidance guidance);
+
     void addStudent(@Param("student")Student student);
 
     void deleteStudentById(@Param("id") String id);
@@ -28,6 +30,8 @@ public interface MainMapper {
     void deleteParentById(@Param("id") String id);
 
     void deleteUserById(@Param("id") String id);
+
+    void deleteGuianceById(@Param("id") String id);
 
     void postAnnouncement(@Param("mj") MessageJson mj);
 

@@ -246,6 +246,20 @@ public class MainWebController {
         return "userList";
     }
 
+    @RequestMapping(value = "/updateGuidance", method = RequestMethod.POST)
+    public String updateGuidance(@ModelAttribute("appUser") User appUser, @Valid Guidance guidance, BindingResult bindingResult, Model model) {
+
+        try {
+            mainService.updateGuidance(guidance);
+            System.out.println("SUCCESS!!");
+            return "redirect:/getGuidanceList";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "guidanceList";
+    }
+
     @RequestMapping(value = "/getParent", method = RequestMethod.GET)
     public String getParentOfStudent(@Valid Parent parent, @ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
@@ -638,6 +652,19 @@ public class MainWebController {
         }
     }
 
+    @RequestMapping(value = "/showGuidanceInfo", method = RequestMethod.GET)
+    public String showGuidanceInfo(Model model, @RequestParam(value = "id") String id) {
+
+        Guidance guidance = mainService.getGuidanceById(id);
+        if (null == guidance) {
+            return "guidanceInfo";
+        } else {
+            System.out.println("RETURNED GUIDANCE!!!!");
+            model.addAttribute("editGuidance", guidance );
+            return "guidanceInfo";
+        }
+    }
+
 
     @RequestMapping(value = "/deleteStudent", method = RequestMethod.GET)
     public ResponseEntity<?> deleteStudent(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
@@ -652,6 +679,11 @@ public class MainWebController {
     @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
     public ResponseEntity<?> deleteUser(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
         return new ResponseEntity<>(mainService.deleteUser(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/deleteGuidance", method = RequestMethod.GET)
+    public ResponseEntity<?> deleteGuidance(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
+        return new ResponseEntity<>(mainService.deleteGuidance(id), HttpStatus.OK);
     }
 
 
