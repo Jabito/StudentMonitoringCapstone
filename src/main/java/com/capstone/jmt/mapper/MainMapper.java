@@ -17,9 +17,13 @@ public interface MainMapper {
 
     void updateStudent(@Param("student") Student student);
 
+    void updateParent(@Param("parent") Parent parent);
+
     void addStudent(@Param("student")Student student);
 
     void deleteStudentById(@Param("id") String id);
+
+    void deleteParentById(@Param("id") String id);
 
     void postAnnouncement(@Param("mj") MessageJson mj);
 
@@ -83,6 +87,8 @@ public interface MainMapper {
 
     List<Student> getStudentList();
 
+    List<Parent> getParentList();
+
     Student getStudentById(@Param("id") String id);
 
     List<MessageJson> getAnnouncementsByUserId(@Param("userId") String userId);
@@ -109,7 +115,11 @@ public interface MainMapper {
 
     int getGradeLvlIdByGradeLevel(@Param("gradeLevel") String gradeLevel);
 
-    List<String> getContactNumbersByStudentId(@Param("sectionId") String sectionId);
+    List<String> getContactNumbersByStudentId(@Param("sectionId") String sectionId, @Param("studentId") String studentId);
 
     List<Student> getStudentListBySectionId(@Param("sectionId") String sectionId);
+
+    List<User> getUserList();
+
+    List<Guidance> getGuidanceList();
 }
