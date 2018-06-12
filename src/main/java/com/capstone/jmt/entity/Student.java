@@ -1,5 +1,6 @@
 package com.capstone.jmt.entity;
 
+import com.capstone.jmt.data.AddStudentJson;
 import com.capstone.jmt.data.PictureObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -69,6 +70,21 @@ public class Student implements Serializable {
     private String fullName;
     @JsonProperty("sectionDesc")
     private String sectionDesc;
+
+    public Student(AddStudentJson sj) {
+        this.firstName = sj.getFirstName();
+        this.lastName = sj.getLastName();
+        this.middleName = sj.getMiddleName();
+        this.gradeLvlId = sj.getGradeLvlId();
+        this.address = sj.getAddress();
+        this.contactNo = sj.getContactNo();
+        this.citizenship = sj.getCitizenship();
+        this.bday = sj.getBday();
+        this.createdBy = sj.getAppUsername();
+        this.fullName = sj.getFirstName() + ' ' + sj.getMiddleName() + ' ' + sj.getLastName();
+        this.isEnrolled = true;
+        this.createdOn = new Date();
+    }
 
 
     public PictureObject getPictureObject() {
