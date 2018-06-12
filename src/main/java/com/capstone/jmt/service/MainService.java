@@ -200,6 +200,21 @@ public class MainService {
         return response;
     }
 
+
+    public HashMap<String, Object> updateGuidance(Guidance guidance) {
+        HashMap<String, Object> response = new HashMap<>();
+        Guidance existingStudent = mainMapper.getGuidance(guidance.getId());
+        if (null != existingStudent) {
+            System.out.println("UPDATED");
+            mainMapper.updateGuidance(guidance);
+            System.out.println("UPDATED SUCCESSFULLY");
+        } else {
+            response.put("responseCode", 404);
+            response.put("responseDesc", "Failed to update guidance.");
+        }
+        return response;
+    }
+
     public HashMap<String, Object> addStudent(Student student) {
         HashMap<String, Object> response = new HashMap<>();
         student.setId("SID" + String.valueOf(mainMapper.getLastId(4)));
@@ -253,6 +268,12 @@ public class MainService {
     public HashMap<String, Object> deleteUser(String id) {
         HashMap<String, Object> response = new HashMap<>();
         mainMapper.deleteUserById(id);
+        return response;
+    }
+
+    public HashMap<String, Object> deleteGuidance(String id) {
+        HashMap<String, Object> response = new HashMap<>();
+        mainMapper.deleteGuianceById(id);
         return response;
     }
 
@@ -346,6 +367,11 @@ public class MainService {
     public User getUserId(String id) {
         return mainMapper.getUserById(id);
     }
+
+    public Guidance getGuidanceById(String id) {
+        return mainMapper.getGuidance(id);
+    }
+
 
     public HashMap<String, Object> getAnnouncements(String userId) {
         HashMap<String, Object> response = new HashMap<>();

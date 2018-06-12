@@ -152,6 +152,11 @@
         WHERE id = #{id}
     </delete>
 
+    <delete id="deleteGuianceById" flushCache="true">
+        DELETE FROM data_guidance
+        WHERE id = #{id}
+    </delete>
+
     <insert id="addStudent" flushCache="true">
         INSERT INTO data_students(
         id, first_name, last_name, middle_name, birth_date, place, gender, citizenship,
@@ -249,7 +254,16 @@
         SET username = #{user.username},
         password = #{user.password},
         email = #{user.email}
-        WHERE id = #{parent.id, jdbcType=VARCHAR}
+        WHERE id = #{user.id, jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateGuidance" flushCache="true">
+        UPDATE data_guidance
+        SET teacher_fname = #{guidance.firstName, jdbcType=VARCHAR},
+        teacher_lname = #{guidance.lastName, jdbcType=VARCHAR},
+        position = #{guidance.position, jdbcType=VARCHAR},
+        contact_no = #{guidance.contactNo, jdbcType=VARCHAR}
+        WHERE id = #{guidance.id, jdbcType=VARCHAR}
     </update>
 
     <insert id="postAnnouncement" flushCache="true">
