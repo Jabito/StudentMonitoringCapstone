@@ -364,6 +364,10 @@ public class MainService {
         return mainMapper.getStudentList();
     }
 
+    public List<Parent> getParentList() {
+        return mainMapper.getParentList();
+    }
+
     public Student getStudentById(String id) {
         return mainMapper.getStudentById(id);
     }

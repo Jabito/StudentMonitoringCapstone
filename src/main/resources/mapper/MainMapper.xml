@@ -380,6 +380,10 @@ ORDER BY B.log_datetime DESC LIMIT 1
         SELECT * FROM data_students
     </select>
 
+    <select id="getParentList" resultMap="ParentMap" resultType="java.util.List">
+        SELECT * FROM data_parents
+    </select>
+
     <resultMap id="GradeLevelMap" type="com.capstone.jmt.data.RefGradeLevel">
         <result column="id" property="id" jdbcType="INTEGER"/>
         <result column="grade_level" property="gradeLevel" jdbcType="VARCHAR"/>

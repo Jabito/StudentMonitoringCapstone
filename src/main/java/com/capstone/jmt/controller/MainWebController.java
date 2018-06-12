@@ -469,6 +469,24 @@ public class MainWebController {
         }
     }
 
+    @RequestMapping(value = "/getParents", method = RequestMethod.GET)
+    public String getParents(@ModelAttribute("appUser") User user, Model model) {
+
+        user = setUserRole(user, model);
+        if (null == user)
+            return "redirect:/login";
+
+        List<Parent> parentList = mainService.getParentList();
+        if (null == parentList) {
+            return "redirect:/login";
+        } else {
+            model.addAttribute("parentList", parentList);
+            return "parents";
+        }
+    }
+
+
+
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
     public String showBottleSales(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
@@ -538,6 +556,8 @@ public class MainWebController {
             return "studentInfo";
         }
     }
+
+
 
     @RequestMapping(value = "/deleteStudent", method = RequestMethod.GET)
     public ResponseEntity<?> deleteStudent(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {

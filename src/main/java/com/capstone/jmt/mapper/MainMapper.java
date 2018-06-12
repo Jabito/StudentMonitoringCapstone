@@ -83,6 +83,8 @@ public interface MainMapper {
 
     List<Student> getStudentList();
 
+    List<Parent> getParentList();
+
     Student getStudentById(@Param("id") String id);
 
     List<MessageJson> getAnnouncementsByUserId(@Param("userId") String userId);
