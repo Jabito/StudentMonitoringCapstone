@@ -43,7 +43,7 @@
                                     <div class="form-group">
                                         <label>Users</label>
                                         <select id="users">
-                                            <option  th:each="user  : ${users}" th:text="${user.name}" th:value="${user.id}" th:field="*{referenceId}">
+                                            <option  th:each="user  : ${users}" th:text="${user.name}" th:value="${user.userId}" th:field="*{referenceId}">
                                             </option>
                                         </select>
                                     </div>
@@ -103,7 +103,7 @@
                 console.log(response);
                 $('#users').empty();
                 response.forEach(function (item) {
-                    $('#users').append(new Option(item.name, item.id));
+                    $('#users').append(new Option(item.name, item.userId));
                 });
             }
         });
