@@ -586,7 +586,7 @@ AND #{userId} IN (
     </select>
 
     <select id="getGuidanceList" resultMap="GuidanceMap" resultType="java.util.List">
-        SELECT * FROM data_parents
+        SELECT * FROM data_guidance
     </select>
 
     <select id="getUserType" resultMap="RefUserTypeMap" resultType="java.util.List">
