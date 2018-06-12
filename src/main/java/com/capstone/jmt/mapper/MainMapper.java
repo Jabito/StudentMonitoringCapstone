@@ -19,11 +19,15 @@ public interface MainMapper {
 
     void updateParent(@Param("parent") Parent parent);
 
+    void updateUser(@Param("user") User user);
+
     void addStudent(@Param("student")Student student);
 
     void deleteStudentById(@Param("id") String id);
 
     void deleteParentById(@Param("id") String id);
+
+    void deleteUserById(@Param("id") String id);
 
     void postAnnouncement(@Param("mj") MessageJson mj);
 

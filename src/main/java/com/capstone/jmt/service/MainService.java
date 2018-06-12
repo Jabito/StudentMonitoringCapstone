@@ -181,7 +181,21 @@ public class MainService {
             System.out.println("UPDATED SUCCESSFULLY");
         } else {
             response.put("responseCode", 404);
-            response.put("responseDesc", "Failed to update student.");
+            response.put("responseDesc", "Failed to update parent.");
+        }
+        return response;
+    }
+
+    public HashMap<String, Object> updateUser(User user) {
+        HashMap<String, Object> response = new HashMap<>();
+        User existingStudent = mainMapper.getUserById(user.getId());
+        if (null != existingStudent) {
+            System.out.println("UPDATED");
+            mainMapper.updateUser(user);
+            System.out.println("UPDATED SUCCESSFULLY");
+        } else {
+            response.put("responseCode", 404);
+            response.put("responseDesc", "Failed to update user.");
         }
         return response;
     }
@@ -233,6 +247,12 @@ public class MainService {
     public HashMap<String, Object> deleteParent(String id) {
         HashMap<String, Object> response = new HashMap<>();
         mainMapper.deleteParentById(id);
+        return response;
+    }
+
+    public HashMap<String, Object> deleteUser(String id) {
+        HashMap<String, Object> response = new HashMap<>();
+        mainMapper.deleteUserById(id);
         return response;
     }
 
@@ -321,6 +341,10 @@ public class MainService {
             response.put("responseDesc", "Successfully retrieved user.");
         }
         return response;
+    }
+
+    public User getUserId(String id) {
+        return mainMapper.getUserById(id);
     }
 
     public HashMap<String, Object> getAnnouncements(String userId) {

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>AquaJMT | UserInfo</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="">
+            <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Edit User</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        You can edit User Details here.
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <form  role="form" th:object="${user}" th:action="@{/updateUser}" method="post">
+                                    <br/>
+                                    <div class="form-group">
+                                        <label>User ID</label>
+                                        <input disabled="disabled" th:required="required" class="form-control" placeholder="User ID" th:field="*{id}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input disabled="disabled" th:required="required" class="form-control" placeholder="Username" th:field="*{username}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input disabled="disabled" th:required="required" type="email" class="form-control" placeholder="Email" th:field="*{email}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input disabled="disabled" th:required="required" type="password" class="form-control" placeholder="Password" th:field="*{password}"/>
+                                    </div>
+
+                                    <button th:type="submit" class="btn btn-success btn-lg" id="btnUpdate">UPDATE
+                                    </button>
+                                </form>
+                                <button class="btn btn-success btn-lg" id="btnEdit">EDIT</button>
+                            </div>
+                            <!-- /.col-lg-6 (nested) -->
+                            <div class="col-lg-6">
+                                <form role="form">
+
+
+                                    <h5><label><i class="glyph-icon icon-paperclip" style="color: black"></i>Upload Picture</label></h5>
+                                    <input class="form-control"  id="files-upload" type="file" style=" "/>
+
+
+                                    <button type="submit" class="btn btn-success btn-lg">Upload Photo</button>
+                                </form>
+                            </div>
+                            <!-- /.col-lg-6 (nested) -->
+                        </div>
+                        <!-- /.row (nested) -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+</div>
+<script type="text/javascript">
+
+    $("#btnUpdate").hide();
+    $("#btnEdit").on("click", function () {
+        $(".form-control").removeAttr('disabled');
+        $("#btnUpdate").show();
+        $("#btnEdit").hide();
+    });
+</script>
+</body>
+</html>

@@ -232,6 +232,20 @@ public class MainWebController {
         return "parents";
     }
 
+    @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+    public String updateParent(@ModelAttribute("appUser") User appUser, @Valid User user, BindingResult bindingResult, Model model) {
+
+        try {
+            mainService.updateUser(user);
+            System.out.println("SUCCESS!!");
+            return "redirect:/getUserList";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "userList";
+    }
+
     @RequestMapping(value = "/getParent", method = RequestMethod.GET)
     public String getParentOfStudent(@Valid Parent parent, @ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
@@ -612,6 +626,18 @@ public class MainWebController {
         }
     }
 
+    @RequestMapping(value = "/showUserInfo", method = RequestMethod.GET)
+    public String showUserInfo(Model model, @RequestParam(value = "id") String id) {
+
+        User user = mainService.getUserId(id);
+        if (null == user) {
+            return "userInfo";
+        } else {
+            model.addAttribute("user", user);
+            return "userInfo";
+        }
+    }
+
 
     @RequestMapping(value = "/deleteStudent", method = RequestMethod.GET)
     public ResponseEntity<?> deleteStudent(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
@@ -621,6 +647,11 @@ public class MainWebController {
     @RequestMapping(value = "/deleteParent", method = RequestMethod.GET)
     public ResponseEntity<?> deleteParent(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
         return new ResponseEntity<>(mainService.deleteParent(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
+    public ResponseEntity<?> deleteUser(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
+        return new ResponseEntity<>(mainService.deleteUser(id), HttpStatus.OK);
     }
 
 
