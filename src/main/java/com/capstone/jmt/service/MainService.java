@@ -460,4 +460,12 @@ public class MainService {
     public List<Student> getStudentListBySectionId(String sectionId) {
         return mainMapper.getStudentListBySectionId(sectionId);
     }
+
+    public List<User> getUserList() {
+        return mainMapper.getUserList();
+    }
+
+    public List<Guidance> getGuidanceList() {
+        return mainMapper.getGuidanceList();
+    }
 }

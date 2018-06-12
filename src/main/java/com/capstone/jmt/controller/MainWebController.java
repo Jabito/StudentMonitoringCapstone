@@ -481,6 +481,38 @@ public class MainWebController {
         }
     }
 
+    @RequestMapping(value = "/getUserList", method = RequestMethod.GET)
+    public String getUserList(@ModelAttribute("appUser") User user, Model model) {
+        model.addAttribute("student", getStudent());
+        user = setUserRole(user, model);
+        if (null == user)
+            return "redirect:/login";
+
+        List<User> userList = mainService.getUserList();
+        if (null == userList) {
+            return "redirect:/login";
+        } else {
+            model.addAttribute("userList", userList);
+            return "userList";
+        }
+    }
+
+    @RequestMapping(value = "/getGuidanceList", method = RequestMethod.GET)
+    public String getGuidanceList(@ModelAttribute("appUser") User user, Model model) {
+        model.addAttribute("student", getStudent());
+        user = setUserRole(user, model);
+        if (null == user)
+            return "redirect:/login";
+
+        List<Guidance> guidanceList = mainService.getGuidanceList();
+        if (null == guidanceList) {
+            return "redirect:/login";
+        } else {
+            model.addAttribute("guidanceList", guidanceList);
+            return "guidanceList";
+        }
+    }
+
     @RequestMapping(value = "/getParents", method = RequestMethod.GET)
     public String getParents(@ModelAttribute("appUser") User user, Model model) {
 
@@ -571,7 +603,6 @@ public class MainWebController {
     @RequestMapping(value = "/showParentInfo", method = RequestMethod.GET)
     public String showParentInfo(Model model, @RequestParam(value = "id") String id) {
 
-
         Parent parent = mainService.getParentById(id);
         if (null == parent) {
             return "parentInfo";
@@ -579,7 +610,6 @@ public class MainWebController {
             model.addAttribute("parent", parent);
             return "parentInfo";
         }
-
     }
 
 

@@ -41,6 +41,8 @@ public class User implements Serializable {
     private String createdBy;
     @JsonProperty("updatedBy")
     private String updatedBy;
+    @JsonProperty("userType)")
+    private String userType;
 
 
     public User(){}
@@ -148,5 +150,13 @@ public class User implements Serializable {
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }

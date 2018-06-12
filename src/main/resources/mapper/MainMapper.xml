@@ -92,6 +92,7 @@
         <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
         <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
         <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="user_type" property="userType" jdbcType="VARCHAR" />
     </resultMap>
 
     <select id="getLastId" resultType="java.lang.Integer">
@@ -559,6 +560,14 @@ AND #{userId} IN (
 
     <select id="getStudentListBySectionId" resultMap="StudentMap" resultType="java.util.List">
         SELECT * FROM data_students where "section" = #{sectionId}
+    </select>
+
+    <select id="getUserList" resultMap="UserMap" resultType="java.util.List">
+        SELECT A.*, B.user_type FROM data_users A JOIN ref_user_type B ON A.user_type_id = B.id
+    </select>
+
+    <select id="getGuidanceList" resultMap="GuidanceMap" resultType="java.util.List">
+        SELECT * FROM data_parents
     </select>
 
     <select id="getUserType" resultMap="RefUserTypeMap" resultType="java.util.List">

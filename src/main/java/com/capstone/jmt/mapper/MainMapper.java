@@ -118,4 +118,8 @@ public interface MainMapper {
     List<String> getContactNumbersByStudentId(@Param("sectionId") String sectionId, @Param("studentId") String studentId);
 
     List<Student> getStudentListBySectionId(@Param("sectionId") String sectionId);
+
+    List<User> getUserList();
+
+    List<Guidance> getGuidanceList();
 }
