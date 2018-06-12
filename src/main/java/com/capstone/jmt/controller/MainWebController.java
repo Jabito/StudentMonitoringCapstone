@@ -215,9 +215,21 @@ public class MainWebController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return "students";
+    }
 
+    @RequestMapping(value = "/updateParent", method = RequestMethod.POST)
+    public String updateParent(@ModelAttribute("appUser") User appUser, @Valid Parent parent, BindingResult bindingResult, Model model) {
+
+        try {
+            mainService.updateParent(parent);
+            System.out.println("SUCCESS!!");
+            return "redirect:/getParents";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "parents";
     }
 
     @RequestMapping(value = "/getParent", method = RequestMethod.GET)
@@ -486,7 +498,6 @@ public class MainWebController {
     }
 
 
-
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
     public String showBottleSales(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
@@ -557,11 +568,29 @@ public class MainWebController {
         }
     }
 
+    @RequestMapping(value = "/showParentInfo", method = RequestMethod.GET)
+    public String showParentInfo(Model model, @RequestParam(value = "id") String id) {
+
+
+        Parent parent = mainService.getParentById(id);
+        if (null == parent) {
+            return "parentInfo";
+        } else {
+            model.addAttribute("parent", parent);
+            return "parentInfo";
+        }
+
+    }
 
 
     @RequestMapping(value = "/deleteStudent", method = RequestMethod.GET)
     public ResponseEntity<?> deleteStudent(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
         return new ResponseEntity<>(mainService.deleteStudentById(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/deleteParent", method = RequestMethod.GET)
+    public ResponseEntity<?> deleteParent(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
+        return new ResponseEntity<>(mainService.deleteParent(id), HttpStatus.OK);
     }
 
 

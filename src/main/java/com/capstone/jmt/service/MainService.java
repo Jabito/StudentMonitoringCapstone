@@ -172,6 +172,20 @@ public class MainService {
         return response;
     }
 
+    public HashMap<String, Object> updateParent(Parent parent) {
+        HashMap<String, Object> response = new HashMap<>();
+        Parent existingStudent = mainMapper.getParent(parent.getId());
+        if (null != existingStudent) {
+            System.out.println("UPDATED");
+            mainMapper.updateStudent(parent);
+            System.out.println("UPDATED SUCCESSFULLY");
+        } else {
+            response.put("responseCode", 404);
+            response.put("responseDesc", "Failed to update student.");
+        }
+        return response;
+    }
+
     public HashMap<String, Object> addStudent(Student student) {
         HashMap<String, Object> response = new HashMap<>();
         student.setId("SID" + String.valueOf(mainMapper.getLastId(4)));
@@ -213,6 +227,12 @@ public class MainService {
     public HashMap<String, Object> deleteStudentById(String id) {
         HashMap<String, Object> response = new HashMap<>();
         mainMapper.deleteStudentById(id);
+        return response;
+    }
+
+    public HashMap<String, Object> deleteParent(String id) {
+        HashMap<String, Object> response = new HashMap<>();
+        mainMapper.deleteParentById(id);
         return response;
     }
 
@@ -370,6 +390,10 @@ public class MainService {
 
     public Student getStudentById(String id) {
         return mainMapper.getStudentById(id);
+    }
+
+    public Parent getParentById(String id) {
+        return mainMapper.getParent(id);
     }
 
     public List<Student> getStudentsBySearch(String searchString){
