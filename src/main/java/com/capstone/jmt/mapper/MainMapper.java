@@ -17,9 +17,13 @@ public interface MainMapper {
 
     void updateStudent(@Param("student") Student student);
 
+    void updateParent(@Param("parent") Parent parent);
+
     void addStudent(@Param("student")Student student);
 
     void deleteStudentById(@Param("id") String id);
+
+    void deleteParentById(@Param("id") String id);
 
     void postAnnouncement(@Param("mj") MessageJson mj);
 
@@ -82,6 +86,8 @@ public interface MainMapper {
     PictureObject retrieveImage(@Param("userId") String fileId);
 
     List<Student> getStudentList();
+
+    List<Parent> getParentList();
 
     Student getStudentById(@Param("id") String id);
 

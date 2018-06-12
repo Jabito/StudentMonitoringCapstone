@@ -141,6 +141,11 @@
         WHERE id = #{id}
     </delete>
 
+    <delete id="deleteParentById" flushCache="true">
+        DELETE FROM data_parents
+        WHERE id = #{id}
+    </delete>
+
     <insert id="addStudent" flushCache="true">
         INSERT INTO data_students(
         id, first_name, last_name, middle_name, birth_date, place, gender, citizenship,
@@ -219,6 +224,12 @@
         updated_by = #{student.updatedBy, jdbcType=VARCHAR},
         rfid = #{student.rfid, jdbcType=VARCHAR}
         WHERE id = #{student.id, jdbcType=VARCHAR}
+    </update>
+
+
+    <update id="updateParent" flushCache="true">
+        UPDATE data_parents
+        //TODO
     </update>
 
     <insert id="postAnnouncement" flushCache="true">
@@ -378,6 +389,10 @@ ORDER BY B.log_datetime DESC LIMIT 1
 
     <select id="getStudentList" resultMap="StudentMap" resultType="java.util.List">
         SELECT * FROM data_students
+    </select>
+
+    <select id="getParentList" resultMap="ParentMap" resultType="java.util.List">
+        SELECT * FROM data_parents
     </select>
 
     <resultMap id="GradeLevelMap" type="com.capstone.jmt.data.RefGradeLevel">
