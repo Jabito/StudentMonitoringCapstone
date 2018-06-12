@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
-    <title>AquaJMT | Add Parent </title>
+    <title>AquaJMT | UserInfo</title>
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
 <body>
@@ -18,7 +18,7 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Edit Parent</h1>
+                <h1 class="page-header">Edit User</h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -27,38 +27,30 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        You can edit Parent Details here.
+                        You can edit User Details here.
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-6">
-                                <form  role="form" th:object="${parent}" th:action="@{/updateParent}" method="post">
+                                <form  role="form" th:object="${user}" th:action="@{/updateUser}" method="post">
                                     <br/>
+                                    <div class="form-group">
+                                        <label>User ID</label>
+                                        <input disabled="disabled" th:required="required" class="form-control" placeholder="User ID" th:field="*{id}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input disabled="disabled" th:required="required" class="form-control" placeholder="Username" th:field="*{username}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input disabled="disabled" th:required="required" type="email" class="form-control" placeholder="Email" th:field="*{email}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input disabled="disabled" th:required="required" type="password" class="form-control" placeholder="Password" th:field="*{password}"/>
+                                    </div>
 
-                                    <div class="form-group">
-                                        <label>Parent ID</label>
-                                        <input disabled="disabled" th:required="required" class="form-control" placeholder="Parent ID" th:field="*{id}"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Relationship</label>
-                                        <input disabled="disabled" th:required="required" class="form-control" placeholder="Relationship" th:field="*{relationship}"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Parent Name</label>
-                                        <input disabled="disabled" th:required="required" class="form-control" placeholder="Parent Name" th:field="*{parentName}"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Email Address</label>
-                                        <input disabled="disabled" type="email" th:required="required" class="form-control" placeholder="Email Address" th:field="*{email}"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Occupation</label>
-                                        <input disabled="disabled" class="form-control" placeholder="Occupation" th:required="required" th:field="*{occupation}"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Office No</label>
-                                        <input disabled="disabled" class="form-control" placeholder="Office No" th:required="required" th:field="*{officeNo}"/>
-                                    </div>
                                     <button th:type="submit" class="btn btn-success btn-lg" id="btnUpdate">UPDATE
                                     </button>
                                 </form>

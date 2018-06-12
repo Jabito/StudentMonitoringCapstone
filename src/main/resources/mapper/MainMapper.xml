@@ -147,6 +147,11 @@
         WHERE id = #{id}
     </delete>
 
+    <delete id="deleteUserById" flushCache="true">
+        DELETE FROM data_users
+        WHERE id = #{id}
+    </delete>
+
     <insert id="addStudent" flushCache="true">
         INSERT INTO data_students(
         id, first_name, last_name, middle_name, birth_date, place, gender, citizenship,
@@ -230,7 +235,21 @@
 
     <update id="updateParent" flushCache="true">
         UPDATE data_parents
-        //TODO
+        SET parent_of = #{parent.parentOf, jdbcType=VARCHAR},
+        relationship = #{parent.relationship, jdbcType=VARCHAR},
+        parent_name = #{parent.parentName, jdbcType=VARCHAR},
+        occupation = #{parent.occupation, jdbcType=VARCHAR},
+        office_no = #{parent.officeNo},
+        email = #{parent.email}
+        WHERE id = #{parent.id, jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateUser" flushCache="true">
+        UPDATE data_users
+        SET username = #{user.username},
+        password = #{user.password},
+        email = #{user.email}
+        WHERE id = #{parent.id, jdbcType=VARCHAR}
     </update>
 
     <insert id="postAnnouncement" flushCache="true">
@@ -567,7 +586,7 @@ AND #{userId} IN (
     </select>
 
     <select id="getGuidanceList" resultMap="GuidanceMap" resultType="java.util.List">
-        SELECT * FROM data_parents
+        SELECT * FROM data_guidance
     </select>
 
     <select id="getUserType" resultMap="RefUserTypeMap" resultType="java.util.List">
