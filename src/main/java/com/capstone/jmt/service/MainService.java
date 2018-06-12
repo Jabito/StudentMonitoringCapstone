@@ -177,7 +177,7 @@ public class MainService {
         Parent existingStudent = mainMapper.getParent(parent.getId());
         if (null != existingStudent) {
             System.out.println("UPDATED");
-            mainMapper.updateStudent(parent);
+            mainMapper.updateParent(parent);
             System.out.println("UPDATED SUCCESSFULLY");
         } else {
             response.put("responseCode", 404);
