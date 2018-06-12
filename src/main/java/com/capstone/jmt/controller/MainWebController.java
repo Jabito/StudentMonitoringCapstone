@@ -169,7 +169,7 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
-    public String sendMessage(@RequestParam(value = "gradeLevel", defaultValue = "Nursery") String gradeLevel,  @ModelAttribute("appUser") User user, Model model) {
+    public String sendMessage(@RequestParam(value = "gradeLevel", defaultValue = "Nursery") String gradeLevel, @ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
 
         List<RefGradeLevel> gradeLevels = mainService.getGradeLevelList();
@@ -178,12 +178,12 @@ public class MainWebController {
         List<RefSection> sections = mainService.getSectionList(gradeLvlId);
 
 
-        if (null == user){
+        if (null == user) {
             return "redirect:/login";
-        }else {
+        } else {
 
             model.addAttribute("gradeLevels", gradeLevels);
-            model.addAttribute("sections",sections);
+            model.addAttribute("sections", sections);
             return "sendMessage";
         }
     }
@@ -329,15 +329,15 @@ public class MainWebController {
             mainService.tapStudent(rfid);
             Parent parent = mainService.getParentByStudentId(stud.getId());
             contactNo = parent.getOfficeNo();
-            tap = (TapLog)mainService.getLastTapEntry(stud.getId()).get("tapDetails");
+            tap = (TapLog) mainService.getLastTapEntry(stud.getId()).get("tapDetails");
         }
         Student studIn = mainService.getStudentByRfidIn();
         Student studOut = mainService.getStudentByRfidOut();
         response.put("student", stud);
         response.put("studIn", studIn);
-        response.put("studOut",studOut);
+        response.put("studOut", studOut);
         response.put("timeIn", mainService.getLastTapDate("IN"));
-        response.put("timeOut",mainService.getLastTapDate("OUT"));
+        response.put("timeOut", mainService.getLastTapDate("OUT"));
         response.put("contactNo", contactNo);
         response.put("tapMode", tap.getLogType());
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -362,7 +362,7 @@ public class MainWebController {
             user = setUserRole(user, model);
             return "redirect:/login";
         } else {
-            if(user.getUserTypeId() != 2)
+            if (user.getUserTypeId() != 2)
                 model.addAttribute("logs", tapLogs);
             else
                 model.addAttribute("logs", mainService.getTapLogsByParentId(user.getId()));
@@ -537,6 +537,11 @@ public class MainWebController {
             model.addAttribute("appStudent", student);
             return "studentInfo";
         }
+    }
+
+    @RequestMapping(value = "/deleteStudent", method = RequestMethod.GET)
+    public ResponseEntity<?> deleteStudent(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
+        return new ResponseEntity<>(mainService.deleteStudentById(id), HttpStatus.OK);
     }
 
 
