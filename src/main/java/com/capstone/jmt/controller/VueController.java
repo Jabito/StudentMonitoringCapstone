@@ -59,6 +59,11 @@ public class VueController {
         return new ResponseEntity<>(mainService.getTapLogOfStudent(studId).get("tapListDetails"), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/getWeeklyAttendance", method = RequestMethod.GET)
+    public ResponseEntity<?> getWeeklyAttendance() {
+        return new ResponseEntity<>(mainService.getWeeklyAttendance(), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
     public ResponseEntity<?> addStudent(@RequestBody AddStudentJson studentJson) {
         HashMap<String, Object> response = new HashMap<>();

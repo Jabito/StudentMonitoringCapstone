@@ -428,8 +428,8 @@ public class MainService {
         return mainMapper.getGradeLvlIdByGradeLevel(gradeLevel);
     }
 
-    public List<String> getContactNumbersByStudentId(String sectionId){
-        return mainMapper.getContactNumbersByStudentId(sectionId);
+    public List<String> getContactNumbersByStudentId(String sectionId, String studentId){
+        return mainMapper.getContactNumbersByStudentId(sectionId, studentId);
     }
 
 
