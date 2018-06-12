@@ -109,7 +109,7 @@ public interface MainMapper {
 
     int getGradeLvlIdByGradeLevel(@Param("gradeLevel") String gradeLevel);
 
-    List<String> getContactNumbersByStudentId(@Param("sectionId") String sectionId);
+    List<String> getContactNumbersByStudentId(@Param("sectionId") String sectionId, @Param("studentId") String studentId);
 
     List<Student> getStudentListBySectionId(@Param("sectionId") String sectionId);
 }

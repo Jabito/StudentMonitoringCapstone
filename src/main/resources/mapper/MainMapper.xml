@@ -40,7 +40,7 @@
         <result column="id" property="id" jdbcType="VARCHAR"/>
         <result column="parent_of" property="parentOf" jdbcType="VARCHAR"/>
         <result column="relationship" property="relationship" jdbcType="VARCHAR"/>
-        <result column="sms_notif" property="smsNotif" jdbcType="BIT" />
+        <result column="sms_notif" property="smsNotif" jdbcType="BIT"/>
         <result column="occupation" property="occupation" jdbcType="VARCHAR"/>
         <result column="office_no" property="officeNo" jdbcType="VARCHAR"/>
         <result column="created_on" property="createdOn" jdbcType="TIMESTAMP"/>
@@ -61,7 +61,7 @@
         <result column="gender" property="gender" jdbcType="INTEGER"/>
         <result column="citizenship" property="citizenship" jdbcType="VARCHAR"/>
         <result column="address" property="address" jdbcType="VARCHAR"/>
-        <result column="sectionDesc" property="sectionDesc" jdbcType="VARCHAR" />
+        <result column="sectionDesc" property="sectionDesc" jdbcType="VARCHAR"/>
         <result column="contact_no" property="contactNo" jdbcType="VARCHAR"/>
         <result column="emergency_contact" property="emergencyContact" jdbcType="VARCHAR"/>
         <result column="grade_level_id" property="gradeLvlId" jdbcType="INTEGER"/>
@@ -75,7 +75,7 @@
         <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
         <result column="created_on" property="createdOn" jdbcType="TIMESTAMP"/>
         <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
-        <result column="log_datetime" property="logDateTime" jdbcType="VARCHAR" />
+        <result column="log_datetime" property="logDateTime" jdbcType="VARCHAR"/>
         <result column="fullName" property="fullName" jdbcType="VARCHAR"/>
     </resultMap>
 
@@ -290,8 +290,8 @@
     </select>
 
     <resultMap id="AttendanceRowMap" type="com.capstone.jmt.data.AttendanceRow">
-        <result column="date" property="date" jdbcType="DATE" />
-        <result column="attendance_count" property="attendanceCount" jdbcType="INTEGER" />
+        <result column="date" property="date" jdbcType="DATE"/>
+        <result column="attendance_count" property="attendanceCount" jdbcType="INTEGER"/>
     </resultMap>
 
     <select id="getWeeklyAttendance" resultMap="AttendanceRowMap" resultType="java.util.List">
@@ -409,11 +409,18 @@ ORDER BY B.log_datetime DESC LIMIT 1
     </select>
 
     <select id="getContactNumbersByStudentId" resultType="string">
-        SELECT DICTINCT office_no FROM data_parents
+        SELECT DISTINCT office_no FROM data_parents
         WHERE sms_notif = true
         AND parent_of IN (
-        SELECT id FROM data_students
-        WHERE section = #{sectionId}
+        <choose>
+            <when test="studentId != null and studentId != ''">
+                SELECT id FROM data_students WHERE
+                section = #{sectionId}
+            </when>
+            <otherwise>
+                #{studentId}
+            </otherwise>
+        </choose>
         )
     </select>
 
@@ -442,7 +449,7 @@ ORDER BY B.log_datetime DESC LIMIT 1
         <result column="date_of_incident" property="dateOfIncident" jdbcType="VARCHAR"/>
         <result column="case_of_incident" property="caseOfIncident" jdbcType="VARCHAR"/>
         <result column="name_of_guardian" property="nameOfGuardian" jdbcType="VARCHAR"/>
-        <result column="student_name" property="studentName" jdbcType="VARCHAR" />
+        <result column="student_name" property="studentName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="addGuidanceRecord">
@@ -549,22 +556,22 @@ AND #{userId} IN (
     </select>
 
     <resultMap id="UserTypeMap" type="com.capstone.jmt.data.UserList">
-        <result column="name" property="name" jdbcType="VARCHAR" />
-        <result column="userId" property="userId" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="getUsersByUserTypeId" resultMap="UserTypeMap" resultType="com.capstone.jmt.data.UserList">
-      <choose>
-          <when test="userTypeId == 1">
-              SELECT (teacher_fname || teacher_lname) as name, id as userId
-              FROM data_guidance
+        <choose>
+            <when test="userTypeId == 1">
+                SELECT (teacher_fname || teacher_lname) as name, id as userId
+                FROM data_guidance
 
-          </when>
-          <when test="userTypeId == 2">
-              SELECT parent_name as name, id as userId
-              FROM data_parents
-          </when>
-      </choose>
+            </when>
+            <when test="userTypeId == 2">
+                SELECT parent_name as name, id as userId
+                FROM data_parents
+            </when>
+        </choose>
         ORDER BY name asc
     </select>
     <select id="getParentByStudentId" resultMap="ParentMap" resultType="com.capstone.jmt.entity.Parent">
