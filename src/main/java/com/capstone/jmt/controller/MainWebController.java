@@ -307,10 +307,13 @@ public class MainWebController {
 
     @RequestMapping(value = "/addNewUser", method = RequestMethod.POST)
     public String postNewUser(@Valid User newUser, BindingResult bindingResult, Model model) {
-
         System.out.println("UserTypeId " + String.valueOf(newUser.getUserTypeId()));
         System.out.println("User ID " + newUser.getReferenceId());
-        System.out.println("Username" + newUser.getUsername());
+        System.out.println("Username " + newUser.getUsername());
+        System.out.println("User Type " + newUser.getUserType());
+        System.out.println("Email " + newUser.getEmail());
+        System.out.println("ID " + newUser.getId());
+        System.out.println("Password? " + newUser.getPassword());
         mainService.addUser(newUser);
         return "redirect:/homepage?added=User";
     }

@@ -2,10 +2,12 @@ package com.capstone.jmt.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by macbookpro on 5/7/18.
  */
-public class RefUserType {
+public class RefUserType implements Serializable {
 
     @JsonProperty("id")
     private int id;
