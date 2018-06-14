@@ -70,6 +70,8 @@ public class Student implements Serializable {
     private String fullName;
     @JsonProperty("sectionDesc")
     private String sectionDesc;
+    @JsonProperty("gradeLevelDesc")
+    private String gradeLevelDesc;
 
     public Student(AddStudentJson sj) {
         this.firstName = sj.getFirstName();
@@ -296,5 +298,13 @@ public class Student implements Serializable {
 
     public void setSectionDesc(String sectionDesc) {
         this.sectionDesc = sectionDesc;
+    }
+
+    public String getGradeLevelDesc() {
+        return gradeLevelDesc;
+    }
+
+    public void setGradeLevelDesc(String gradeLevelDesc) {
+        this.gradeLevelDesc = gradeLevelDesc;
     }
 }

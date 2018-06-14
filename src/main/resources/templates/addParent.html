@@ -36,8 +36,8 @@
                                     <br/>
                                     <div class=" pgit form-group">
                                         <label>Parent Of</label>
-                                        <select >
-                                            <option th:each="student : ${students}" th:text="${student.firstName + '  ' + student.lastName}" th:value="${student.id}" th:field="*{parentOf}"></option>
+                                        <select th:field="*{parentOf}">
+                                            <option th:each="student : ${students}" th:text="${student.firstName + '  ' + student.lastName}" th:value="${student.id}"></option>
                                         </select>
                                     </div>
                                     <div class="form-group">
