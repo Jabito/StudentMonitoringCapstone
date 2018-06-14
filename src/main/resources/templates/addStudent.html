@@ -74,15 +74,15 @@
                                     </div>
                                     <div class="form-group">
                                         <label style="color: black">Grade Level</label>
-                                        <select id="selected" name="gradeLvlId">
-                                            <option  th:each="gradeLevel  : ${gradeLevel}" th:text="${gradeLevel.gradeLevel}" th:value="${gradeLevel.id}" th:field="*{gradeLvlId}">
+                                        <select id="selected" name="gradeLvlId" th:field="*{gradeLvlId}">
+                                            <option  th:each="gradeLevel  : ${gradeLevel}" th:text="${gradeLevel.gradeLevel}" th:value="${gradeLevel.id}">
                                             </option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label>Section</label>
-                                        <select id="section" name="section">
-                                            <option  th:each="section  : ${section}" th:text="${section.section}" th:value="${section.id}" th:field="*{section}">
+                                        <select id="section" name="section" th:field="*{section}">
+                                            <option  th:each="section  : ${section}" th:text="${section.section}" th:value="${section.id}">
                                             </option>
                                         </select>
                                     </div>

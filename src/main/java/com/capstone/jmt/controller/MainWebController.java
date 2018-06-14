@@ -191,6 +191,8 @@ public class MainWebController {
 
     @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
     public String addStudent(@ModelAttribute("appUser") User appUser, @Valid Student student, BindingResult bindingResult, Model model) {
+        System.out.println("GradeLevelId " + student.getGradeLvlId());
+        System.out.printf("Section " + student.getSection());
 
         try {
             student.setCreatedBy(appUser.getUsername());
