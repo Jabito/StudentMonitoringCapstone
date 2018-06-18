@@ -9,6 +9,9 @@ import com.capstone.jmt.service.AndroidPushNotificationsService;
 import com.capstone.jmt.service.MainService;
 import com.capstone.jmt.service.StorageService;
 import com.google.api.Http;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 
+import java.io.FileInputStream;
 import java.util.*;
 
 import org.springframework.stereotype.Controller;
@@ -60,6 +64,11 @@ public class MainWebController {
     public Student getStudent() {
         return new Student();
     }
+
+
+
+
+
 
     @RequestMapping(value = "/send", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> send() throws JSONException {
