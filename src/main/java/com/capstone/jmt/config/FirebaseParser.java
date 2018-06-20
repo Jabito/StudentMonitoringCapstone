@@ -13,17 +13,18 @@ import io.opencensus.internal.StringUtil;
 public class FirebaseParser {
 
 
-    public FirebaseTokenHolder parseToken(String idToken) {
-        if (StringUtil.isBlank(idToken)) {
-            throw new IllegalArgumentException("FirebaseTokenBlank");
-        }
-        try {
-            Task<FirebaseToken> authTask = FirebaseAuth.getInstance().verifyIdToken(idToken);
-
-            Tasks.await(authTask);
-
-            return new FirebaseTokenHolder(authTask.getResult());
-        } catch (Exception e) {
-            throw new FirebaseTokenInvalidException(e.getMessage());
-        }
-    }
+//    public FirebaseTokenHolder parseToken(String idToken) {
+//        if (StringUtil.isBlank(idToken)) {
+//            throw new IllegalArgumentException("FirebaseTokenBlank");
+//        }
+//        try {
+//            Task<FirebaseToken> authTask = FirebaseAuth.getInstance().verifyIdToken(idToken);
+//
+//            Tasks.await(authTask);
+//
+//            return new FirebaseTokenHolder(authTask.getResult());
+//        } catch (Exception e) {
+//            throw new FirebaseTokenInvalidException(e.getMessage());
+//        }
+//    }
+}

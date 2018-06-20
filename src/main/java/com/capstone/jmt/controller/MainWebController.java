@@ -190,7 +190,7 @@ public class MainWebController {
         if (null == user) {
             return "redirect:/login";
         } else {
-
+            gradeLevels.add(new RefGradeLevel("ALL", -1));
             model.addAttribute("gradeLevels", gradeLevels);
             model.addAttribute("sections", sections);
             return "sendMessage";
@@ -597,6 +597,17 @@ public class MainWebController {
         System.out.println("STUDENT LIST COUN = : " + studentList.size());
 //        response.put("numbers", numbersList);
         response.put("students", studentList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/getContactNumbers/{gradeLvlId}/{sectionId}/{studId}", method = RequestMethod.POST)
+    public ResponseEntity<?> getContactNumbers(@PathVariable("gradeLvlId") String gradeLevelId, @PathVariable("sectionId") String sectionId,
+                                               @PathVariable("studId") String studentId){
+        HashMap<String, Object> response = new HashMap<>();
+        List<String> numbers = mainService.getContactNumbers(gradeLevelId, sectionId, studentId);
+        response.put("numbers", numbers);
+        response.put("responseDesc", "Success.");
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

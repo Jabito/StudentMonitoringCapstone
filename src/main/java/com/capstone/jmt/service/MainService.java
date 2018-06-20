@@ -518,4 +518,8 @@ public class MainService {
     public List<Guidance> getGuidanceList() {
         return mainMapper.getGuidanceList();
     }
+
+    public List<String> getContactNumbers(String gradeLevelId, String sectionId, String studentId) {
+        return mainMapper.getContactNumbers(gradeLevelId, sectionId, studentId);
+    }
 }
