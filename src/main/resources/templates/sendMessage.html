@@ -135,6 +135,10 @@
                     var arr = num.split('');
                     if (arr[0] == '0')
                         arr[0] = '63';
+                    if(arr[0] == '+')
+                        arr[0] = '';
+                    if(arr[0] == '9')
+                        arr[0] = '639';
                     var numSms = arr.join('');
                     console.log(numSms);
                     sendSms(numSms);
