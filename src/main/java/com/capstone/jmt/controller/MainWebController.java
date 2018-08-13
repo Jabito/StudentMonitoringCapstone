@@ -605,7 +605,7 @@ public class MainWebController {
                                                @PathVariable("studId") String studentId){
         HashMap<String, Object> response = new HashMap<>();
         List<String> numbers = mainService.getContactNumbers(gradeLevelId, sectionId, studentId);
-        response.put("numbers", numbers);
+        response.put("numbers", null != numbers? numbers: new ArrayList<>());
         response.put("responseDesc", "Success.");
 
         return new ResponseEntity<>(response, HttpStatus.OK);

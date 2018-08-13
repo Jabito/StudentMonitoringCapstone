@@ -627,6 +627,7 @@ AND #{userId} IN (
     <select id="getTapAllTopLogs" resultMap="TapLogMap" resultType="java.util.List">
         SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
         ON A.rfid = B.rfid
+        ORDER BY A.log_datetime DESC
     </select>
 
     <resultMap id="UserTypeMap" type="com.capstone.jmt.data.UserList">

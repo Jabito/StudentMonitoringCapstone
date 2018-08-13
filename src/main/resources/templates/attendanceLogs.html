@@ -40,8 +40,8 @@
                id="table_id">
             <thead>
             <tr>
-                <th>Log IN/OUT</th>
                 <th>DateTime</th>
+                <th>Log IN/OUT</th>
                 <th>FirstName</th>
                 <th>LastName</th>
                 <!--<th>Cost per Bottle</th>
@@ -52,8 +52,8 @@
             </thead>
             <tbody>
             <tr class="odd gradeX" th:each="log: ${logs}">
-                <td th:text="${log.logType}"></td>
                 <td th:text="${log.logDateTime}"></td>
+                <td th:text="${log.logType}"></td>
                 <td th:text="${log.firstName}"></td>
                 <td th:text="${log.lastName}"></td>
             </tr>
