@@ -451,11 +451,9 @@ public class MainWebController {
         gr.setCaseOfIncident(reportModel.getCaseOfIncident());
         gr.setNameOfGuardian(reportModel.getGuardianName());
         Parent parent = mainService.getParentByStudentId(reportModel.getStudentId());
-        System.out.println("CONTACT NO: " + parent.getOfficeNo());
 
         if (null != parent)
             if (parent.getSmsNotif()) {
-                System.out.println("CONTACT NO: " + parent.getOfficeNo());
                 response.put("contactNo", parent.getOfficeNo());
             }
 
@@ -600,7 +598,7 @@ public class MainWebController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/getContactNumbers/{gradeLvlId}/{sectionId}/{studId}", method = RequestMethod.POST)
+    @RequestMapping(value="/getContactNumbers/{gradeLvlId}/{sectionId}/{studId}", method = RequestMethod.GET)
     public ResponseEntity<?> getContactNumbers(@PathVariable("gradeLvlId") String gradeLevelId, @PathVariable("sectionId") String sectionId,
                                                @PathVariable("studId") String studentId){
         HashMap<String, Object> response = new HashMap<>();
@@ -626,7 +624,7 @@ public class MainWebController {
         HashMap<String, Object> response = new HashMap<>();
         System.out.println("SELECTED USER TYPE " + id);
 
-        Student student = mainService.getStudentById(id);
+        Student student = mainService.getStudentById(id.toUpperCase());
         if (null == student) {
             response.put("responseCode", 404);
         } else {

@@ -610,8 +610,8 @@ AND #{userId} IN (
         SELECT office_no FROM data_parents
         WHERE parent_of IN
         <choose>
-            <when test="studentId != -1">(#{studentId})</when>
-            <when test="sectionId != -1">
+            <when test="studentId != ''">(#{studentId})</when>
+            <when test="sectionId != ''">
                 (SELECT id FROM data_students WHERE section = #{sectionId})
             </when>
             <when test="gradeLevelId != -1">

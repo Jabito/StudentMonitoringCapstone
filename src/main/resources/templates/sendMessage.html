@@ -126,7 +126,7 @@
         var studentId = $("#stud_group").val();
 
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             contentType: 'application/json; charset=utf-8',
             url: '/getContactNumbers/' + gradeLevelId + '/' + sectionId + '/' + studentId,
             success: function (response) {
