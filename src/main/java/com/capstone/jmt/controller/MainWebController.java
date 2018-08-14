@@ -9,6 +9,9 @@ import com.capstone.jmt.service.AndroidPushNotificationsService;
 import com.capstone.jmt.service.MainService;
 import com.capstone.jmt.service.StorageService;
 import com.google.api.Http;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 
+import java.io.FileInputStream;
 import java.util.*;
 
 import org.springframework.stereotype.Controller;
@@ -60,6 +64,11 @@ public class MainWebController {
     public Student getStudent() {
         return new Student();
     }
+
+
+
+
+
 
     @RequestMapping(value = "/send", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> send() throws JSONException {
@@ -181,7 +190,7 @@ public class MainWebController {
         if (null == user) {
             return "redirect:/login";
         } else {
-
+            gradeLevels.add(new RefGradeLevel("ALL", -1));
             model.addAttribute("gradeLevels", gradeLevels);
             model.addAttribute("sections", sections);
             return "sendMessage";
@@ -588,6 +597,17 @@ public class MainWebController {
         System.out.println("STUDENT LIST COUN = : " + studentList.size());
 //        response.put("numbers", numbersList);
         response.put("students", studentList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/getContactNumbers/{gradeLvlId}/{sectionId}/{studId}", method = RequestMethod.POST)
+    public ResponseEntity<?> getContactNumbers(@PathVariable("gradeLvlId") String gradeLevelId, @PathVariable("sectionId") String sectionId,
+                                               @PathVariable("studId") String studentId){
+        HashMap<String, Object> response = new HashMap<>();
+        List<String> numbers = mainService.getContactNumbers(gradeLevelId, sectionId, studentId);
+        response.put("numbers", null != numbers? numbers: new ArrayList<>());
+        response.put("responseDesc", "Success.");
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

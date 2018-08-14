@@ -121,7 +121,7 @@
     <select id="getStudent" resultMap="StudentMap" resultType="com.capstone.jmt.entity.Student">
         SELECT A.*, l.grade_level AS gradeLevelDesc, section2.section AS sectionDesc FROM data_students A JOIN ref_grade_level l on A.grade_level_id = l.id
         JOIN ref_section section2 on l.id = section2.ref_grade_level_id
-        WHERE id = #{id}
+        WHERE A.id = #{id}
     </select>
 
     <select id="getGuidance" resultMap="GuidanceMap" resultType="com.capstone.jmt.entity.Student">
@@ -606,6 +606,20 @@ AND #{userId} IN (
         SELECT * FROM data_guidance
     </select>
 
+    <select id="getContactNumbers" resultType="string">
+        SELECT office_no FROM data_parents
+        WHERE parent_of IN
+        <choose>
+            <when test="studentId != -1">(#{studentId})</when>
+            <when test="sectionId != -1">
+                (SELECT id FROM data_students WHERE section = #{sectionId})
+            </when>
+            <when test="gradeLevelId != -1">
+                (SELECT id FROM data_students WHERE grade_level_id = CAST(#{gradeLevelId} AS INTEGER))
+            </when>
+        </choose>
+    </select>
+
     <select id="getUserType" resultMap="RefUserTypeMap" resultType="java.util.List">
         SELECT * FROM ref_user_type
     </select>
@@ -613,6 +627,7 @@ AND #{userId} IN (
     <select id="getTapAllTopLogs" resultMap="TapLogMap" resultType="java.util.List">
         SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
         ON A.rfid = B.rfid
+        ORDER BY A.log_datetime DESC
     </select>
 
     <resultMap id="UserTypeMap" type="com.capstone.jmt.data.UserList">

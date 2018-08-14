@@ -130,4 +130,6 @@ public interface MainMapper {
     List<User> getUserList();
 
     List<Guidance> getGuidanceList();
+
+    List<String> getContactNumbers(@Param("gradeLevelId") String gradeLevelId, @Param("sectionId") String sectionId, @Param("studentId") String studentId);
 }

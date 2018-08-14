@@ -14,6 +14,12 @@ public class RefGradeLevel implements Serializable{
     @JsonProperty("gradeLevel")
     private String gradeLevel;
 
+    public RefGradeLevel(){}
+    public RefGradeLevel(String gradeLevel, int id) {
+        this.id = id;
+        this.gradeLevel = gradeLevel;
+    }
+
     public Integer getId() {
         return id;
     }

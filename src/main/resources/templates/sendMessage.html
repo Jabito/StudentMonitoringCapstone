@@ -35,18 +35,19 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <label>Select Grade</label>
-                        <select id="groups" class="form-control" name="">
-                            <option th:each="gradeLevel : ${gradeLevels}" th:value="${gradeLevel.id}" th:text="${gradeLevel.gradeLevel}"></option>
+                        <select id="groups" class="form-control">
+                            <option th:each="gradeLevel : ${gradeLevels}" th:value="${gradeLevel.id}"
+                                    th:text="${gradeLevel.gradeLevel}"></option>
                         </select>
                     </div>
                     <div class="col-lg-3">
                         <label>Select Section</label>
-                        <select id="sub_groups" class="form-control" name="">
+                        <select id="sub_groups" class="form-control">
                             <option th:each="sec : ${sections}" th:value="${sec.id}" th:text="${sec.section}"></option>
                         </select>
                     </div>
                     <div class="col-lg-3">
-
+                        <label>Select Student</label>
                         <select class="form-control" name="" id="stud_group">
                             <option value="0">ALL</option>
                             <option></option>
@@ -68,30 +69,42 @@
                     <br/>
 
                 </div>
-                <button type="submit" onclick="sendSms()" class="btn btn-primary" style="padding: 20px ">SEND</button>
+                <button type="submit" onclick="getContactNumbers()" class="btn btn-primary" style="padding: 20px ">
+                    SEND
+                </button>
 
                 <!--<textarea  style="margin: 0px; width: 446px; height: 85px;" maxlength="140"></textarea>-->
             </div>
         </div>
 
     </div>
-        <!--SEND TO: <input id="prefix" type="text" disabled="disabled" value="63" placeholder="+63" maxlength="4"/> <input type="text" id="to"/>-->
-        <!--<label>Format: +63 XXXXXXXXXX</label>-->
+    <!--SEND TO: <input id="prefix" type="text" disabled="disabled" value="63" placeholder="+63" maxlength="4"/> <input type="text" id="to"/>-->
+    <!--<label>Format: +63 XXXXXXXXXX</label>-->
 
 
-        <!-- /.row -->
-    </div>
-    <!-- /#page-wrapper -->
+    <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
 
 
-    <script type="text/javascript">
-        // Initialize Firebase
+<script type="text/javascript">
+    var firstSection = $("#sub_groups").val();
 
-        //    var from = "63"+ document.getElementById('from').value;
-        //    var sentTo = pref + to;
+    $.ajax({
+        type: 'GET',
+        contentType: 'application/json; charset=utf-8',
+        url: '/getContactNumbersBySectionId?sectionId=' + firstSection,
+        success: function (response) {
+            $('#stud_group').empty();
+            $('#stud_group').append(new Option("ALL", -1));
+            response.students.forEach(function (item) {
+                $('#stud_group').append(new Option(item.firstName + " " + item.lastName, item.id));
+            });
+        }
+    });
 
-
-        var firstSection = $("#sub_groups").val();
+    $("#sub_groups").on("change", function () {
+        firstSection = $("#sub_groups").val();
 
         $.ajax({
             type: 'GET',
@@ -99,154 +112,72 @@
             url: '/getContactNumbersBySectionId?sectionId=' + firstSection,
             success: function (response) {
                 $('#stud_group').empty();
-                $('#stud_group').append(new Option("ALL", 99));
+                $('#stud_group').append(new Option("ALL", -1));
                 response.students.forEach(function (item) {
                     $('#stud_group').append(new Option(item.firstName + " " + item.lastName, item.id));
                 });
             }
         });
+    });
 
-        $("#sub_groups").on("change", function () {
-            firstSection = $("#sub_groups").val();
+    function getContactNumbers() {
+        var gradeLevelId = $("#groups").val();
+        var sectionId = $("#sub_groups").val();
+        var studentId = $("#stud_group").val();
 
-            $.ajax({
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                url: '/getContactNumbersBySectionId?sectionId=' + firstSection,
-                success: function (response) {
-                    $('#stud_group').empty();
-                    $('#stud_group').append(new Option("---Select an option---", 104));
-                    $('#stud_group').append(new Option("ALL", 105));
-                    response.students.forEach(function (item) {
-                        $('#stud_group').append(new Option(item.firstName + " " + item.lastName, item.id));
-                    });
-                }
-            });
-        });
-
-        function sendSms() {
-            var message = $("#message").val();
-            if($("#stud_group").val() == "105" || $("#sub_groups").val() == "102") {
-                $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
-                    apiusername: "APIE4DYUT3XMS",
-                    apipassword: "APIE4DYUT3XMSE4DYU",
-                    mobileno: "09165132692,639954835023,639058041794",
-                    senderid: "292903166",
-                    languagetype: "1",
-                    message: message
-                }, function (data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: '/getContactNumbers/' + gradeLevelId + '/' + sectionId + '/' + studentId,
+            success: function (response) {
+                console.log("Numbers", response.numbers);
+                response.numbers.forEach(function (num) {
+                    var arr = num.split('');
+                    if (arr[0] == '0')
+                        arr[0] = '63';
+                    if(arr[0] == '+')
+                        arr[0] = '';
+                    if(arr[0] == '9')
+                        arr[0] = '639';
+                    var numSms = arr.join('');
+                    console.log(numSms);
+                    sendSms(numSms);
                 });
-                alert('Message Sent!.');
-            }else {
-                $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
-                    apiusername: "APIE4DYUT3XMS",
-                    apipassword: "APIE4DYUT3XMSE4DYU",
-                    mobileno: "639058041794",
-                    senderid: "292903166",
-                    languagetype: "1",
-                    message: message
-                }, function (data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
-                });
-                alert('Message Sent!.');
+                alert("Notification sent out!.");
             }
+        })
+    }
 
+    function sendSms(number) {
+        var message = $("#message").val();
+        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
+            apiusername: "APIE4DYUT3XMS",
+            apipassword: "APIE4DYUT3XMSE4DYU",
+            mobileno: number,
+            senderid: "292903166",
+            languagetype: "1",
+            message: message
+        }, function (data, status) {
 
-
-//            console.log("VALUE OF STUDENT ID: " + studId);
-//        var announcement = document.getElementById('message').value;
-//        var to = '63'+document.getElementById('to').value;
-////        var pref = document.getElementById('prefix').value;
-//
-//        var msgId = guid();
-//        var xhr = new XMLHttpRequest();
-//        var url = "https://post.chikka.com/smsapi/request";
-//        xhr.open("POST", url, true);
-//        xhr.setRequestHeader("Content-type", "application/json");
-//
-//        var data = JSON.stringify({"message_type": "SEND", "mobile_number": "639954835023", "shortcode": "292903147", "message_id": "ccc81279fcc048d1a6fcc52ed4c14255", "message": "HI", "client_id": "230d0648f6672956b8fc2bed85a480ebb32b296a412e2672714096c37bebebcd", "secret_key": "da51dc811a15e7f7b10784f1e7266b350efe07d13792c0735a4b406e1332c490"});
-//        xhr.send(data);
-//        $.post("https://post.chikka.com/smsapi/request", {
-//            message_type: "SEND",
-//            mobile_number: to,
-//            shortcode: "292903147",
-//            message_id: msgId,
-//            message: announcement,
-//            client_id: "230d0648f6672956b8fc2bed85a480ebb32b296a412e2672714096c37bebebcd",
-//            secret_key: "da51dc811a15e7f7b10784f1e7266b350efe07d13792c0735a4b406e1332c490"
-//        }, function (data, status) {
-//            alert("Data: " + data + "\nStatus: " + status);
-//        });
-
-//        $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
-//            apiusername: "APIXV4PYFBUJJ",
-//            apipassword: "APIXV4PYFBUJJBLB47",
-//            mobileno: "09176996988",
-//            senderid: "292903149",
-//            languagetype: "1",
-//            message: "HI ALFRED VARGAS IV, SAW YOUR PROFILE AND THIS IS TO INFORM YOU THAT YOU ONLY HAVE 1 HOUR LEFT TO TELL EVERYBODY THAT IT IS THE END OF THE WORLD - ANONYMOUS"
-//        }, function (data, status) {
-//            alert("Data: " + data + "\nStatus: " + status);
-//        });
-        }
-        //        function guid() {
-        //            function s4() {
-        //                return Math.floor((1 + Math.random()) * 0x10000)
-        //                    .toString(16)
-        //                    .substring(1);
-        //            }
-        //            var ret = '';
-        //            var x=0;
-        //            while(x != 8){
-        //                ret += s4();
-        //                x++;
-        //            }
-        //            return ret;
-        //        }
-
-
-        $("#groups").on("change", function () {
-            var gradeLevel = $(this).val();
-            console.log("ID: " + gradeLevel);
-            $.ajax({
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                url: '/selectGradeLevel?gradeLvlId=' + gradeLevel,
-                success: function (response) {
-                    $('#sub_groups').empty();
-                    $('#sub_groups').append(new Option("---Select a section---", 101)); // 101 is just a default id
-                    $('#sub_groups').append(new Option("All", 102)); // 102 is a default id
-                    $('#stud_group').empty();
-                    response.section.forEach(function (item) {
-                        $('#sub_groups').append(new Option(item.section, item.id));
-                    });
-                }
-            });
         });
+    }
 
-        $("#searchText").on("input", function () {
-            var value = $(this).val();
-            console.log(value);
-            $.ajax({
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                url: '/getStudentsBySearch?searchText=' + value,
-                success: function (response) {
-                    $('#studList').empty();
-                    $.each(response.studList, function (key, value) {
-                        var option = '<option id="' + value.id + '">' + value.fullName + '</option>';
-                        console.log(option);
-                        $('#studList').append(option);
-
-                    });
-                },
-                error: function (response) {
-                    console.log("Error.")
-                }
-
-            });
+    $("#groups").on("change", function () {
+        var gradeLevel = $(this).val();
+        console.log("ID: " + gradeLevel);
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            url: '/selectGradeLevel?gradeLvlId=' + gradeLevel,
+            success: function (response) {
+                $('#sub_groups').empty();
+                $('#sub_groups').append(new Option("All", -1));
+                response.section.forEach(function (item) {
+                    $('#sub_groups').append(new Option(item.section, item.id));
+                });
+            }
         });
-    </script>
+    });
+</script>
 </body>
 </html>
