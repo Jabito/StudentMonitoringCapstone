@@ -119,8 +119,8 @@
     </select>
 
     <select id="getStudent" resultMap="StudentMap" resultType="com.capstone.jmt.entity.Student">
-        SELECT A.*, l.grade_level AS gradeLevelDesc, section2.section AS sectionDesc FROM data_students A JOIN ref_grade_level l on A.grade_level_id = l.id
-        JOIN ref_section section2 on l.id = section2.id
+        SELECT A.*, l.grade_level AS gradeLevelDesc, section2.section AS sectionDesc FROM data_students A LEFT JOIN ref_grade_level l on A.grade_level_id = l.id
+        LEFT JOIN ref_section section2 on cast(a.section AS INTEGER) = section2.id
         WHERE A.id = #{id}
     </select>
 

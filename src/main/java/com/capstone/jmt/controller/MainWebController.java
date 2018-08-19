@@ -248,7 +248,6 @@ public class MainWebController {
 
         try {
             mainService.updateUser(user);
-            System.out.println("SUCCESS!!");
             return "redirect:/getUserList";
 
         } catch (Exception e) {

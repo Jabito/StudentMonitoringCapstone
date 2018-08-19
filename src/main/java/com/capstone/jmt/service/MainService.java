@@ -190,9 +190,8 @@ public class MainService {
         HashMap<String, Object> response = new HashMap<>();
         User existingStudent = mainMapper.getUserById(user.getId());
         if (null != existingStudent) {
-            System.out.println("UPDATED");
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             mainMapper.updateUser(user);
-            System.out.println("UPDATED SUCCESSFULLY");
         } else {
             response.put("responseCode", 404);
             response.put("responseDesc", "Failed to update user.");
