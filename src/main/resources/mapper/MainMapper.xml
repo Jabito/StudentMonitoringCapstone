@@ -620,6 +620,14 @@ AND #{userId} IN (
         </choose>
     </select>
 
+    <select id="getStudentContactNumbersBySectionId"  resultType="string">
+        Select id from data_students where "section" = #{id} IS NOT NULL
+    </select>
+
+    <select id="getParentNumberByStudentId" resultType="string">
+        select office_no from data_parents where parent_of = #{s}
+    </select>
+
     <select id="getUserType" resultMap="RefUserTypeMap" resultType="java.util.List">
         SELECT * FROM ref_user_type
     </select>

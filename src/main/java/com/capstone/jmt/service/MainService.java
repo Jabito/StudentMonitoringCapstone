@@ -522,4 +522,13 @@ public class MainService {
     public List<String> getContactNumbers(String gradeLevelId, String sectionId, String studentId) {
         return mainMapper.getContactNumbers(gradeLevelId, sectionId, studentId);
     }
+
+
+    public List<String> getStudentNumberBySectionId(String id) {
+        return mainMapper.getStudentContactNumbersBySectionId(id);
+    }
+
+    public String getParentNumberByStudentId(String s) {
+        return mainMapper.getParentNumberByStudentId(s);
+    }
 }
