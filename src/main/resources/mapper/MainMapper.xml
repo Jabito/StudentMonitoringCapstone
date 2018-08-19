@@ -119,8 +119,8 @@
     </select>
 
     <select id="getStudent" resultMap="StudentMap" resultType="com.capstone.jmt.entity.Student">
-        SELECT A.*, l.grade_level AS gradeLevelDesc, section2.section AS sectionDesc FROM data_students A JOIN ref_grade_level l on A.grade_level_id = l.id
-        JOIN ref_section section2 on l.id = section2.id
+        SELECT A.*, l.grade_level AS gradeLevelDesc, section2.section AS sectionDesc FROM data_students A LEFT JOIN ref_grade_level l on A.grade_level_id = l.id
+        LEFT JOIN ref_section section2 on cast(a.section AS INTEGER) = section2.id
         WHERE A.id = #{id}
     </select>
 
@@ -618,6 +618,14 @@ AND #{userId} IN (
                 (SELECT id FROM data_students WHERE grade_level_id = CAST(#{gradeLevelId} AS INTEGER))
             </when>
         </choose>
+    </select>
+
+    <select id="getStudentContactNumbersBySectionId"  resultType="string">
+        Select id from data_students where "section" = #{id} IS NOT NULL
+    </select>
+
+    <select id="getParentNumberByStudentId" resultType="string">
+        select office_no from data_parents where parent_of = #{s}
     </select>
 
     <select id="getUserType" resultMap="RefUserTypeMap" resultType="java.util.List">

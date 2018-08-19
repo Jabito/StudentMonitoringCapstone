@@ -190,9 +190,8 @@ public class MainService {
         HashMap<String, Object> response = new HashMap<>();
         User existingStudent = mainMapper.getUserById(user.getId());
         if (null != existingStudent) {
-            System.out.println("UPDATED");
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             mainMapper.updateUser(user);
-            System.out.println("UPDATED SUCCESSFULLY");
         } else {
             response.put("responseCode", 404);
             response.put("responseDesc", "Failed to update user.");
@@ -521,5 +520,14 @@ public class MainService {
 
     public List<String> getContactNumbers(String gradeLevelId, String sectionId, String studentId) {
         return mainMapper.getContactNumbers(gradeLevelId, sectionId, studentId);
+    }
+
+
+    public List<String> getStudentNumberBySectionId(String id) {
+        return mainMapper.getStudentContactNumbersBySectionId(id);
+    }
+
+    public String getParentNumberByStudentId(String s) {
+        return mainMapper.getParentNumberByStudentId(s);
     }
 }

@@ -248,7 +248,6 @@ public class MainWebController {
 
         try {
             mainService.updateUser(user);
-            System.out.println("SUCCESS!!");
             return "redirect:/getUserList";
 
         } catch (Exception e) {
@@ -602,10 +601,57 @@ public class MainWebController {
     public ResponseEntity<?> getContactNumbers(@PathVariable("gradeLvlId") String gradeLevelId, @PathVariable("sectionId") String sectionId,
                                                @PathVariable("studId") String studentId){
         HashMap<String, Object> response = new HashMap<>();
-        List<String> numbers = mainService.getContactNumbers(gradeLevelId, sectionId, studentId);
-        response.put("numbers", null != numbers? numbers: new ArrayList<>());
-        response.put("responseDesc", "Success.");
 
+        /*
+           EDITED CODE Francisco Aquino III
+           August 19, 2018
+           @Param sectionId if -1 = "ALL"
+           @Param studentId if -1 = "ALL"
+         */
+        if(sectionId.equals("-1")) {
+            List<RefSection> refSectionList = mainService.getSectionList(Integer.parseInt(gradeLevelId));
+            List<String> numbersList = new ArrayList<>();
+
+            for(RefSection refSection: refSectionList){
+                //getting all Student Id per section
+                List<String> studentIds = mainService.getStudentNumberBySectionId(String.valueOf(refSection.getId()));
+
+                //Iterating list of
+                for(String studId: studentIds){
+                    String parentsNumber = mainService.getParentNumberByStudentId(studId);
+                    //Adding parentNumber to the list
+                    numbersList.add(parentsNumber);
+                }
+            }
+            response.put("numbers", numbersList);
+            response.put("responseDesc", "Success.");
+
+        }else {
+            if(studentId.equals("-1")) {
+                //Initialize List
+                List<String> numberListForSelectedSection  = new ArrayList<>();
+
+                List<String> studentIds = mainService.getStudentNumberBySectionId(sectionId);
+
+                //Iterating studentIds to filter parent numbers
+                for(String studId: studentIds) {
+                    String parentsNumber = mainService.getParentNumberByStudentId(studId);
+                    //Adding parentNumber to the list
+                    numberListForSelectedSection.add(parentsNumber);
+                }
+                response.put("numbers", numberListForSelectedSection);
+                response.put("responseDesc", "Success.");
+            }else {
+                //Initialize List
+                List<String> parentNumberList = new ArrayList<>();
+
+                String parentNumber = mainService.getParentNumberByStudentId(studentId);
+                parentNumberList.add(parentNumber);
+
+                response.put("numbers", parentNumberList);
+                response.put("responseDesc", "Success.");
+            }
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

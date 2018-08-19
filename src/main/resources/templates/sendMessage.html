@@ -125,6 +125,11 @@
         var sectionId = $("#sub_groups").val();
         var studentId = $("#stud_group").val();
 
+
+        console.log("GRADELEVELID VALUE : " + gradeLevelId);
+        console.log("sectionIDVALUE : " + sectionId);
+        console.log("studentID VALUE : " + studentId);
+
         $.ajax({
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
@@ -132,16 +137,11 @@
             success: function (response) {
                 console.log("Numbers", response.numbers);
                 response.numbers.forEach(function (num) {
-                    var arr = num.split('');
-                    if (arr[0] == '0')
-                        arr[0] = '63';
-                    if(arr[0] == '+')
-                        arr[0] = '';
-                    if(arr[0] == '9')
-                        arr[0] = '639';
-                    var numSms = arr.join('');
-                    console.log(numSms);
-                    sendSms(numSms);
+                    if(num === null) {
+                        //Filter do nothing
+                    }else {
+                        sendSms(num);
+                    }
                 });
                 alert("Notification sent out!.");
             }
