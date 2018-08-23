@@ -140,7 +140,15 @@
                     if(num === null) {
                         //Filter do nothing
                     }else {
-                        sendSms(num);
+                        var arr = num.split('');
+                        if (arr[0] == '0')
+                            arr[0] = '63';
+                        if(arr[0] == '+')
+                            arr[0] = '';
+                        if(arr[0] == '9')
+                            arr[0] = '639';
+                        var numSms = arr.join('');
+                        sendSms(numSms);
                     }
                 });
                 alert("Notification sent out!.");
