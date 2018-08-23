@@ -624,8 +624,8 @@ AND #{userId} IN (
         Select id from data_students where "section" = #{id} IS NOT NULL
     </select>
 
-    <select id="getParentNumberByStudentId" resultType="string">
-        select office_no from data_parents where parent_of = #{s}
+    <select id="getParentNumberByStudentId" resultMap="ParentMap" resultType="com.capstone.jmt.entity.Parent">
+        select * from data_parents where parent_of = #{s}
     </select>
 
     <select id="getUserType" resultMap="RefUserTypeMap" resultType="java.util.List">

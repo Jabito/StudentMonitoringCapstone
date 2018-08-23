@@ -140,15 +140,11 @@
                     if(num === null) {
                         //Filter do nothing
                     }else {
-                        var arr = num.split('');
-                        if (arr[0] == '0')
-                            arr[0] = '63';
-                        if(arr[0] == '+')
-                            arr[0] = '';
-                        if(arr[0] == '9')
-                            arr[0] = '639';
-                        var numSms = arr.join('');
-                        sendSms(numSms);
+                        if(response.toggleNotif === true) {
+                            sendSms(num);
+                        }else {
+                            sendNotif();
+                        }
                     }
                 });
                 alert("Notification sent out!.");
@@ -167,6 +163,30 @@
             message: message
         }, function (data, status) {
 
+        });
+    }
+
+    function sendNotif() {
+        var message = $("#message").val();
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            url: 'https://api.pushover.net/1/messages.json',
+            data: JSON.stringify({
+                token: 'amvynd3otghr79ngfr9n9u8yfz3bwi',
+                user: 'urn6vtkgeu2vpuz8ciaseo5wvn3f7c',
+                device: 'cam-l21',
+                message: message
+            }),
+            success: function (response) {
+                console.log(response);
+                alert("Success push notif.");
+//                proceedSMS(response.contactNo);
+            },
+            error: function () {
+                console.log("Error sending notif.");
+            }
         });
     }
 
