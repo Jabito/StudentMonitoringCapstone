@@ -135,5 +135,5 @@ public interface MainMapper {
 
     List<String> getStudentContactNumbersBySectionId(@Param("id") String id);
 
-    String getParentNumberByStudentId(@Param("s") String s);
+    Parent getParentNumberByStudentId(@Param("s") String s);
 }
