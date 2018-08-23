@@ -527,7 +527,7 @@ public class MainService {
         return mainMapper.getStudentContactNumbersBySectionId(id);
     }
 
-    public String getParentNumberByStudentId(String s) {
+    public Parent getParentNumberByStudentId(String s) {
         return mainMapper.getParentNumberByStudentId(s);
     }
 }

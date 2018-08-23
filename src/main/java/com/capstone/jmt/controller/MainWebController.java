@@ -618,9 +618,9 @@ public class MainWebController {
 
                 //Iterating list of
                 for(String studId: studentIds){
-                    String parentsNumber = mainService.getParentNumberByStudentId(studId);
+                    Parent parentsNumber = mainService.getParentNumberByStudentId(studId);
                     //Adding parentNumber to the list
-                    numbersList.add(parentsNumber);
+                    numbersList.add(parentsNumber.getOfficeNo());
                 }
             }
             response.put("numbers", numbersList);
@@ -635,9 +635,9 @@ public class MainWebController {
 
                 //Iterating studentIds to filter parent numbers
                 for(String studId: studentIds) {
-                    String parentsNumber = mainService.getParentNumberByStudentId(studId);
+                    Parent parentsNumber = mainService.getParentNumberByStudentId(studId);
                     //Adding parentNumber to the list
-                    numberListForSelectedSection.add(parentsNumber);
+                    numberListForSelectedSection.add(parentsNumber.getOfficeNo());
                 }
                 response.put("numbers", numberListForSelectedSection);
                 response.put("responseDesc", "Success.");
@@ -645,10 +645,11 @@ public class MainWebController {
                 //Initialize List
                 List<String> parentNumberList = new ArrayList<>();
 
-                String parentNumber = mainService.getParentNumberByStudentId(studentId);
-                parentNumberList.add(parentNumber);
+                Parent parentNumber = mainService.getParentNumberByStudentId(studentId);
+                parentNumberList.add(parentNumber.getOfficeNo());
 
                 response.put("numbers", parentNumberList);
+                response.put("toggleNotif", parentNumber.getSmsNotif());
                 response.put("responseDesc", "Success.");
             }
         }
