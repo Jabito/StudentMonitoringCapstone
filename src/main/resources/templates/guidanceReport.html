@@ -158,13 +158,6 @@
 
     function sendSms() {
 
-        console.log($("#selected option:selected").val());
-        console.log($("#studId").val());
-        console.log($("#studGuardian").val());
-        console.log($("#datePicker").val());
-        console.log($("#message").val());
-
-
         var studId = $("#studId").val();
         var guardianName = $("#studGuardian").val();
         var message = $("#message").val();
@@ -187,7 +180,9 @@
             success: function (response) {
                 console.log(response);
                 alert("SUCCESS");
-                proceedSMS(response.contactNo);
+                if(null != response.contactNo)
+                    if(response.contactNo != '')
+                        proceedSMS(response.contactNo);
             },
             error: function () {
                 console.log("Error sending SMS.");
