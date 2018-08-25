@@ -136,4 +136,8 @@ public interface MainMapper {
     List<String> getStudentContactNumbersBySectionId(@Param("id") String id);
 
     Parent getParentNumberByStudentId(@Param("s") String s);
+
+    boolean doesParentEmailExist(@Param("email") String email);
+
+    int validateUser(@Param("username") String username, @Param("email") String email);
 }

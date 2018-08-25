@@ -66,10 +66,6 @@ public class MainWebController {
     }
 
 
-
-
-
-
     @RequestMapping(value = "/send", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> send() throws JSONException {
 
@@ -271,11 +267,14 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getParent", method = RequestMethod.GET)
-    public String getParentOfStudent(@Valid Parent parent, @ModelAttribute("appUser") User user, Model model) {
+    public String getParentOfStudent(@Valid Parent parent, @RequestParam(value = "error", required = false) String error,
+                                     @ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
         if (null == user)
             return "redirect:/login";
 
+        if (null != error)
+            model.addAttribute("param.error", error.equals("1"));
         model.addAttribute("students", mainService.getAllStudents());
         model.addAttribute("parent", new Parent());
         return "addParent";
@@ -287,17 +286,28 @@ public class MainWebController {
 
         parent.setCreatedBy(appUser.getUsername());
         parent.setUpdatedBy(appUser.getUsername());
-        mainService.addParent(parent);
+        if (mainService.doesParentEmailExist(parent.getEmail())) {
+            return "redirect:/getParent?error=1";
+        } else
+            mainService.addParent(parent);
 
         return "redirect:/homepage?added=Parent";
     }
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public String getUserData(@ModelAttribute("appUser") User user, @Valid AddUserJson newUser, Model model) {
+    public String getUserData(@ModelAttribute("appUser") User user,
+                              @RequestParam(value = "error", required = false, defaultValue = "0") String error,
+                              @Valid AddUserJson newUser, Model model) {
         user = setUserRole(user, model);
         if (null == user)
             return "redirect:/login";
-        //TODO ADD VALIDATION OF NULL VALUES
+
+        if (null != error) {
+            model.addAttribute("param.error1", error.equals("1"));
+            model.addAttribute("param.error2", error.equals("2"));
+        }
+        System.out.println(error.equals("1"));
+        System.out.println(error.equals("2"));
 
         model.addAttribute("newUser", new User());
         model.addAttribute("userType", mainService.getUserType());
@@ -324,6 +334,10 @@ public class MainWebController {
         System.out.println("Email " + newUser.getEmail());
         System.out.println("ID " + newUser.getId());
         System.out.println("Password? " + newUser.getPassword());
+        int error = mainService.validateUser(newUser.getUsername(), newUser.getEmail());
+        if (error != 0)
+            return "redirect:/getUser?error=" + String.valueOf(error);
+
         mainService.addUser(newUser);
         return "redirect:/homepage?added=User";
     }
@@ -597,9 +611,9 @@ public class MainWebController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/getContactNumbers/{gradeLvlId}/{sectionId}/{studId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getContactNumbers/{gradeLvlId}/{sectionId}/{studId}", method = RequestMethod.GET)
     public ResponseEntity<?> getContactNumbers(@PathVariable("gradeLvlId") String gradeLevelId, @PathVariable("sectionId") String sectionId,
-                                               @PathVariable("studId") String studentId){
+                                               @PathVariable("studId") String studentId) {
         HashMap<String, Object> response = new HashMap<>();
 
         /*
@@ -608,16 +622,16 @@ public class MainWebController {
            @Param sectionId if -1 = "ALL"
            @Param studentId if -1 = "ALL"
          */
-        if(sectionId.equals("-1")) {
+        if (sectionId.equals("-1")) {
             List<RefSection> refSectionList = mainService.getSectionList(Integer.parseInt(gradeLevelId));
             List<String> numbersList = new ArrayList<>();
 
-            for(RefSection refSection: refSectionList){
+            for (RefSection refSection : refSectionList) {
                 //getting all Student Id per section
                 List<String> studentIds = mainService.getStudentNumberBySectionId(String.valueOf(refSection.getId()));
 
                 //Iterating list of
-                for(String studId: studentIds){
+                for (String studId : studentIds) {
                     Parent parentsNumber = mainService.getParentNumberByStudentId(studId);
                     //Adding parentNumber to the list
                     numbersList.add(parentsNumber.getOfficeNo());
@@ -626,22 +640,22 @@ public class MainWebController {
             response.put("numbers", numbersList);
             response.put("responseDesc", "Success.");
 
-        }else {
-            if(studentId.equals("-1")) {
+        } else {
+            if (studentId.equals("-1")) {
                 //Initialize List
-                List<String> numberListForSelectedSection  = new ArrayList<>();
+                List<String> numberListForSelectedSection = new ArrayList<>();
 
                 List<String> studentIds = mainService.getStudentNumberBySectionId(sectionId);
 
                 //Iterating studentIds to filter parent numbers
-                for(String studId: studentIds) {
+                for (String studId : studentIds) {
                     Parent parentsNumber = mainService.getParentNumberByStudentId(studId);
                     //Adding parentNumber to the list
                     numberListForSelectedSection.add(parentsNumber.getOfficeNo());
                 }
                 response.put("numbers", numberListForSelectedSection);
                 response.put("responseDesc", "Success.");
-            }else {
+            } else {
                 //Initialize List
                 List<String> parentNumberList = new ArrayList<>();
 
@@ -730,7 +744,7 @@ public class MainWebController {
             return "guidanceInfo";
         } else {
             System.out.println("RETURNED GUIDANCE!!!!");
-            model.addAttribute("editGuidance", guidance );
+            model.addAttribute("editGuidance", guidance);
             return "guidanceInfo";
         }
     }
