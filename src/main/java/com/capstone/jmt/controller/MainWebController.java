@@ -67,10 +67,6 @@ public class MainWebController {
     }
 
 
-
-
-
-
     @RequestMapping(value = "/send", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> send() throws JSONException {
 
@@ -272,11 +268,14 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getParent", method = RequestMethod.GET)
-    public String getParentOfStudent(@Valid Parent parent, @ModelAttribute("appUser") User user, Model model) {
+    public String getParentOfStudent(@Valid Parent parent, @RequestParam(value = "error", required = false) String error,
+                                     @ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
         if (null == user)
             return "redirect:/login";
 
+        if (null != error)
+            model.addAttribute("param.error", error.equals("1"));
         model.addAttribute("students", mainService.getAllStudents());
         model.addAttribute("parent", new Parent());
         return "addParent";
@@ -288,17 +287,20 @@ public class MainWebController {
 
         parent.setCreatedBy(appUser.getUsername());
         parent.setUpdatedBy(appUser.getUsername());
-        mainService.addParent(parent);
+        if (mainService.doesParentEmailExist(parent.getEmail())) {
+            return "redirect:/getParent?error=1";
+        } else
+            mainService.addParent(parent);
 
         return "redirect:/homepage?added=Parent";
     }
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public String getUserData(@ModelAttribute("appUser") User user, @Valid AddUserJson newUser, Model model) {
+    public String getUserData(@ModelAttribute("appUser") User user,
+                              @Valid AddUserJson newUser, Model model) {
         user = setUserRole(user, model);
         if (null == user)
             return "redirect:/login";
-        //TODO ADD VALIDATION OF NULL VALUES
 
         model.addAttribute("newUser", new User());
         model.addAttribute("userType", mainService.getUserType());
@@ -325,6 +327,13 @@ public class MainWebController {
         System.out.println("Email " + newUser.getEmail());
         System.out.println("ID " + newUser.getId());
         System.out.println("Password? " + newUser.getPassword());
+        int error = mainService.validateUser(newUser.getUsername(), newUser.getEmail());
+        if (error != 0)
+            if (error == 1)
+                return "redirect:/getUser?error=1";
+            else
+                return "redirect:/getUser?error2=1";
+
         mainService.addUser(newUser);
         return "redirect:/homepage?added=User";
     }
@@ -606,9 +615,9 @@ public class MainWebController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/getContactNumbers/{gradeLvlId}/{sectionId}/{studId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getContactNumbers/{gradeLvlId}/{sectionId}/{studId}", method = RequestMethod.GET)
     public ResponseEntity<?> getContactNumbers(@PathVariable("gradeLvlId") String gradeLevelId, @PathVariable("sectionId") String sectionId,
-                                               @PathVariable("studId") String studentId){
+                                               @PathVariable("studId") String studentId) {
         HashMap<String, Object> response = new HashMap<>();
 
         /*
@@ -617,20 +626,18 @@ public class MainWebController {
            @Param sectionId if -1 = "ALL"
            @Param studentId if -1 = "ALL"
          */
-        if(sectionId.equals("-1")) {
+        if (sectionId.equals("-1")) {
             List<RefSection> refSectionList = mainService.getSectionList(Integer.parseInt(gradeLevelId));
             List<String> numbersList = new ArrayList<>();
             List<Boolean> smsNotif = new ArrayList<>();
 
-            for(RefSection refSection: refSectionList){
+            for (RefSection refSection : refSectionList) {
                 //getting all Student Id per section
                 List<String> studentIds = mainService.getStudentNumberBySectionId(String.valueOf(refSection.getId()));
 
                 //Iterating list of
-                for(String studId: studentIds){
 
-                    System.out.println("=======Stud ID: " + studId);
-                    System.out.println("=======Stud Count: " +studentIds.size());
+                for (String studId : studentIds) {
                     Parent parentsNumber = mainService.getParentNumberByStudentId(studId);
                     //Adding parentNumber to the list
 
@@ -653,17 +660,16 @@ public class MainWebController {
             response.put("toggleNotif",smsNotif);
             response.put("responseDesc", "Success.");
 
-        }else {
-            if(studentId.equals("-1")) {
+        } else {
+            if (studentId.equals("-1")) {
                 //Initialize List
-                List<String> numberListForSelectedSection  = new ArrayList<>();
                 List<Boolean> smsNotif = new ArrayList<>();
-
+                List<String> numberListForSelectedSection = new ArrayList<>();
 
                 List<String> studentIds = mainService.getStudentNumberBySectionId(sectionId);
 
                 //Iterating studentIds to filter parent numbers
-                for(String studId: studentIds) {
+                for (String studId : studentIds) {
                     Parent parentsNumber = mainService.getParentNumberByStudentId(studId);
                     //Adding parentNumber to the list
                     numberListForSelectedSection.add(parentsNumber.getOfficeNo());
@@ -672,7 +678,7 @@ public class MainWebController {
                 response.put("numbers", numberListForSelectedSection);
                 response.put("toggleNotif", smsNotif);
                 response.put("responseDesc", "Success.");
-            }else {
+            } else {
                 //Initialize List
                 List<String> parentNumberList = new ArrayList<>();
                 List<Boolean> smsNotif = new ArrayList<>();
@@ -732,8 +738,8 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/showParentInfo", method = RequestMethod.GET)
-    public String showParentInfo(Model model, @RequestParam(value = "id") String id) {
-
+    public String showParentInfo(@ModelAttribute("appUser") User user, Model model, @RequestParam(value = "id") String id) {
+        user = setUserRole(user, model);
         Parent parent = mainService.getParentById(id);
         if (null == parent) {
             return "parentInfo";
@@ -744,26 +750,26 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/showUserInfo", method = RequestMethod.GET)
-    public String showUserInfo(Model model, @RequestParam(value = "id") String id) {
-
-        User user = mainService.getUserId(id);
-        if (null == user) {
+    public String showUserInfo(@ModelAttribute("appUser") User user, Model model, @RequestParam(value = "id") String id) {
+        user = setUserRole(user, model);
+        User user2 = mainService.getUserId(id);
+        if (null == user2) {
             return "userInfo";
         } else {
-            model.addAttribute("user", user);
+            model.addAttribute("user", user2);
             return "userInfo";
         }
     }
 
     @RequestMapping(value = "/showGuidanceInfo", method = RequestMethod.GET)
-    public String showGuidanceInfo(Model model, @RequestParam(value = "id") String id) {
-
+    public String showGuidanceInfo(@ModelAttribute("appUser") User user, Model model, @RequestParam(value = "id") String id) {
+        user = setUserRole(user, model);
         Guidance guidance = mainService.getGuidanceById(id);
         if (null == guidance) {
             return "guidanceInfo";
         } else {
             System.out.println("RETURNED GUIDANCE!!!!");
-            model.addAttribute("editGuidance", guidance );
+            model.addAttribute("editGuidance", guidance);
             return "guidanceInfo";
         }
     }

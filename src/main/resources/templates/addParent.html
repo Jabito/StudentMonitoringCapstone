@@ -52,6 +52,7 @@
                                         <label>Email Address</label>
                                         <input type="email" th:required="required" class="form-control" placeholder="Email Address" th:field="*{email}"/>
                                     </div>
+                                    <div th:if="${param.error2}" class="alert alert-danger">Email already used.</div>
                                     <div class="form-group">
                                         <label>Occupation</label>
                                         <input class="form-control" placeholder="Occupation" th:required="required" th:field="*{occupation}"/>

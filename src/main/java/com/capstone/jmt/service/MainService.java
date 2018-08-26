@@ -530,4 +530,12 @@ public class MainService {
     public Parent getParentNumberByStudentId(String s) {
         return mainMapper.getParentNumberByStudentId(s);
     }
+
+    public boolean doesParentEmailExist(String email) {
+        return mainMapper.doesParentEmailExist(email);
+    }
+
+    public int validateUser(String username, String email) {
+        return mainMapper.validateUser(username, email);
+    }
 }

@@ -671,4 +671,16 @@ AND #{userId} IN (
         WHERE B.id = (SELECT parent_of FROM data_parents WHERE id = #{parentId})
         ORDER BY A.log_datetime DESC
     </select>
+
+    <select id="doesParentEmailExist" resultType="java.lang.Boolean">
+        SELECT EXISTS(SELECT * FROM data_parents where email = #{email})
+    </select>
+
+    <select id="validateUser" resultType="java.lang.Integer">
+      SELECT CASE WHEN EXISTS(SELECT * FROM data_users WHERE username = #{username}) THEN 1
+       ELSE CASE WHEN EXISTS(SELECT * FROM data_users WHERE email = #{email}) THEN 2
+            ELSE 0
+            END
+       END
+    </select>
 </mapper>
