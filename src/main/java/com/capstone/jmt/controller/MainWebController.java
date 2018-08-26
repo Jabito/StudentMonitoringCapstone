@@ -296,18 +296,10 @@ public class MainWebController {
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
     public String getUserData(@ModelAttribute("appUser") User user,
-                              @RequestParam(value = "error", required = false, defaultValue = "0") String error,
                               @Valid AddUserJson newUser, Model model) {
         user = setUserRole(user, model);
         if (null == user)
             return "redirect:/login";
-
-        if (null != error) {
-            model.addAttribute("param.error1", error.equals("1"));
-            model.addAttribute("param.error2", error.equals("2"));
-        }
-        System.out.println(error.equals("1"));
-        System.out.println(error.equals("2"));
 
         model.addAttribute("newUser", new User());
         model.addAttribute("userType", mainService.getUserType());
@@ -336,7 +328,10 @@ public class MainWebController {
         System.out.println("Password? " + newUser.getPassword());
         int error = mainService.validateUser(newUser.getUsername(), newUser.getEmail());
         if (error != 0)
-            return "redirect:/getUser?error=" + String.valueOf(error);
+            if (error == 1)
+                return "redirect:/getUser?error=1";
+            else
+                return "redirect:/getUser?error2=1";
 
         mainService.addUser(newUser);
         return "redirect:/homepage?added=User";
@@ -713,8 +708,8 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/showParentInfo", method = RequestMethod.GET)
-    public String showParentInfo(Model model, @RequestParam(value = "id") String id) {
-
+    public String showParentInfo(@ModelAttribute("appUser") User user, Model model, @RequestParam(value = "id") String id) {
+        user = setUserRole(user, model);
         Parent parent = mainService.getParentById(id);
         if (null == parent) {
             return "parentInfo";
@@ -725,20 +720,20 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/showUserInfo", method = RequestMethod.GET)
-    public String showUserInfo(Model model, @RequestParam(value = "id") String id) {
-
-        User user = mainService.getUserId(id);
-        if (null == user) {
+    public String showUserInfo(@ModelAttribute("appUser") User user, Model model, @RequestParam(value = "id") String id) {
+        user = setUserRole(user, model);
+        User user2 = mainService.getUserId(id);
+        if (null == user2) {
             return "userInfo";
         } else {
-            model.addAttribute("user", user);
+            model.addAttribute("user", user2);
             return "userInfo";
         }
     }
 
     @RequestMapping(value = "/showGuidanceInfo", method = RequestMethod.GET)
-    public String showGuidanceInfo(Model model, @RequestParam(value = "id") String id) {
-
+    public String showGuidanceInfo(@ModelAttribute("appUser") User user, Model model, @RequestParam(value = "id") String id) {
+        user = setUserRole(user, model);
         Guidance guidance = mainService.getGuidanceById(id);
         if (null == guidance) {
             return "guidanceInfo";
