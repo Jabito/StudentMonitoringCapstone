@@ -140,11 +140,14 @@
                     if(num === null) {
                         //Filter do nothing
                     }else {
-                        if(response.toggleNotif === true) {
-                            sendSms(num);
-                        }else {
-                            sendNotif();
-                        }
+                        response.toggleNotif.forEach(function(smsNotif){
+                            console.log(smsNotif);
+                            if(smsNotif === true) {
+                                sendSms(num);
+                            }else {
+                                sendNotif();
+                            }
+                        })
                     }
                 });
                 alert("Notification sent out!.");
@@ -181,13 +184,14 @@
             }),
             success: function (response) {
                 console.log(response);
-                alert("Success push notif.");
+
 //                proceedSMS(response.contactNo);
             },
             error: function () {
                 console.log("Error sending notif.");
             }
         });
+        alert("Success push notif.");
     }
 
     $("#groups").on("change", function () {

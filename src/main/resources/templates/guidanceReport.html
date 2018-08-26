@@ -142,6 +142,7 @@
                 contentType: 'application/json',
                 url: '/getStudentByStudId?id=' + studId,
                 success: function (response) {
+                    console.log(response);
                     console.log("FIRST NAME: " + response.stud.firstName);
                     console.log("LAST NAME: " + response.stud.lastName);
                     $("#studName").val(response.stud.firstName + ' ' + response.stud.lastName);

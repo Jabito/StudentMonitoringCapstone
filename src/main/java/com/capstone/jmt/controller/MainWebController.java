@@ -22,6 +22,7 @@ import org.springframework.http.*;
 import java.io.FileInputStream;
 import java.util.*;
 
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -451,8 +452,16 @@ public class MainWebController {
         gr.setNameOfGuardian(reportModel.getGuardianName());
         Parent parent = mainService.getParentByStudentId(reportModel.getStudentId());
 
-        if (null != parent)
+        if (parent != null)
             if (parent.getSmsNotif()) {
+                try {
+                    System.out.println("SMS GET NOTIF: " + parent.getSmsNotif());
+                    System.out.println("SMS NO: " + parent.getOfficeNo());
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+
                 response.put("contactNo", parent.getOfficeNo());
             }
 
@@ -611,6 +620,7 @@ public class MainWebController {
         if(sectionId.equals("-1")) {
             List<RefSection> refSectionList = mainService.getSectionList(Integer.parseInt(gradeLevelId));
             List<String> numbersList = new ArrayList<>();
+            List<Boolean> smsNotif = new ArrayList<>();
 
             for(RefSection refSection: refSectionList){
                 //getting all Student Id per section
@@ -618,18 +628,37 @@ public class MainWebController {
 
                 //Iterating list of
                 for(String studId: studentIds){
+
+                    System.out.println("=======Stud ID: " + studId);
+                    System.out.println("=======Stud Count: " +studentIds.size());
                     Parent parentsNumber = mainService.getParentNumberByStudentId(studId);
                     //Adding parentNumber to the list
-                    numbersList.add(parentsNumber.getOfficeNo());
+
+                    try {
+                        if (parentsNumber.getOfficeNo() == null) {
+                            System.out.println("null");
+                        }else {
+                            numbersList.add(parentsNumber.getOfficeNo());
+                            smsNotif.add(parentsNumber.getSmsNotif());
+                        }
+                    }catch(Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+
                 }
             }
             response.put("numbers", numbersList);
+            response.put("toggleNotif",smsNotif);
             response.put("responseDesc", "Success.");
 
         }else {
             if(studentId.equals("-1")) {
                 //Initialize List
                 List<String> numberListForSelectedSection  = new ArrayList<>();
+                List<Boolean> smsNotif = new ArrayList<>();
+
 
                 List<String> studentIds = mainService.getStudentNumberBySectionId(sectionId);
 
@@ -638,18 +667,22 @@ public class MainWebController {
                     Parent parentsNumber = mainService.getParentNumberByStudentId(studId);
                     //Adding parentNumber to the list
                     numberListForSelectedSection.add(parentsNumber.getOfficeNo());
+                    smsNotif.add(parentsNumber.getSmsNotif());
                 }
                 response.put("numbers", numberListForSelectedSection);
+                response.put("toggleNotif", smsNotif);
                 response.put("responseDesc", "Success.");
             }else {
                 //Initialize List
                 List<String> parentNumberList = new ArrayList<>();
+                List<Boolean> smsNotif = new ArrayList<>();
 
                 Parent parentNumber = mainService.getParentNumberByStudentId(studentId);
                 parentNumberList.add(parentNumber.getOfficeNo());
+                smsNotif.add(parentNumber.getSmsNotif());
 
                 response.put("numbers", parentNumberList);
-                response.put("toggleNotif", parentNumber.getSmsNotif());
+                response.put("toggleNotif", smsNotif);
                 response.put("responseDesc", "Success.");
             }
         }

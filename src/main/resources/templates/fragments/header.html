@@ -55,7 +55,7 @@
                 <ul class="nav" id="side-menu" >
                     <li><a href="" th:href="@{/homepage}"><i class="fa fa-dashboard fa-fw"></i> Homepage</a></li>
                     <li><a href="" th:href="@{/attendanceLogs}"><i class="fa fa-calendar fa-fw"></i> Attendance Logs</a></li>
-                    <li><a href="" th:href="@{/messages}"><i class="fa fa-envelope"></i> Messages</a></li>
+                    <li><a href="" th:if="${parent}" th:href="@{/messages}"><i class="fa fa-envelope"></i> Messages</a></li>
                     <li><a href="" th:if="${parent}" th:href="@{/settings}"><i class="fa fa-cog"></i> SMS Settings</a></li>
                     <li><a href="" th:if="${guidance}" th:href="@{/guidanceReport}"><i class="fa fa-bullhorn"></i> Post Guidance Report</a></li>
                     <!--<li><a href="" th:if="${admin}" target="_blank" th:href="@{/monitor}"><i class="fa fa-desktop"></i> Monitor</a></li>-->
