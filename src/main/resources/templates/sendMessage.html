@@ -124,11 +124,26 @@
         var gradeLevelId = $("#groups").val();
         var sectionId = $("#sub_groups").val();
         var studentId = $("#stud_group").val();
+        var message = $("#message").val();
 
+        try{
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                url: '/sendMessage/',
+                params:{
+                  gradeLevelId: gradeLevelId,
+                  sectionId: sectionId,
+                  studentId: studentId,
+                  message: message
+                },
+                success: function(response){
 
-        console.log("GRADELEVELID VALUE : " + gradeLevelId);
-        console.log("sectionIDVALUE : " + sectionId);
-        console.log("studentID VALUE : " + studentId);
+                }
+            })
+        }catch(e){
+            console.log('Error', e);
+        }
 
         $.ajax({
             type: 'GET',

@@ -71,7 +71,7 @@
                         <h5>Parent/Guardian:</h5>
                     </div>
                     <div class="col-md-8">
-                        <input type="text" id="studGuardian" th:required="required" class="form-control"
+                        <input disabled="disabled" type="text" id="studGuardian" th:required="required" class="form-control"
                                placeholder="Input Parent/Guardian:"/>
                     </div>
                 </div>
@@ -142,11 +142,13 @@
                 contentType: 'application/json',
                 url: '/getStudentByStudId?id=' + studId,
                 success: function (response) {
-                    console.log(response);
-                    console.log("FIRST NAME: " + response.stud.firstName);
-                    console.log("LAST NAME: " + response.stud.lastName);
-                    $("#studName").val(response.stud.firstName + ' ' + response.stud.lastName);
-                    $("#studYear").val(response.stud.gradeLvlId);
+                    if(response.responseCode == 404)
+                        alert('Student does not exist.');
+                    else {
+                        $("#studName").val(response.stud.firstName + ' ' + response.stud.lastName);
+                        $("#studYear").val(response.stud.gradeLvlId);
+                        $("#studGuardian").val(response.guardianName);
+                    }
                 },
                 error: function () {
                     alert("FAILED");
@@ -179,7 +181,6 @@
                 caseOfIncident: caseOfIncident
             }),
             success: function (response) {
-                console.log(response);
                 alert("SUCCESS");
                 if(null != response.contactNo)
                     if(response.contactNo != '')

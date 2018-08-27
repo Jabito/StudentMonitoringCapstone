@@ -584,7 +584,7 @@ AND #{userId} IN (
       SELECT id from data_students E WHERE A.message_target LIKE '%' || E.id || '%'
     )
   )
-)
+)ORDER BY date_posted DESC
     </select>
 
     <select id="getStudentsBySearchString" resultMap="StudentMap" resultType="java.util.List">

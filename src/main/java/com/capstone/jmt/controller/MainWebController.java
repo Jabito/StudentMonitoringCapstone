@@ -174,14 +174,27 @@ public class MainWebController {
         return "addStudent";
     }
 
-    @RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
-    public String sendMessage(@RequestParam(value = "gradeLevel", defaultValue = "Nursery") String gradeLevel, @ModelAttribute("appUser") User user, Model model) {
+    @RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
+    public String sendMessage(@RequestParam(value = "gradeLevelId") String gradeLvlId,
+                              @RequestParam(value = "sectionId") String sectionId,
+                              @RequestParam(value = "studentId") String studentId,
+                              @RequestParam(value = "message") String message,
+                              @ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
+        System.out.println(gradeLvlId);
+        System.out.println(sectionId);
+        System.out.println(studentId);
+        System.out.println(message);
+
+        MessageJson mj = new MessageJson();
+        mj.setMessage(message);
+        mj.setPostedBy(user.getUsername());
+
+        mainService.postAnnouncement(mj);
 
         List<RefGradeLevel> gradeLevels = mainService.getGradeLevelList();
-        int gradeLvlId = mainService.getGradeLvlIdByGradeLevel(gradeLevel);
         System.out.println("GRADE LEVEL ID : " + gradeLvlId);
-        List<RefSection> sections = mainService.getSectionList(gradeLvlId);
+        List<RefSection> sections = mainService.getSectionList(Integer.valueOf(gradeLvlId));
 
 
         if (null == user) {
@@ -715,6 +728,8 @@ public class MainWebController {
             response.put("responseCode", 404);
         } else {
             response.put("stud", student);
+            Parent parent = mainService.getParentNumberByStudentId(student.getId());
+            response.put("guardianName", null != parent? parent.getParentName(): "");
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
