@@ -4,10 +4,19 @@ import java.io.Serializable;
 
 public class MsgJson implements Serializable {
 
+    private String appUsername;
     private String gradeLevelId;
     private String sectionId;
     private String studentId;
     private String message;
+
+    public String getAppUsername() {
+        return appUsername;
+    }
+
+    public void setAppUsername(String appUsername) {
+        this.appUsername = appUsername;
+    }
 
     public String getGradeLevelId() {
         return gradeLevelId;

@@ -874,24 +874,20 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/postMessage", method = RequestMethod.POST)
-    public ResponseEntity<?> postMessage(@RequestBody MsgJson messageJson){
-        System.out.println(messageJson.getMessage());
-        System.out.println(messageJson.getSectionId());
-        System.out.println(messageJson.getGradeLevelId());
-        System.out.println(messageJson.getStudentId());
+    public ResponseEntity<?> postMessage(@RequestBody MsgJson messageJson, @ModelAttribute("appUser") User user){
         MessageJson mj = new MessageJson();
         mj.setMessage(messageJson.getMessage());
-        mj.setPostedBy(getShopUser().getUsername());
+        mj.setPostedBy(user.getId());
         ArrayList<String> toSend = new ArrayList<>();
 
         if(messageJson.getStudentId().equals("-1")){
             if(messageJson.getSectionId().equals("-1")){
                 if(messageJson.getGradeLevelId().equals("-1")){
                     //All GradeLevels
-                    mj.setMessageTarget("3");
+                    mj.setMessageTypeId(3);
                 }else{
                     //List of Sections for selected GradeLevel
-                    mj.setMessageTarget("2");
+                    mj.setMessageTypeId(2);
                     List<RefSection> sectionList = mainService.getSectionListByGradeLevel(messageJson.getGradeLevelId());
                     if(null != sectionList){
                         for (RefSection refSection : sectionList) {
@@ -906,10 +902,14 @@ public class MainWebController {
             }
         }else{
             //Specific Parent selected
-            mj.setMessageTarget("0");
-            toSend.add(mainService.getParentByStudentId(messageJson.getStudentId()).getId());
+            mj.setMessageTypeId(0);
+            Parent par = mainService.getParentByStudentId(messageJson.getStudentId());
+            if(null != par)
+                toSend.add(par.getId());
+            else
+                toSend.add("");
         }
-        mj.setTargetIds((String[])toSend.toArray());
+        mj.setTargetIds(toSend.toArray(new String[toSend.size()]));
         mainService.postAnnouncement(mj);
 
         return new ResponseEntity<>( HttpStatus.OK);
