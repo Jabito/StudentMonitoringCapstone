@@ -149,20 +149,24 @@
             contentType: 'application/json; charset=utf-8',
             url: '/getContactNumbers/' + gradeLevelId + '/' + sectionId + '/' + studentId,
             success: function (response) {
-                console.log("Numbers", response.numbers);
+                console.log("Numbers", response);
                 response.numbers.forEach(function (num) {
                     if(num === null) {
                         //Filter do nothing
                     }else {
-                        response.toggleNotif.forEach(function(smsNotif){
-                            console.log(smsNotif);
-                            if(smsNotif === true) {
-                                if(null != num)
-                                    if('' != num)
-                                        sendSms(num);
-                            }
-
-                        })
+                        for(var x=0; x<response.numbers.length; x++){
+                            if(response.toggleNotif[x] === true)
+                                sendSms(response.numbers[x]);
+                        }
+                        // response.toggleNotif.forEach(function(smsNotif){
+                        //     console.log(smsNotif);
+                        //     if(smsNotif === true) {
+                        //         if(null != num)
+                        //             if('' != num)
+                        //                 sendSms(num);
+                        //     }
+                        //
+                        // })
                     }
                 });
                 sendNotif();
