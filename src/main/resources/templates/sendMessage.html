@@ -126,7 +126,7 @@
         var studentId = $("#stud_group").val();
         var message = $("#message").val();
 
-        try{
+        try {
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -138,11 +138,13 @@
                     studentId: studentId,
                     message: message
                 }),
-                success: function(response){
+                success: function (response) {
 
                 }
             });
-        }catch(e){ console.log(e); }
+        } catch (e) {
+            console.log(e);
+        }
 
         $.ajax({
             type: 'GET',
@@ -150,14 +152,13 @@
             url: '/getContactNumbers/' + gradeLevelId + '/' + sectionId + '/' + studentId,
             success: function (response) {
                 console.log("Numbers", response);
+                var x = 0;
                 response.numbers.forEach(function (num) {
-                    if(num === null) {
+                    if (num === null) {
                         //Filter do nothing
-                    }else {
-                        for(var x=0; x<response.numbers.length; x++){
-                            if(response.toggleNotif[x] === true)
-                                sendSms(response.numbers[x]);
-                        }
+                    } else {
+                        if (response.toggleNotif[x] === true)
+                            sendSms(num);
                         // response.toggleNotif.forEach(function(smsNotif){
                         //     console.log(smsNotif);
                         //     if(smsNotif === true) {
@@ -168,6 +169,7 @@
                         //
                         // })
                     }
+                    x++;
                 });
                 sendNotif();
                 alert("Notification sent out!.");
