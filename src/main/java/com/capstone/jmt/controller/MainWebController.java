@@ -38,6 +38,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.io.IOUtils;
+import sun.plugin2.message.Message;
 
 /**
  * Created by Jabito on 08/08/2017.
@@ -174,33 +175,20 @@ public class MainWebController {
         return "addStudent";
     }
 
-    @RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
-    public String sendMessage(@RequestParam(value = "gradeLevelId") String gradeLvlId,
-                              @RequestParam(value = "sectionId") String sectionId,
-                              @RequestParam(value = "studentId") String studentId,
-                              @RequestParam(value = "message") String message,
-                              @ModelAttribute("appUser") User user, Model model) {
+    @RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
+    public String sendMessage(@RequestParam(value = "gradeLevel", defaultValue = "Nursery") String gradeLevel, @ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        System.out.println(gradeLvlId);
-        System.out.println(sectionId);
-        System.out.println(studentId);
-        System.out.println(message);
-
-        MessageJson mj = new MessageJson();
-        mj.setMessage(message);
-        mj.setPostedBy(user.getUsername());
-
-        mainService.postAnnouncement(mj);
 
         List<RefGradeLevel> gradeLevels = mainService.getGradeLevelList();
+        int gradeLvlId = mainService.getGradeLvlIdByGradeLevel(gradeLevel);
         System.out.println("GRADE LEVEL ID : " + gradeLvlId);
-        List<RefSection> sections = mainService.getSectionList(Integer.valueOf(gradeLvlId));
+        List<RefSection> sections = mainService.getSectionList(gradeLvlId);
 
 
         if (null == user) {
             return "redirect:/login";
         } else {
-            gradeLevels.add(new RefGradeLevel("ALL", -1));
+            gradeLevels.add(new RefGradeLevel("Everyone", -1));
             model.addAttribute("gradeLevels", gradeLevels);
             model.addAttribute("sections", sections);
             return "sendMessage";
@@ -685,8 +673,10 @@ public class MainWebController {
                 for (String studId : studentIds) {
                     Parent parentsNumber = mainService.getParentNumberByStudentId(studId);
                     //Adding parentNumber to the list
-                    numberListForSelectedSection.add(parentsNumber.getOfficeNo());
-                    smsNotif.add(parentsNumber.getSmsNotif());
+                    if(null != parentsNumber) {
+                        numberListForSelectedSection.add(parentsNumber.getOfficeNo());
+                        smsNotif.add(parentsNumber.getSmsNotif());
+                    }
                 }
                 response.put("numbers", numberListForSelectedSection);
                 response.put("toggleNotif", smsNotif);
@@ -697,8 +687,10 @@ public class MainWebController {
                 List<Boolean> smsNotif = new ArrayList<>();
 
                 Parent parentNumber = mainService.getParentNumberByStudentId(studentId);
-                parentNumberList.add(parentNumber.getOfficeNo());
-                smsNotif.add(parentNumber.getSmsNotif());
+                if(null != parentNumber) {
+                    parentNumberList.add(parentNumber.getOfficeNo());
+                    smsNotif.add(parentNumber.getSmsNotif());
+                }
 
                 response.put("numbers", parentNumberList);
                 response.put("toggleNotif", smsNotif);
@@ -729,7 +721,7 @@ public class MainWebController {
         } else {
             response.put("stud", student);
             Parent parent = mainService.getParentNumberByStudentId(student.getId());
-            response.put("guardianName", null != parent? parent.getParentName(): "");
+            response.put("guardianName", parent.getParentName());
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -879,5 +871,47 @@ public class MainWebController {
     @RequestMapping(value = "/getWeeklyAttendance", method = RequestMethod.GET)
     public ResponseEntity<?> getWeeklyAttendance() {
         return new ResponseEntity<>(mainService.getWeeklyAttendance(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/postMessage", method = RequestMethod.POST)
+    public ResponseEntity<?> postMessage(@RequestBody MsgJson messageJson){
+        System.out.println(messageJson.getMessage());
+        System.out.println(messageJson.getSectionId());
+        System.out.println(messageJson.getGradeLevelId());
+        System.out.println(messageJson.getStudentId());
+        MessageJson mj = new MessageJson();
+        mj.setMessage(messageJson.getMessage());
+        mj.setPostedBy(getShopUser().getUsername());
+        ArrayList<String> toSend = new ArrayList<>();
+
+        if(messageJson.getStudentId().equals("-1")){
+            if(messageJson.getSectionId().equals("-1")){
+                if(messageJson.getGradeLevelId().equals("-1")){
+                    //All GradeLevels
+                    mj.setMessageTarget("3");
+                }else{
+                    //List of Sections for selected GradeLevel
+                    mj.setMessageTarget("2");
+                    List<RefSection> sectionList = mainService.getSectionListByGradeLevel(messageJson.getGradeLevelId());
+                    if(null != sectionList){
+                        for (RefSection refSection : sectionList) {
+                            toSend.add(String.valueOf(refSection.getId()));
+                        }
+                    }
+                }
+            }else{
+                //Just add one section
+                mj.setMessageTarget("1");
+                toSend.add(messageJson.getSectionId());
+            }
+        }else{
+            //Specific Parent selected
+            mj.setMessageTarget("0");
+            toSend.add(mainService.getParentByStudentId(messageJson.getStudentId()).getId());
+        }
+        mj.setTargetIds((String[])toSend.toArray());
+        mainService.postAnnouncement(mj);
+
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 }

@@ -49,7 +49,7 @@
                     <div class="col-lg-3">
                         <label>Select Student</label>
                         <select class="form-control" name="" id="stud_group">
-                            <option value="0">ALL</option>
+                            <option value="0">Everyone</option>
                             <option></option>
 
                         </select>
@@ -96,7 +96,7 @@
         url: '/getContactNumbersBySectionId?sectionId=' + firstSection,
         success: function (response) {
             $('#stud_group').empty();
-            $('#stud_group').append(new Option("ALL", -1));
+            $('#stud_group').append(new Option("Everyone", -1));
             response.students.forEach(function (item) {
                 $('#stud_group').append(new Option(item.firstName + " " + item.lastName, item.id));
             });
@@ -112,7 +112,7 @@
             url: '/getContactNumbersBySectionId?sectionId=' + firstSection,
             success: function (response) {
                 $('#stud_group').empty();
-                $('#stud_group').append(new Option("ALL", -1));
+                $('#stud_group').append(new Option("Everyone", -1));
                 response.students.forEach(function (item) {
                     $('#stud_group').append(new Option(item.firstName + " " + item.lastName, item.id));
                 });
@@ -129,21 +129,20 @@
         try{
             $.ajax({
                 type: 'POST',
+                dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
-                url: '/sendMessage/',
-                params:{
-                  gradeLevelId: gradeLevelId,
-                  sectionId: sectionId,
-                  studentId: studentId,
-                  message: message
-                },
+                url: '/postMessage',
+                data: JSON.stringify({
+                    gradeLevelId: gradeLevelId,
+                    sectionId: sectionId,
+                    studentId: studentId,
+                    message: message
+                }),
                 success: function(response){
 
                 }
-            })
-        }catch(e){
-            console.log('Error', e);
-        }
+            });
+        }catch(e){ console.log(e); }
 
         $.ajax({
             type: 'GET',
@@ -158,13 +157,15 @@
                         response.toggleNotif.forEach(function(smsNotif){
                             console.log(smsNotif);
                             if(smsNotif === true) {
-                                sendSms(num);
-                            }else {
-                                sendNotif();
+                                if(null != num)
+                                    if('' != num)
+                                        sendSms(num);
                             }
+
                         })
                     }
                 });
+                sendNotif();
                 alert("Notification sent out!.");
             }
         })
@@ -218,7 +219,7 @@
             url: '/selectGradeLevel?gradeLvlId=' + gradeLevel,
             success: function (response) {
                 $('#sub_groups').empty();
-                $('#sub_groups').append(new Option("All", -1));
+                $('#sub_groups').append(new Option("Everyone", -1));
                 response.section.forEach(function (item) {
                     $('#sub_groups').append(new Option(item.section, item.id));
                 });

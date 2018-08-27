@@ -683,4 +683,10 @@ AND #{userId} IN (
             END
        END
     </select>
+
+    <select id="getParentIdsBySectionId" resultType="string">
+        SELECT id FROM data_parents WHERE parent_of IN (
+          SELECT id FROM data_students WHERE section = #{sectionId}
+        )
+    </select>
 </mapper>

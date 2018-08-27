@@ -538,4 +538,8 @@ public class MainService {
     public int validateUser(String username, String email) {
         return mainMapper.validateUser(username, email);
     }
+
+    public String getParentIdsBySectionId(String sectionId) {
+        return mainMapper.getParentIdsBySectionId(sectionId);
+    }
 }

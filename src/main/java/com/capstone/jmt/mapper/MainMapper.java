@@ -140,4 +140,6 @@ public interface MainMapper {
     boolean doesParentEmailExist(@Param("email") String email);
 
     int validateUser(@Param("username") String username, @Param("email") String email);
+
+    String getParentIdsBySectionId(@Param("sectionId") String sectionId);
 }
