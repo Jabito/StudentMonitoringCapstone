@@ -136,6 +136,8 @@
 
     $("#btnUpdate").hide();
     $("#btnEdit").on("click", function () {
+        $("#selected").removeAttr('disabled');
+        $("#section").removeAttr('disabled');
         $(".form-control").removeAttr('disabled');
         $("#btnUpdate").show();
         $("#btnEdit").hide();
