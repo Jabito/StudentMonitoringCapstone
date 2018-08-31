@@ -502,6 +502,8 @@ ORDER BY B.log_datetime DESC LIMIT 1
         <result column="case_of_incident" property="caseOfIncident" jdbcType="VARCHAR"/>
         <result column="name_of_guardian" property="nameOfGuardian" jdbcType="VARCHAR"/>
         <result column="student_name" property="studentName" jdbcType="VARCHAR"/>
+        <result column="gradeLevel" property="gradeLevel" jdbcType="VARCHAR"/>
+        <result column="sectionName" property="sectionName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="addGuidanceRecord">
@@ -544,7 +546,10 @@ ORDER BY B.log_datetime DESC LIMIT 1
     </select>
 
     <select id="getGuidanceRecordList" resultMap="GuidanceLogMap" resultType="java.util.List">
-        SELECT A.*, (B.first_name || ' ' || b.middle_name || ' ' || b.last_name) as student_name FROM log_guidance A JOIN data_students B
+        SELECT A.*, (B.first_name || ' ' || b.middle_name || ' ' || b.last_name) as student_name,
+         (SELECT grade_level from ref_grade_level where id = B.grade_level_id) AS gradeLevel,
+         (SELECT section FROM ref_section where id = CAST(B.section AS INTEGER)) AS sectionName
+        FROM log_guidance A JOIN data_students B
         ON A.student_id = B.id
         ORDER BY date_of_incident DESC
     </select>

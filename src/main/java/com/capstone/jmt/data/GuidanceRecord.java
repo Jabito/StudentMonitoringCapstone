@@ -39,6 +39,12 @@ public class GuidanceRecord implements Serializable{
     private String nameOfGuardian;
     @JsonProperty("studentName")
     private String studentName;
+    @JsonProperty("gradeLevel")
+    private String gradeLevel;
+    @JsonProperty("sectionName")
+    private String sectionName;
+    @JsonProperty("gradeAndSection")
+    private String gradeAndSection;
 
     public String getId() {
         return id;
@@ -142,5 +148,29 @@ public class GuidanceRecord implements Serializable{
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
+    }
+
+    public String getGradeLevel() {
+        return gradeLevel;
+    }
+
+    public void setGradeLevel(String gradeLevel) {
+        this.gradeLevel = gradeLevel;
+    }
+
+    public String getSectionName() {
+        return sectionName;
+    }
+
+    public void setSectionName(String sectionName) {
+        this.sectionName = sectionName;
+    }
+
+    public String getGradeAndSection() {
+        return gradeAndSection;
+    }
+
+    public void setGradeAndSection(String gradeAndSection) {
+        this.gradeAndSection = gradeAndSection;
     }
 }

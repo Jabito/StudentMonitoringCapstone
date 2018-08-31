@@ -422,7 +422,12 @@ public class MainService {
     }
 
     public List<GuidanceRecord> getGuidanceRecordList(){
-        return mainMapper.getGuidanceRecordList();
+        List<GuidanceRecord> list = mainMapper.getGuidanceRecordList();
+        for (GuidanceRecord guidanceRecord : list) {
+            guidanceRecord.setGradeAndSection(null != guidanceRecord.getGradeLevel()? guidanceRecord.getGradeLevel():""
+                    + " " + null != guidanceRecord.getSectionName()? guidanceRecord.getSectionName():"");
+        }
+        return list;
     }
 
     public PictureObject retrieveImage(String fileId) {
