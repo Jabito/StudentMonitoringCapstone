@@ -159,9 +159,18 @@
 
     var charArray = [];
     window.onkeyup = function(e) {
-        console.log(charArray.join(''));
-        charArray.push(e.key);
-        if(charArray.length >= 10) {
+
+        var numbers = ['1','2','3','4','5','6','7','8','9','0'];
+        var hit = false;
+        for(var x=0; x<numbers.length; x++)
+            if(numbers[x] === e.key){
+                hit = true;
+                break;
+            }
+        if(hit)
+            charArray.push(e.key);
+
+        if(e.key === 'Enter' || charArray.length >= 10) {
             var toSend = charArray.join('');
             console.log("ToSend:" + toSend);
             charArray = [];
@@ -195,6 +204,7 @@
                 });
             }
         }
+        console.log(charArray.join(''));
     }
 
     function proceedSMS(contactNo, name, tapMode) {
