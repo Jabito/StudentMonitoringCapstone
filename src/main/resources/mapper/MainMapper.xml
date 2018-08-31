@@ -579,11 +579,7 @@ AND #{userId} IN (
   )
 )
 OR(message_type = 0
-AND #{userId} IN (
-    SELECT id FROM data_parents B where parent_of IN(
-      SELECT id from data_students E WHERE A.message_target LIKE '%' || E.id || '%'
-    )
-  )
+AND A.message_target LIKE '%' || #{userId} || '%'
 )ORDER BY date_posted DESC
     </select>
 
