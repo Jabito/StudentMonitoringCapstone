@@ -44,13 +44,14 @@
                id="summaryReportId">
             <thead>
             <tr>
+                <th th:hidden="true"></th>
                 <th>Date</th>
                 <th>Offense Type</th>
                 <th>Student Name</th>
                 <th>Grade/Section</th>
                 <th>Parent/Guardian</th>
                 <th>Guidance Counselor</th>
-                <th>Reason for Guidance</th>
+                <th>Violation</th>
                 <!--<th>Cost per Bottle</th>
                 <th>No. of Slim</th>
                 <th>Cost per Bottle</th>
@@ -59,13 +60,14 @@
             </thead>
             <tbody >
             <tr th:each="sums : ${summaryList}">
+                <td th:hidden="true" th:text="${sums.createdOn}"></td>
                 <td th:text="${sums.dateOfIncident}"></td>
                 <td th:text="${sums.caseOfIncident}"></td>
                 <td th:text="${sums.studentName}"></td>
                 <td th:text="${sums.gradeAndSection}"></td>
                 <td th:text="${sums.nameOfGuardian}"></td>
                 <td th:text="${sums.createdBy}"></td>
-                <td th:text="${sums.reason}"></td>
+                <td th:text="${sums.violation}"></td>
             </tr>
             <!--<tr class="odd gradeX">-->
             <!--<td th:text="${attendance.logType}"></td>-->

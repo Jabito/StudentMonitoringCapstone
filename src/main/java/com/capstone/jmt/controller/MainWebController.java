@@ -391,7 +391,8 @@ public class MainWebController {
         if (null != stud) {
             mainService.tapStudent(rfid);
             Parent parent = mainService.getParentByStudentId(stud.getId());
-            contactNo = parent.getOfficeNo();
+            if(null != parent)
+                contactNo = parent.getOfficeNo();
             tap = (TapLog) mainService.getLastTapEntry(stud.getId()).get("tapDetails");
         }
         Student studIn = mainService.getStudentByRfidIn();
@@ -459,6 +460,8 @@ public class MainWebController {
         gr.setDateOfIncident(reportModel.getDateOfIncident());
         gr.setCaseOfIncident(reportModel.getCaseOfIncident());
         gr.setNameOfGuardian(reportModel.getGuardianName());
+        gr.setViolation(reportModel.getViolation());
+
         Parent parent = mainService.getParentByStudentId(reportModel.getStudentId());
 
         if (parent != null)
@@ -847,14 +850,16 @@ public class MainWebController {
         HashMap<String, Object> response = new HashMap<>();
         HttpHeaders headers = new HttpHeaders();
         try {
-            Resource file = storageService.loadFile(mainService.retrieveImage(studId).getOriginalFileName());
+            PictureObject po = mainService.retrieveImage(studId);
+            System.out.println(po.getOriginalFileName());
+            Resource file = storageService.loadFile(po.getOriginalFileName());
             if (null == file)
                 file = storageService.loadFile("image.png");
 
             InputStream in = file.getInputStream();
             byte[] media = IOUtils.toByteArray(in);
 //            headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-            headers.setContentType(MediaType.IMAGE_JPEG);
+            headers.setContentType(file.getFilename().contains(".png")? MediaType.IMAGE_PNG: MediaType.IMAGE_JPEG);
             return new ResponseEntity<byte[]>(Base64.getEncoder().encode(media), headers, HttpStatus.OK);
         } catch (IOException e) {
             System.out.println("ERROR LOADING IMAGE");

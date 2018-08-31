@@ -45,6 +45,8 @@ public class GuidanceRecord implements Serializable{
     private String sectionName;
     @JsonProperty("gradeAndSection")
     private String gradeAndSection;
+    @JsonProperty("violation")
+    private String violation;
 
     public String getId() {
         return id;
@@ -172,5 +174,13 @@ public class GuidanceRecord implements Serializable{
 
     public void setGradeAndSection(String gradeAndSection) {
         this.gradeAndSection = gradeAndSection;
+    }
+
+    public String getViolation() {
+        return violation;
+    }
+
+    public void setViolation(String violation) {
+        this.violation = violation;
     }
 }

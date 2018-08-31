@@ -97,9 +97,18 @@
                         </select>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>Violation:</h5>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" th:required="required" id="violation" class="form-control"/>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <label>Message to Parent</label>
         <div class="row">
 
 
@@ -166,6 +175,7 @@
         var message = $("#message").val();
         var dateOfIncident = $("#datePicker").val();
         var caseOfIncident = $("#selected option:selected").val();
+        var violation = $("#violation").val();
 
 
         $.ajax({
@@ -178,7 +188,8 @@
                 guardianName: guardianName,
                 message: message,
                 dateOfIncident: dateOfIncident,
-                caseOfIncident: caseOfIncident
+                caseOfIncident: caseOfIncident,
+                violation: violation
             }),
             success: function (response) {
                 alert("SUCCESS");

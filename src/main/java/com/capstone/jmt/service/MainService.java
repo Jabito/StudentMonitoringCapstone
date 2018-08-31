@@ -424,8 +424,8 @@ public class MainService {
     public List<GuidanceRecord> getGuidanceRecordList(){
         List<GuidanceRecord> list = mainMapper.getGuidanceRecordList();
         for (GuidanceRecord guidanceRecord : list) {
-            guidanceRecord.setGradeAndSection(null != guidanceRecord.getGradeLevel()? guidanceRecord.getGradeLevel():""
-                    + " " + null != guidanceRecord.getSectionName()? guidanceRecord.getSectionName():"");
+            guidanceRecord.setGradeAndSection((null != guidanceRecord.getGradeLevel()? guidanceRecord.getGradeLevel():"")
+                    + " - " + (null != guidanceRecord.getSectionName()? guidanceRecord.getSectionName():""));
         }
         return list;
     }

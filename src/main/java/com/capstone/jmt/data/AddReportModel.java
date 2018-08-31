@@ -16,6 +16,8 @@ public class AddReportModel implements Serializable {
     private String dateOfIncident;
     @JsonProperty("caseOfIncident")
     private String caseOfIncident;
+    @JsonProperty("violation")
+    private String violation;
 
     public String getStudentId() {
         return studentId;
@@ -55,5 +57,13 @@ public class AddReportModel implements Serializable {
 
     public void setDateOfIncident(String dateOfIncident) {
         this.dateOfIncident = dateOfIncident;
+    }
+
+    public String getViolation() {
+        return violation;
+    }
+
+    public void setViolation(String violation) {
+        this.violation = violation;
     }
 }

@@ -507,7 +507,7 @@ ORDER BY B.log_datetime DESC LIMIT 1
     </resultMap>
 
     <insert id="addGuidanceRecord">
-        INSERT INTO log_guidance(id, student_id, reason, title, created_on, created_by, date_of_incident, case_of_incident, name_of_guardian)
+        INSERT INTO log_guidance(id, student_id, reason, title, created_on, created_by, date_of_incident, case_of_incident, name_of_guardian, violation)
         VALUES
         (
         #{gr.id, jdbcType=VARCHAR},
@@ -518,7 +518,8 @@ ORDER BY B.log_datetime DESC LIMIT 1
         #{gr.createdBy, jdbcType=TIMESTAMP},
         #{gr.dateOfIncident, jdbcType=VARCHAR},
         #{gr.caseOfIncident, jdbcType=VARCHAR},
-        #{gr.nameOfGuardian, jdbcType=VARCHAR}
+        #{gr.nameOfGuardian, jdbcType=VARCHAR},
+        #{gr.violation, jdbcType=VARCHAR}
         )
     </insert>
 
@@ -551,7 +552,7 @@ ORDER BY B.log_datetime DESC LIMIT 1
          (SELECT section FROM ref_section where id = CAST(B.section AS INTEGER)) AS sectionName
         FROM log_guidance A JOIN data_students B
         ON A.student_id = B.id
-        ORDER BY date_of_incident DESC
+        ORDER BY created_on DESC
     </select>
 
     <resultMap id="PictureObjectMap" type="com.capstone.jmt.data.PictureObject">
