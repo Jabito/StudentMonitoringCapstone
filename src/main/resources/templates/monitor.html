@@ -19,7 +19,8 @@
                 <table style="float: left; margin-left: 40px;padding: 20px; margin-left: 200px">
                     <tbody>
                     <tr>
-                        <th  style="float: left; margin-left: 40px;padding: 20px; margin-left: 140px "><h2 style="color: white">IN</h2></th>
+                        <th style="float: left; margin-left: 40px;padding: 20px; margin-left: 140px "><h2
+                                style="color: white">IN</h2></th>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -63,7 +64,8 @@
                 <table style="float: left; margin-left: 150px; padding: 20px;">
                     <tbody>
                     <tr>
-                        <th style="float: left; margin-left: 40px;padding: 20px; margin-left: 130px "><h2 style="color: white">OUT</h2></th>
+                        <th style="float: left; margin-left: 40px;padding: 20px; margin-left: 130px "><h2
+                                style="color: white">OUT</h2></th>
                     </tr>
 
                     <tr>
@@ -113,9 +115,9 @@
     //<![CDATA[
     var isFullScreen = false;
     $(document).ready(function () {
-        $('#body').on('click', function(){
+        $('#body').on('click', function () {
             console.log("this");
-            if(!isFullScreen)
+            if (!isFullScreen)
                 toggleFullScreen(this);
         });
 
@@ -158,59 +160,60 @@
     }
 
     var charArray = [];
-    window.onkeyup = function(e) {
+    window.onkeyup = function (e) {
 
-        var numbers = ['1','2','3','4','5','6','7','8','9','0'];
+        var numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
         var hit = false;
-        for(var x=0; x<numbers.length; x++)
-            if(numbers[x] === e.key){
+        for (var x = 0; x < numbers.length; x++)
+            if (numbers[x] === e.key) {
                 hit = true;
                 break;
             }
-        if(hit)
+        if (hit)
             charArray.push(e.key);
 
-        if(e.key === 'Enter' || charArray.length >= 10) {
-            var toSend = charArray.join('');
-            console.log("ToSend:" + toSend);
-            charArray = [];
-            if(toSend.length >= 10){
+        if (charArray.length)
+            if (e.key === 'Enter' || charArray.length >= 10) {
+                var toSend = charArray.join('');
+                console.log("ToSend:" + toSend);
+                charArray = [];
+                if (toSend.length >= 10) {
 
-                $.ajax({
-                    type: 'GET',
-                    contentType: 'application/json; charset=utf-8',
-                    url: '/monitorStudent',
-                    data: {rfid: toSend},
-                    success: function (response) {
-                        console.log(response);
-                        var stud1 = response.studIn;
-                        var stud2 = response.studOut;
-                        $('#fullname1').text(stud1.firstName + ' ' + stud1.lastName);
-                        $('#fullname2').text(stud2.firstName + ' ' + stud1.lastName);
-                        $('#gradeLevel1').text(stud1.gradeLvlId);
-                        $('#gradeLevel2').text(stud2.gradeLvlId);
-                        $('#section1').text(stud1.sectionDesc);
-                        $('#section2').text(stud2.sectionDesc);
-                        $('#dateTime1').text(response.timeIn);
-                        $('#dateTime2').text(response.timeOut);
-                        loadImage(response.studIn.id, 1);
-                        loadImage(response.studOut.id, 2);
-                        if(response.contactNo != '')
-                            proceedSMS(response.contactNo, response.student.firstName + ' ' + response.student.lastName, response.tapMode);
-                    },
-                    error: function (response) {
-                        console.log("Error pulling image.");
-                    }
-                });
+                    $.ajax({
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        url: '/monitorStudent',
+                        data: {rfid: toSend},
+                        success: function (response) {
+                            console.log(response);
+                            var stud1 = response.studIn;
+                            var stud2 = response.studOut;
+                            $('#fullname1').text(stud1.firstName + ' ' + stud1.lastName);
+                            $('#fullname2').text(stud2.firstName + ' ' + stud1.lastName);
+                            $('#gradeLevel1').text(stud1.gradeLvlId);
+                            $('#gradeLevel2').text(stud2.gradeLvlId);
+                            $('#section1').text(stud1.sectionDesc);
+                            $('#section2').text(stud2.sectionDesc);
+                            $('#dateTime1').text(response.timeIn);
+                            $('#dateTime2').text(response.timeOut);
+                            loadImage(response.studIn.id, 1);
+                            loadImage(response.studOut.id, 2);
+                            if (response.contactNo != '')
+                                proceedSMS(response.contactNo, response.student.firstName + ' ' + response.student.lastName, response.tapMode);
+                        },
+                        error: function (response) {
+                            console.log("Error pulling image.");
+                        }
+                    });
+                }
             }
-        }
         console.log(charArray.join(''));
     }
 
     function proceedSMS(contactNo, name, tapMode) {
         var message = 'Your child ' + name + ' has tapped ' + tapMode;
         message += ' the school. ** This is a free message. Please do not reply.';
-        if(null != contactNo) {
+        if (null != contactNo) {
             console.log("Sending SMS");
             $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
                 apiusername: "APIE4DYUT3XMS",
