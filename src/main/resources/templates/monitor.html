@@ -160,7 +160,8 @@
     var charArray = [];
     window.onkeyup = function(e) {
         console.log(charArray.join(''));
-        if(e.key === 'Enter') {
+        charArray.push(e.key);
+        if(charArray.length >= 10) {
             var toSend = charArray.join('');
             console.log("ToSend:" + toSend);
             charArray = [];
@@ -193,8 +194,7 @@
                     }
                 });
             }
-        }else
-            charArray.push(e.key);
+        }
     }
 
     function proceedSMS(contactNo, name, tapMode) {
