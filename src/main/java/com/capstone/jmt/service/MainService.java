@@ -411,10 +411,11 @@ public class MainService {
        return mainMapper.getAllStudents();
     }
 
-    public void addGuidanceRecord(GuidanceRecord gr){
+    public String addGuidanceRecord(GuidanceRecord gr){
         gr.setId("GR" + mainMapper.getLastId(5));
         mainMapper.incrementId(5);
         mainMapper.addGuidanceRecord(gr);
+        return gr.getId();
     }
 
     public List<GuidanceRecord> getGuidanceRecord(String studentId){

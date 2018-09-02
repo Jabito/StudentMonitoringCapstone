@@ -20,6 +20,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 
 import java.io.FileInputStream;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.springframework.security.access.method.P;
@@ -482,9 +483,13 @@ public class MainWebController {
         } catch (Exception e) {
         }
 
-        mainService.addGuidanceRecord(gr);
-        String message = "Dear " + (null != parent ? parent.getParentName() : "parent") + ", this is a message from the Guidance: **";
-        message += reportModel.getMessage();
+        String id = mainService.addGuidanceRecord(gr);
+        Student stud = mainService.getStudentById(reportModel.getStudentId());
+        String message = "This is from the guidance office of St. Marks's Institute. Your Son/Daughter " + stud.getFullName() + " is having a " + reportModel.getCaseOfIncident() + " - Violation -";
+        message += "Please come to the Guidance Office.";
+        try {
+            message += "Ref Id: " + id + " " + " Date: " + new SimpleDateFormat("MMM dd, yyyy").format(new Date());
+        }catch(Exception e){}
         message += "** This message is free. Please do not reply.";
         response.put("message", message);
         response.put("responseCode", 200);

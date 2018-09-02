@@ -10,7 +10,7 @@
         <div class="row">
 
             <div class="col-md-12">
-                <img src="../static/images/headerPng.png" width="1400" height="180"/>
+                <center><img src="../static/images/header_image.jpg" width="1400" height="180"/></center>
             </div>
         </div>
 
@@ -20,7 +20,7 @@
                     <tbody>
                     <tr>
                         <th style="float: left; margin-left: 40px;padding: 20px; margin-left: 140px "><h2
-                                style="color: white">IN</h2></th>
+                                style="color: white; font-size: 20px;">IN</h2></th>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -29,43 +29,35 @@
                     </tr>
                     <tr>
                         <td>
-                            <h4 style="color: white">Full Name :</h4>
+                            <h4 style="color: white; font-size: 20px;">Full Name :</h4>
                         </td>
-                        <td id="fullname1" style="color: white"
+                        <td id="fullname1" style="color: white; font-size: 20px;"
                             th:text="${stud.firstName + ' ' + stud.middleName + ' ' + stud.lastName}">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <h4 style="color: white">Grade :</h4>
+                            <h4 style="color: white; font-size: 20px;">Grade :</h4>
                         </td>
-                        <td id="gradeLevel1" style="color: white" th:text="${studGradelvl}">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h4 style="color: white">Section :</h4>
-                        </td>
-                        <td id="section1" style="color: white" th:text="${stud.sectionDesc}">
+                        <td id="gradeLevel1" style="color: white; font-size: 20px;" th:text="${studGradelvl}">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label><h4 style="color: white">Time IN: </h4></label>
+                            <h4 style="color: white; font-size: 20px;">Section :</h4>
                         </td>
-                        <td>
-                            <label id="dateTime1" style="color: white" th:text="${stud1.logDateTime}"></label>
+                        <td id="section1" style="color: white; font-size: 20px;" th:text="${stud.sectionDesc}">
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6" style="border-style:solid; border-color:white; border-width:2px;">
                 <table style="float: left; margin-left: 150px; padding: 20px;">
                     <tbody>
                     <tr>
-                        <th style="float: left; margin-left: 40px;padding: 20px; margin-left: 130px "><h2
-                                style="color: white">OUT</h2></th>
+                        <th style="float: left; margin-left: 40px; padding: 20px; margin-left: 130px "><h2
+                                style="color: white; font-size: 20px;">OUT</h2></th>
                     </tr>
 
                     <tr>
@@ -77,30 +69,22 @@
                         <td>
                             <h4 style="color: white">Full Name :</h4>
                         </td>
-                        <td id="fullname2" style="color: white"
+                        <td id="fullname2" style="color: white; font-size: 20px;"
                             th:text="${stud1.firstName + ' ' + stud1.middleName + ' ' + stud1.lastName}">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <h4 style="color: white">Grade :</h4>
+                            <h4 style="color: white; font-size: 20px;">Grade :</h4>
                         </td>
-                        <td id="gradeLevel2" style="color: white" th:text="${studGradelvl1}">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h4 style="color: white">Section :</h4>
-                        </td>
-                        <td id="section2" style="color: white" th:text="${stud1.section}">
+                        <td id="gradeLevel2" style="color: white; font-size: 20px;" th:text="${studGradelvl1}">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label><h4 style="color: white">Time OUT:</h4></label>
+                            <h4 style="color: white; font-size: 20px;">Section :</h4>
                         </td>
-                        <td>
-                            <label id="dateTime2" style="color: white" th:text="${stud1.logDateTime}"></label>
+                        <td id="section2" style="color: white; font-size: 20px;" th:text="${stud1.sectionDesc}">
                         </td>
                     </tr>
                     </tbody>
@@ -199,7 +183,7 @@
                             loadImage(response.studIn.id, 1);
                             loadImage(response.studOut.id, 2);
                             if (response.contactNo != '')
-                                proceedSMS(response.contactNo, response.student.firstName + ' ' + response.student.lastName, response.tapMode);
+                                proceedSMS(response.contactNo, response.student.firstName + ' ' + response.student.lastName, response.tapMode, new Date());
                         },
                         error: function (response) {
                             console.log("Error pulling image.");
@@ -210,9 +194,11 @@
         console.log(charArray.join(''));
     }
 
-    function proceedSMS(contactNo, name, tapMode) {
+    function proceedSMS(contactNo, name, tapMode, dateTime) {
+        console.log('date', dateTime);
         var message = 'Your child ' + name + ' has tapped ' + tapMode;
-        message += ' the school. ** This is a free message. Please do not reply.';
+        message += ' the school. ** This is a free message. Please do not reply. ';
+        message += dateTime;
         if (null != contactNo) {
             console.log("Sending SMS");
             $.get("http://gateway.onewaysms.ph:10001/api.aspx", {
