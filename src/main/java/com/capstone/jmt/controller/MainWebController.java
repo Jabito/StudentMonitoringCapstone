@@ -452,6 +452,9 @@ public class MainWebController {
     @RequestMapping(value = "/postGuidanceReport", method = RequestMethod.POST)
     public ResponseEntity<?> postGuidanceReport(@ModelAttribute("appUser") User user, @RequestBody AddReportModel reportModel) {
         HashMap<String, Object> response = new HashMap<>();
+        reportModel.setStudentId(reportModel.getStudentId().toUpperCase());
+        System.out.println("SID - " + reportModel.getStudentId());
+        System.out.println("CaseOfIncident - " + reportModel.getCaseOfIncident());
         GuidanceRecord gr = new GuidanceRecord();
         gr.setGuidance(user.getUsername());
         gr.setCreatedBy(user.getUsername());
@@ -485,10 +488,14 @@ public class MainWebController {
 
         String id = mainService.addGuidanceRecord(gr);
         Student stud = mainService.getStudentById(reportModel.getStudentId());
-        String message = "This is from the guidance office of St. Marks's Institute. Your Son/Daughter " + stud.getFullName() + " is having a " + reportModel.getCaseOfIncident() + " - Violation -";
+        System.out.println(stud.getFirstName());
+        System.out.println(stud.getLastName());
+        String message = "This is from the guidance office of St. Marks's Institute. Your Son/Daughter "
+                + stud.getFullName() + " is having a " + reportModel.getCaseOfIncident() + " - Violation -";
         message += "Please come to the Guidance Office.";
+        message += "Ref Id: " + id;
         try {
-            message += "Ref Id: " + id + " " + " Date: " + new SimpleDateFormat("MMM dd, yyyy").format(new Date());
+            message +=  " Date: " + new SimpleDateFormat("MMM dd, yyyy HH:mm").format(new Date());
         }catch(Exception e){}
         message += "** This message is free. Please do not reply.";
         response.put("message", message);
