@@ -285,7 +285,7 @@ public class Student implements Serializable {
     }
 
     public String getFullName() {
-        return fullName;
+        return this.getFirstName() + " " + this.getLastName();
     }
 
     public void setFullName(String fullName) {
