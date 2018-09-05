@@ -5,6 +5,7 @@ import com.capstone.jmt.entity.Guidance;
 import com.capstone.jmt.entity.Parent;
 import com.capstone.jmt.entity.Student;
 import com.capstone.jmt.entity.User;
+import com.capstone.jmt.service.EmailService;
 import com.capstone.jmt.service.MainService;
 import com.capstone.jmt.service.StorageService;
 import org.apache.commons.io.IOUtils;
@@ -42,6 +43,9 @@ public class MainAppController {
 
     @Autowired
     private StorageService storageService;
+
+    @Autowired
+    private EmailService emailService;
 
     @RequestMapping(value = "toggleSMS", method = RequestMethod.POST)
     public ResponseEntity<?> toggleSMS(@RequestParam("parentId") String parentId, @RequestParam("mode") boolean mode){
@@ -151,6 +155,22 @@ public class MainAppController {
     public ResponseEntity<?> editStudentInfo(@RequestParam Student student) {
         HashMap<String, Object> response = new HashMap<>();
         response.putAll(mainService.updateStudentInfo(student));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "updateTempPassword", method = RequestMethod.POST)
+    public ResponseEntity<?> editStudentInfo(@RequestParam String email) {
+        HashMap<String, Object> response = new HashMap<>();
+        String s = mainService.updatePassword(email);
+
+        if(s != null) {
+
+            emailService.sendPasswordReset(email);
+
+            response.put("responseCode", 200);
+            response.put("responseDesc", "success updated password");
+        }
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

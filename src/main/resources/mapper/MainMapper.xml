@@ -108,6 +108,12 @@
         WHERE user_type_id = #{id}
     </update>
 
+    <update id="updatePassword" flushCache="true">
+        UPDATE data_users
+        SET password = #{tempPassword}
+        WHERE email = #{email}
+    </update>
+
     <select id="getUserByUsername" resultMap="UserMap" resultType="com.capstone.jmt.entity.User">
         SELECT * FROM data_users
         WHERE username = #{username}
