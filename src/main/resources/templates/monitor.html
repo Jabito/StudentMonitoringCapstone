@@ -49,6 +49,13 @@
                         <td id="section1" style="color: white; font-size: 20px;" th:text="${stud.sectionDesc}">
                         </td>
                     </tr>
+                    <tr th:if="${stud.violation}">
+                        <td>
+                            <h4 style="color: white; font-size: 20px;">Note :</h4>
+                        </td>
+                        <td id="section1" style="color: white; font-size: 20px;">Kindly go to the Guidance Office.
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -85,6 +92,13 @@
                             <h4 style="color: white; font-size: 20px;">Section :</h4>
                         </td>
                         <td id="section2" style="color: white; font-size: 20px;" th:text="${stud1.sectionDesc}">
+                        </td>
+                    </tr>
+                    <tr th:if="${stud2.violation}">
+                        <td>
+                            <h4 style="color: white; font-size: 20px;">Note :</h4>
+                        </td>
+                        <td id="section1" style="color: white; font-size: 20px;">Kindly go to the Guidance Office.
                         </td>
                     </tr>
                     </tbody>

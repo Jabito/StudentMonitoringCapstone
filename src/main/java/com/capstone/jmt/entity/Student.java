@@ -72,6 +72,8 @@ public class Student implements Serializable {
     private String sectionDesc;
     @JsonProperty("gradeLevelDesc")
     private String gradeLevelDesc;
+    @JsonProperty("violation")
+    private Boolean violation;
 
     public Student(AddStudentJson sj) {
         this.firstName = sj.getFirstName();
@@ -306,5 +308,13 @@ public class Student implements Serializable {
 
     public void setGradeLevelDesc(String gradeLevelDesc) {
         this.gradeLevelDesc = gradeLevelDesc;
+    }
+
+    public Boolean getViolation() {
+        return violation;
+    }
+
+    public void setViolation(Boolean violation) {
+        this.violation = violation;
     }
 }
