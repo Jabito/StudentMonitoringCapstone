@@ -10,7 +10,9 @@
     <link rel="stylesheet" type="text/css" href="../../static/css/jquery.dataTables.min.css"/>
     <script>
         $(document).ready(function () {
-            $('#summaryReportId').DataTable();
+            $('#summaryReportId').DataTable({
+                "order":[[0, "desc"]]
+            });
         });
     </script>
 </head>
