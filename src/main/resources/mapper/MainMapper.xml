@@ -407,7 +407,7 @@
     </select>
     <select id="getStudIn" resultMap="StudentMap" resultType="com.capstone.jmt.entity.Student">
 
-        SELECT A.*, C.section as sectionDesc, B.log_datetime, EXISTS(SELECT * FROM log_guidance WHERE student_id = A.id) AS violation FROM data_students A JOIN log_taps B ON a.rfid = b.rfid
+        SELECT A.*, C.section as sectionDesc, B.log_datetime, EXISTS(SELECT * FROM log_guidance WHERE student_id = A.id AND status = true) AS violation FROM data_students A JOIN log_taps B ON a.rfid = b.rfid
   JOIN ref_section C ON CAST(A.section AS int) = C.id
 WHERE B.log_type = 'IN'
 ORDER BY B.log_datetime DESC LIMIT 1
@@ -415,7 +415,7 @@ ORDER BY B.log_datetime DESC LIMIT 1
 
     <select id="getStudOut" resultMap="StudentMap" resultType="com.capstone.jmt.entity.Student">
 
-        SELECT A.*, C.section as sectionDesc, B.log_datetime, EXISTS(SELECT * FROM log_guidance WHERE student_id = A.id) AS violation FROM data_students A JOIN log_taps B ON a.rfid = b.rfid
+        SELECT A.*, C.section as sectionDesc, B.log_datetime, EXISTS(SELECT * FROM log_guidance WHERE student_id = A.id AND status = true) AS violation FROM data_students A JOIN log_taps B ON a.rfid = b.rfid
   JOIN ref_section C ON CAST(A.section AS int) = C.id
 WHERE B.log_type = 'OUT'
 ORDER BY B.log_datetime DESC LIMIT 1
