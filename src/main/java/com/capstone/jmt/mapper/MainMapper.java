@@ -142,4 +142,6 @@ public interface MainMapper {
     int validateUser(@Param("username") String username, @Param("email") String email);
 
     String getParentIdsBySectionId(@Param("sectionId") String sectionId);
+
+    void updatePassword(@Param("email") String email,@Param("tempPassword") String tempPassword);
 }

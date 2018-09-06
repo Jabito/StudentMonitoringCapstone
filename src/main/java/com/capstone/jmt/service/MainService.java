@@ -112,6 +112,13 @@ public class MainService {
         return response;
     }
 
+
+    public String updatePassword(String email) {
+        String tempPassword = "Password!1";
+        mainMapper.updatePassword(email,tempPassword);
+        return tempPassword;
+    }
+
     public HashMap<String, Object> getEmergencyContact(String id) {
         HashMap<String, Object> response = new HashMap<>();
         EmergencyContact eContact = mainMapper.getEmergencyContact(id);
