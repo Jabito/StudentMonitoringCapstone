@@ -516,7 +516,7 @@ ORDER BY B.log_datetime DESC LIMIT 1
     </resultMap>
 
     <insert id="addGuidanceRecord">
-        INSERT INTO log_guidance(id, student_id, reason, title, created_on, created_by, date_of_incident, case_of_incident, name_of_guardian, violation)
+        INSERT INTO log_guidance(id, student_id, reason, title, created_on, created_by, date_of_incident, case_of_incident, name_of_guardian, violation, status)
         VALUES
         (
         #{gr.id, jdbcType=VARCHAR},
@@ -528,7 +528,8 @@ ORDER BY B.log_datetime DESC LIMIT 1
         #{gr.dateOfIncident, jdbcType=VARCHAR},
         #{gr.caseOfIncident, jdbcType=VARCHAR},
         #{gr.nameOfGuardian, jdbcType=VARCHAR},
-        #{gr.violation, jdbcType=VARCHAR}
+        #{gr.violation, jdbcType=VARCHAR},
+        true
         )
     </insert>
 
