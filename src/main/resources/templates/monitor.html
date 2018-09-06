@@ -15,22 +15,32 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-6" style="border-style:solid; border-color:white; border-width:2px;">
-                <table style="float: left; margin-left: 40px;padding: 20px; margin-left: 200px">
+
+            <div class="col-lg-6" style="border-style:solid; margin-left:140px; border-color:white; height: 585px; width: 500px; border-width:4px;">
+                <table style="float: left; margin-left: 20px; margin-right: 20px;">
                     <tbody>
                     <tr>
-                        <th style="float: left; margin-left: 40px;padding: 20px; margin-left: 140px "><h2
-                                style="color: white; font-size: 20px;">IN</h2></th>
+                        <th style="float: left;"><h2
+                                style="color: white; font-size: 20px; padding-left:210px;">  <b> IN</b></h2></th>
                     </tr>
                     <tr>
+                    <tr>
+                        <th style="float: left;"><h5
+                            style="color: white; font-size: 5px;">&nbsp; &nbsp;</h5></th>
+                    </tr>
                         <td colspan="2">
-                            <img id="imageIn" width="360" height="360"/>
+                            <center>  <img id="imageIn" width="250" height="250"/></center>
                         </td>
                     </tr>
                     <tr>
+                    <tr>
+                        <th style="float: left;"><h5
+                                style="color: white; font-size: 5px;">&nbsp; &nbsp;</h5></th>
+                    </tr>
                         <td>
                             <h4 style="color: white; font-size: 20px;">Full Name :</h4>
                         </td>
+
                         <td id="fullname1" style="color: white; font-size: 20px;"
                             th:text="${stud.firstName + ' ' + stud.middleName + ' ' + stud.lastName}">
                         </td>
@@ -52,18 +62,25 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-lg-6" style="border-style:solid; border-color:white; border-width:2px;">
-                <table style="float: left; margin-left: 150px; padding: 20px;">
+            <div class="col-lg-6" style="border-style:solid;margin-left: 100px; border-color:white; height: 585px; width: 500px; border-width:4px;">
+                <table style="float: left; margin-left: 20px; margin-right: 20px;">
                     <tbody>
                     <tr>
-                        <th style="float: left; margin-left: 40px; padding: 20px; margin-left: 130px "><h2
-                                style="color: white; font-size: 20px;">OUT</h2></th>
+                        <th style="float: left;"><h2
+                                style="color: white; font-size: 20px; padding-left:210px;">  <b> OUT</b></h2></th>
                     </tr>
-
                     <tr>
+                        <th style="float: left;"><h4
+                                style="color: white; font-size: 10px;">&nbsp; &nbsp;</h4></th>
+                    </tr>
+                                       <tr>
                         <td colspan="2">
-                            <img id="imageOut" width="360" height="360"/>
+                            <center> <img id="imageOut" width="250" height="250"/></center>
                         </td>
+                    </tr>
+                    <tr>
+                        <th style="float: left;"><h5
+                                style="color: white; font-size: 5px;">&nbsp; &nbsp;</h5></th>
                     </tr>
                     <tr>
                         <td>
@@ -87,6 +104,7 @@
                         <td id="section2" style="color: white; font-size: 20px;" th:text="${stud1.sectionDesc}">
                         </td>
                     </tr>
+
                     </tbody>
                 </table>
                 <label id="studInId" th:text="${stud.id}" hidden="true"></label>

@@ -367,11 +367,13 @@ public class MainWebController {
         Student studIn = mainService.getStudentByRfidIn();
         String gradelevel = "";
         String gradelevel1 = "";
-        if (null != studIn)
+        if (null != studIn) {
             gradelevel = mainService.getGradelevelStringById(studIn.getGradeLvlId());
+        }
         Student studOut = mainService.getStudentByRfidOut();
-        if (null != studOut)
+        if (null != studOut) {
             gradelevel1 = mainService.getGradelevelStringById(studOut.getGradeLvlId());
+        }
 
         model.addAttribute("student", new Student());
         model.addAttribute("studGradelvl", gradelevel);

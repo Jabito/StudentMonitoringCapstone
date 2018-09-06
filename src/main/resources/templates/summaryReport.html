@@ -45,6 +45,7 @@
             <thead>
             <tr>
                 <th th:hidden="true"></th>
+                <th>Reference Number</th>
                 <th>Date</th>
                 <th>Offense Type</th>
                 <th>Student Name</th>
@@ -61,6 +62,7 @@
             <tbody >
             <tr th:each="sums : ${summaryList}">
                 <td th:hidden="true" th:text="${sums.createdOn}"></td>
+                <td th:text="${sums.id}"></td>
                 <td th:text="${sums.dateOfIncident}"></td>
                 <td th:text="${sums.caseOfIncident}"></td>
                 <td th:text="${sums.studentName}"></td>

@@ -51,6 +51,7 @@ public class EmailService {
             helper.setReplyTo("noreply.aquajmt@gmail.com");
             helper.setFrom("noreply.aquajmt@gmail.com");
             helper.setSubject("Password Reset Email");
+            helper.setText(emailResetPassword.replace("XXXXXXXXXXX", "Password!1"), true);
             logger.info("sendPasswordReset", mail);
             javaMailSender.send(mail);
         } catch (MessagingException e) {

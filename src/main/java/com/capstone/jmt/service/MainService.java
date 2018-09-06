@@ -43,7 +43,8 @@ public class MainService {
             response.put("responseCode", HttpStatus.NOT_FOUND);
             response.put("responseDesc", "Username does not exists.");
         } else {
-            if (passwordEncoder.matches(password, user.getPassword())) {
+            if (passwordEncoder.matches(password,user.getPassword())) {
+
                 Parent parent = mainMapper.getParent(user.getId());
                 logger.info("parent", parent);
                 if(null == parent){
@@ -115,7 +116,9 @@ public class MainService {
 
     public String updatePassword(String email) {
         String tempPassword = "Password!1";
-        mainMapper.updatePassword(email,tempPassword);
+        String encodedPassword = passwordEncoder.encode(tempPassword);
+        System.out.println("ENCODED PASSWORD!: " + encodedPassword);
+        mainMapper.updatePassword(email,encodedPassword);
         return tempPassword;
     }
 
