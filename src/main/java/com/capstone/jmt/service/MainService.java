@@ -268,6 +268,12 @@ public class MainService {
         return response;
     }
 
+    public HashMap<String, Object> unDeleteStudent(String id){
+        HashMap<String, Object> response = new HashMap<>();
+        mainMapper.unDeleteStudent(id);
+        return response;
+    }
+
     public HashMap<String, Object> deleteParent(String id) {
         HashMap<String, Object> response = new HashMap<>();
         mainMapper.deleteParentById(id);
@@ -421,6 +427,10 @@ public class MainService {
        return mainMapper.getAllStudents();
     }
 
+    public List<Student> getAllArchivedStudents() {
+        return mainMapper.getAllArchivedStudents();
+    }
+
     public String addGuidanceRecord(GuidanceRecord gr){
         gr.setId("GR" + mainMapper.getLastId(5));
         mainMapper.incrementId(5);
@@ -447,6 +457,10 @@ public class MainService {
 
     public List<Student> getStudentList() {
         return mainMapper.getStudentList();
+    }
+
+    public List<Student> getArchivedStudentList() {
+        return mainMapper.getArchivedStudentList();
     }
 
     public List<Parent> getParentList() {

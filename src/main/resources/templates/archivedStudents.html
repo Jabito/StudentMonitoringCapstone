@@ -68,7 +68,7 @@
                     <td th:text="${stud.citizenship}"></td>
                     <td th:text="${stud.address}"></td>
                     <td th:text="${stud.contactNo}"></td>
-                    <td><a th:href="@{'/showStudentInfo?id='+ ${stud.id}}"><i class="glyphicon glyphicon-edit"></i></a> &nbsp; | &nbsp;  <a th:onclick="'deleteStud(\'' + ${stud.id} + '\');'"><i class="glyphicon glyphicon-folder-open"></i></a> </td>
+                    <td><a th:href="@{'/showStudentInfo?id='+ ${stud.id}}"><i class="glyphicon glyphicon-edit"></i></a> &nbsp; | &nbsp;  <a th:onclick="'deleteStud(\'' + ${stud.id} + '\');'"><i class="glyphicon glyphicon-folder-close"></i></a> </td>
                 </tr>
             </tbody>
         </table>
@@ -84,7 +84,7 @@
 
     function deleteStud(id) {
         console.log(id);
-        var r = confirm("Are you sure you want to archive this student?");
+        var r = confirm("Do you want to recover this student?");
         if (r == true) {
             $.ajax({
                 type: 'GET',

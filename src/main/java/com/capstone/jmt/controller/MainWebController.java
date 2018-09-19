@@ -149,7 +149,7 @@ public class MainWebController {
 
     @RequestMapping(value = "/homepage", method = RequestMethod.GET)
     public String showDashboard(@RequestParam(value = "added", required = false, defaultValue = "") String added, @ModelAttribute("appUser") User user, Model model) {
-        if (null == user)
+        if (null == user || null == user.getUsername())
             return "redirect:/login";
         if (user.getUsername().equals("monitorAdmin"))
             return "redirect:/monitor";
@@ -162,7 +162,7 @@ public class MainWebController {
     @RequestMapping(value = "/getStudent", method = RequestMethod.GET)
     public String shopAddStudent(@ModelAttribute("appUser") User user, @RequestParam(value = "gradeLvlId", required = false) Integer gradeLvlId, Model model, @RequestBody(required = false) PictureObject pictureObject) {
         user = setUserRole(user, model);
-        if (null == user)
+        if (null == user || null == user.getUsername())
             return "redirect:/login";
 
         System.out.println("GET STUDENT GRADE LEVEL ID: " + gradeLvlId);
@@ -185,7 +185,7 @@ public class MainWebController {
         List<RefSection> sections = mainService.getSectionList(gradeLvlId);
 
 
-        if (null == user) {
+        if (null == user || null == user.getUsername()) {
             return "redirect:/login";
         } else {
             gradeLevels.add(new RefGradeLevel("Everyone", -1));
@@ -272,7 +272,7 @@ public class MainWebController {
     public String getParentOfStudent(@Valid Parent parent, @RequestParam(value = "error", required = false) String error,
                                      @ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        if (null == user)
+        if (null == user || null == user.getUsername())
             return "redirect:/login";
 
         if (null != error)
@@ -300,7 +300,7 @@ public class MainWebController {
     public String getUserData(@ModelAttribute("appUser") User user,
                               @Valid AddUserJson newUser, Model model) {
         user = setUserRole(user, model);
-        if (null == user)
+        if (null == user || null == user.getUsername())
             return "redirect:/login";
 
         model.addAttribute("newUser", new User());
@@ -342,7 +342,7 @@ public class MainWebController {
     @RequestMapping(value = "/getGuidance", method = RequestMethod.GET)
     public String getGuidanceData(@ModelAttribute("appUser") User user, @Valid Guidance guidance, Model model) {
         user = setUserRole(user, model);
-        if (null == user)
+        if (null == user || null == user.getUsername())
             return "redirect:/login";
 
         model.addAttribute("newGuidance", new Guidance());
@@ -362,7 +362,7 @@ public class MainWebController {
 
     @RequestMapping(value = "/monitor", method = RequestMethod.GET)
     public String shopMonitor(@ModelAttribute("appUser") User user, Model model) {
-        if (!user.getUsername().equalsIgnoreCase("monitorAdmin"))
+        if (user == null || !user.getUsername().equalsIgnoreCase("monitorAdmin"))
             return "redirect:/login";
         Student studIn = mainService.getStudentByRfidIn();
         String gradelevel = "";
@@ -422,7 +422,7 @@ public class MainWebController {
     @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
     public String showSales(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        if (null == user)
+        if (null == user || null == user.getUsername())
             return "redirect:/login";
         List<TapLog> tapLogs = mainService.getTapAllTopLogs();
         if (tapLogs.isEmpty()) {
@@ -441,14 +441,14 @@ public class MainWebController {
     @RequestMapping(value = "/guidanceReport", method = RequestMethod.GET)
     public String guidanceReport(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        return null == user ? "redirect:/login" : "guidanceReport";
+        return null == user || null == user.getUsername()? "redirect:/login" : "guidanceReport";
     }
 
     @RequestMapping(value = "/summaryReport", method = RequestMethod.GET)
     public String summaryReport(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
         model.addAttribute("summaryList", mainService.getGuidanceRecordList());
-        return null == user ? "redirect:/login" : "summaryReport";
+        return null == user || null == user.getUsername() ? "redirect:/login" : "summaryReport";
     }
 
     @RequestMapping(value = "/postGuidanceReport", method = RequestMethod.POST)
@@ -543,7 +543,7 @@ public class MainWebController {
     public String getStudentList(@ModelAttribute("appUser") User user, Model model) {
         model.addAttribute("student", getStudent());
         user = setUserRole(user, model);
-        if (null == user)
+        if (null == user || null == user.getUsername())
             return "redirect:/login";
 
         List<Student> studentList = mainService.getStudentList();
@@ -555,11 +555,27 @@ public class MainWebController {
         }
     }
 
+    @RequestMapping(value = "/getArchivedStudents", method = RequestMethod.GET)
+    public String getArchivedStudents(@ModelAttribute("appUser") User user, Model model) {
+        model.addAttribute("student", getStudent());
+        user = setUserRole(user, model);
+        if (null == user || null == user.getUsername())
+            return "redirect:/login";
+
+        List<Student> studentList = mainService.getArchivedStudentList();
+        if (null == studentList) {
+            return "redirect:/login";
+        } else {
+            model.addAttribute("studList", studentList);
+            return "archivedStudents";
+        }
+    }
+
     @RequestMapping(value = "/getUserList", method = RequestMethod.GET)
     public String getUserList(@ModelAttribute("appUser") User user, Model model) {
         model.addAttribute("student", getStudent());
         user = setUserRole(user, model);
-        if (null == user)
+        if (null == user || null == user.getUsername())
             return "redirect:/login";
 
         List<User> userList = mainService.getUserList();
@@ -575,7 +591,7 @@ public class MainWebController {
     public String getGuidanceList(@ModelAttribute("appUser") User user, Model model) {
         model.addAttribute("student", getStudent());
         user = setUserRole(user, model);
-        if (null == user)
+        if (null == user || null == user.getUsername())
             return "redirect:/login";
 
         List<Guidance> guidanceList = mainService.getGuidanceList();
@@ -591,7 +607,7 @@ public class MainWebController {
     public String getParents(@ModelAttribute("appUser") User user, Model model) {
 
         user = setUserRole(user, model);
-        if (null == user)
+        if (null == user || null == user.getUsername())
             return "redirect:/login";
 
         List<Parent> parentList = mainService.getParentList();
@@ -607,7 +623,7 @@ public class MainWebController {
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
     public String showBottleSales(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        return null == user ? "redirect:/login" : "bottlesales";
+        return null == user || null == user.getUsername() ? "redirect:/login" : "bottlesales";
     }
 
     @RequestMapping(value = "/selectGradeLevel", method = RequestMethod.GET)
@@ -801,6 +817,11 @@ public class MainWebController {
     @RequestMapping(value = "/deleteStudent", method = RequestMethod.GET)
     public ResponseEntity<?> deleteStudent(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
         return new ResponseEntity<>(mainService.deleteStudentById(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/unDeleteStudent", method = RequestMethod.GET)
+    public ResponseEntity<?> unDeleteStudent(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
+        return new ResponseEntity<>(mainService.unDeleteStudent(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/deleteParent", method = RequestMethod.GET)

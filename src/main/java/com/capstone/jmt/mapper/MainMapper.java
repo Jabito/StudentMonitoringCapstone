@@ -27,6 +27,8 @@ public interface MainMapper {
 
     void deleteStudentById(@Param("id") String id);
 
+    void unDeleteStudent(@Param("id") String id);
+
     void deleteParentById(@Param("id") String id);
 
     void deleteUserById(@Param("id") String id);
@@ -77,6 +79,8 @@ public interface MainMapper {
 
     List<Student> getAllStudents();
 
+    List<Student> getAllArchivedStudents();
+
     Student getStudentByRfid(@Param("rfid") String rfid);
 
     Student getStudIn();
@@ -94,6 +98,8 @@ public interface MainMapper {
     PictureObject retrieveImage(@Param("userId") String fileId);
 
     List<Student> getStudentList();
+
+    List<Student> getArchivedStudentList();
 
     List<Parent> getParentList();
 

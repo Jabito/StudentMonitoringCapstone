@@ -95,6 +95,11 @@ public class MainAppController {
         return new ResponseEntity<>(mainService.getAllStudents(), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "getAllArchivedStudents", method = RequestMethod.GET)
+    public ResponseEntity<?> getAllArchivedStudents() {
+        return new ResponseEntity<>(mainService.getAllArchivedStudents(), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "getStudent", method = RequestMethod.GET)
     public ResponseEntity<?> getStudent(@RequestParam String studentId) {
         HashMap<String, Object> response = new HashMap<>();
