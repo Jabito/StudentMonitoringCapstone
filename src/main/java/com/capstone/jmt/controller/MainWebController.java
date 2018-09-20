@@ -819,6 +819,11 @@ public class MainWebController {
         return new ResponseEntity<>(mainService.deleteStudentById(id), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/archiveAllStudents", method = RequestMethod.GET)
+    public ResponseEntity<?> deleteAllStudents(@ModelAttribute("appStudent") Student student, Model model) {
+        return new ResponseEntity<>(mainService.archiveAllStudents(), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/unDeleteStudent", method = RequestMethod.GET)
     public ResponseEntity<?> unDeleteStudent(@ModelAttribute("appStudent") Student student, Model model, @RequestParam(value = "id") String id) {
         return new ResponseEntity<>(mainService.unDeleteStudent(id), HttpStatus.OK);

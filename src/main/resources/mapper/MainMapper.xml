@@ -154,7 +154,12 @@
         WHERE id = #{id}
     </update>
 
-    <update id="unDeleteStudentById" flushCache="true">
+    <update id="archiveAllStudents" flushCache="true">
+        UPDATE data_students
+        SET is_active = false
+    </update>
+
+    <update id="unDeleteStudent" flushCache="true">
         UPDATE data_students
         SET is_active = true
         WHERE id = #{id}

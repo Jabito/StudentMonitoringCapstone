@@ -268,6 +268,13 @@ public class MainService {
         return response;
     }
 
+    public HashMap<String, Object> archiveAllStudents(){
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("ARCHIVING ALL STUDENTS.");
+        mainMapper.archiveAllStudents();
+        return response;
+    }
+
     public HashMap<String, Object> unDeleteStudent(String id){
         HashMap<String, Object> response = new HashMap<>();
         mainMapper.unDeleteStudent(id);

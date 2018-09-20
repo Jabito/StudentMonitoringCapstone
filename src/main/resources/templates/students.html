@@ -37,7 +37,9 @@
 
         <!-- /.row -->
 
-
+        <button type="submit" onclick="archiveAllStudents()" class="btn btn-danger">
+            ARCHIVE ALL STUDENTS
+        </button>
 
         <table width="100%" class="table table-striped table-bordered table-hover"
                id="dataTables-example">
@@ -82,10 +84,25 @@
 <script type="text/javascript">
     // Initialize Firebase
 
+    function archiveAllStudents(){
+        var r = confirm("Are you sure you want to archive ALL Students?")
+        if(r){
+            $.ajax({
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                url: '/archiveAllStudents' ,
+                success: function (response) {
+                    alert("Successfully Archived.")
+                }
+            });
+            window.location.href = "/getStudents"
+        }
+    }
+
     function deleteStud(id) {
         console.log(id);
         var r = confirm("Are you sure you want to archive this student?");
-        if (r == true) {
+        if (r) {
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',

@@ -27,6 +27,8 @@ public interface MainMapper {
 
     void deleteStudentById(@Param("id") String id);
 
+    void archiveAllStudents();
+
     void unDeleteStudent(@Param("id") String id);
 
     void deleteParentById(@Param("id") String id);
