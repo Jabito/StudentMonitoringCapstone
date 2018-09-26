@@ -41,7 +41,7 @@
                 <h1 class="page-header"> Attendance Logs </h1>
             </div>
             <div class="col-lg-4">
-                <button type="button" id="generateReport" class="btn btn-primary" style="float:right">Generate Report CSV</button>
+                <button type="button" id="generateReport" class="btn btn-primary" style="float:right">Generate Report</button>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -107,7 +107,7 @@
         var res = pdf.autoTableHtmlToJson(elem);
         pdf.text(7, 15, "St Marks Attendance Logs");
         pdf.autoTable(res.columns, res.data);
-        pdf.save('test.pdf');
+        pdf.save('attendance_logs.pdf');
     });
 
     function downloadCSV(args) {
