@@ -588,6 +588,18 @@ ORDER BY B.log_datetime DESC LIMIT 1
         ORDER BY created_on DESC
     </select>
 
+    <select id="getGuidanceRecordListWithParams" resultMap="GuidanceLogMap" resultType="java.util.List">
+        SELECT A.*, (B.first_name || ' ' || b.middle_name || ' ' || b.last_name) as student_name,
+         (SELECT grade_level from ref_grade_level where id = B.grade_level_id) AS gradeLevel,
+         (SELECT section FROM ref_section where id = CAST(B.section AS INTEGER)) AS sectionName
+        FROM log_guidance A JOIN data_students B
+        ON A.student_id = B.id
+        WHERE A.created_on &gt; #{dateFrom}
+        AND A.created_on &lt; #{dateTo}
+        AND ((B.first_name || ' ' || b.middle_name || ' ' || b.last_name) LIKE #{searchString})
+        ORDER BY created_on DESC
+    </select>
+
     <resultMap id="PictureObjectMap" type="com.capstone.jmt.data.PictureObject">
         <result column="userid" property="studentId" jdbcType="VARCHAR"/>
         <result column="original_file_name" property="originalFileName" jdbcType="VARCHAR"/>
@@ -677,6 +689,15 @@ AND A.message_target LIKE '%' || #{userId} || '%'
         ORDER BY A.log_datetime DESC
     </select>
 
+    <select id="getFilteredTapLogs" resultMap="TapLogMap" resultType="list">
+        SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
+        ON A.rfid = B.rfid
+        AND A.log_datetime &gt; #{dateFrom}
+        AND A.log_datetime &lt; #{dateTo}
+        AND UPPER(B.first_name || ' ' || B.last_name) LIKE UPPER(#{searchString})
+        ORDER BY A.log_datetime DESC
+    </select>
+
     <resultMap id="UserTypeMap" type="com.capstone.jmt.data.UserList">
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
@@ -708,6 +729,16 @@ AND A.message_target LIKE '%' || #{userId} || '%'
         SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
         ON A.rfid = B.rfid
         WHERE B.id = (SELECT parent_of FROM data_parents WHERE id = #{parentId})
+        ORDER BY A.log_datetime DESC
+    </select>
+
+    <select id="getFilteredTapLogsByParentId" resultMap="TapLogMap" resultType="list">
+        SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
+        ON A.rfid = B.rfid
+        WHERE B.id = (SELECT parent_of FROM data_parents WHERE id = #{parentId})
+        AND A.log_datetime &gt; #{dateFrom}
+        AND A.log_datetime &lt; #{dateTo}
+        AND (B.first_name || ' ' || B.last_name) LIKE #{searchString}
         ORDER BY A.log_datetime DESC
     </select>
 

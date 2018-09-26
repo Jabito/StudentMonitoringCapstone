@@ -458,6 +458,17 @@ public class MainService {
         return list;
     }
 
+    public List<GuidanceRecord> getGuidanceRecordListWithParams(Date dateF, Date dateT, String searchString){
+        System.out.println(dateF);
+        System.out.println(dateT);
+        List<GuidanceRecord> list = mainMapper.getGuidanceRecordListWithParams(dateF, dateT, "%" + searchString + "%");
+        for (GuidanceRecord guidanceRecord : list) {
+            guidanceRecord.setGradeAndSection((null != guidanceRecord.getGradeLevel()? guidanceRecord.getGradeLevel():"")
+                    + " - " + (null != guidanceRecord.getSectionName()? guidanceRecord.getSectionName():""));
+        }
+        return list;
+    }
+
     public PictureObject retrieveImage(String fileId) {
         return mainMapper.retrieveImage(fileId);
     }
@@ -510,6 +521,10 @@ public class MainService {
         return mainMapper.getTapAllTopLogs();
     }
 
+    public List<TapLog> getFilteredTapLogs(Date dateFrom, Date dateTo, String searchString){
+        return mainMapper.getFilteredTapLogs(dateFrom, dateTo, "%"+searchString+"%");
+    }
+
     public Parent getParentByStudentId(String studentId) {
         return mainMapper.getParentByStudentId(studentId);
     }
@@ -528,6 +543,10 @@ public class MainService {
 
     public List<TapLog> getTapLogsByParentId(String id) {
         return mainMapper.getTapLogsByParentId(id);
+    }
+
+    public List<TapLog> getFilteredTapLogsByParentId(Date dateFrom, Date dateTo, String searchString, String id) {
+        return mainMapper.getFilteredTapLogsByParentId(dateFrom, dateTo, "%"+searchString+"%", id);
     }
 
     public List<RefSection> getSectionListByGradeLevel(String gradeLevel) {

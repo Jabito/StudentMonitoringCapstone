@@ -5,6 +5,7 @@ import com.capstone.jmt.entity.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.sql.Blob;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -95,6 +96,9 @@ public interface MainMapper {
 
     List<GuidanceRecord> getGuidanceRecordList();
 
+    List<GuidanceRecord> getGuidanceRecordListWithParams(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo,
+                                                         @Param("searchString") String searchString);
+
     void saveImage(@Param("imageHolder") PictureObject imageHolder);
 
     PictureObject retrieveImage(@Param("userId") String fileId);
@@ -121,11 +125,17 @@ public interface MainMapper {
 
     List<TapLog> getTapAllTopLogs();
 
+    List<TapLog> getFilteredTapLogs(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo,
+                                    @Param("searchString") String searchString);
+
     Parent getParentByStudentId(@Param("studentId") String studentId);
 
     String getLastTapDate(@Param("mode")String mode);
 
     List<TapLog> getTapLogsByParentId(@Param("parentId") String id);
+
+    List<TapLog> getFilteredTapLogsByParentId(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo,
+                                              @Param("searchString") String searchString, @Param("id") String id);
 
     List<RefSection> getSectionListByGradeLevel(String gradeLevel);
 
