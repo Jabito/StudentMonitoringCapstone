@@ -413,9 +413,15 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
-    public String shopInventory(@ModelAttribute("appUser") User user, Model model) {
+    public String shopInventory(@ModelAttribute("appUser") User user, @ModelAttribute("attendanceParams") AttendanceParams attParams, Model model) {
+
+        if (null == attParams)
+            attParams = new AttendanceParams();
         user = setUserRole(user, model);
-        List<MessageJson> messages = (List<MessageJson>) mainService.getAnnouncements(user.getId()).get("announcements");
+        if (null == user || null == user.getUsername())
+            return "redirect:/login";
+
+        List<MessageJson> messages = mainService.getFilteredAnnouncements(attParams);
 
         model.addAttribute("messages", messages);
         return null == user ? "redirect:/login" : "inventory";

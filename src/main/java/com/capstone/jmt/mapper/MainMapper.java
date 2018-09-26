@@ -162,4 +162,6 @@ public interface MainMapper {
     String getParentIdsBySectionId(@Param("sectionId") String sectionId);
 
     void updatePassword(@Param("email") String email,@Param("tempPassword") String tempPassword);
+
+    List<MessageJson> getFilteredAnnouncements(@Param("dateFrom") Date dateForm, @Param("dateTo") Date dateTo);
 }

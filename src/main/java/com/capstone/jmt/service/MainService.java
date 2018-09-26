@@ -598,4 +598,29 @@ public class MainService {
     public String getParentIdsBySectionId(String sectionId) {
         return mainMapper.getParentIdsBySectionId(sectionId);
     }
+
+    public List<MessageJson> getFilteredAnnouncements(AttendanceParams attParams) {
+        if (attParams.getDateFrom().equals(""))
+            attParams.setDateFrom("2015-01-01 00:00");
+        else {
+            String[] arr = attParams.getDateFrom().split("T");
+            attParams.setDateFrom(String.join(" ", arr));
+        }
+        if (attParams.getDateTo().equals(""))
+            attParams.setDateTo("2019-01-01 23:59");
+        else {
+            String[] arr = attParams.getDateTo().split("T");
+            attParams.setDateFrom(String.join(" ", arr));
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date dateF = new Date();
+        Date dateT = new Date();
+        try {
+            dateF = sdf.parse(attParams.getDateFrom());
+            dateT = sdf.parse(attParams.getDateTo());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mainMapper.getFilteredAnnouncements(dateF, dateT);
+    }
 }
