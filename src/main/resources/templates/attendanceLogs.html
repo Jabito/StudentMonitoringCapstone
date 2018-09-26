@@ -8,6 +8,11 @@
     <script type="text/javascript" charset="utf8" src="../../static/js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="../../static/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../../static/css/jquery.dataTables.min.css"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.5/jspdf.plugin.autotable.js"></script>
+
+
     <script>
         $(document).ready(function () {
             $('#table_id').DataTable({
@@ -35,7 +40,7 @@
                 <h1 class="page-header"> Attendance Logs </h1>
             </div>
             <div class="col-lg-4">
-                <button type="button" onclick="downloadCSV({filename: 'summary-report.csv'});" class="btn btn-primary" style="float:right">Generate Report CSV</button>
+                <button type="button" id="generateReport" class="btn btn-primary" style="float:right">Generate Report CSV</button>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -79,11 +84,25 @@
 
     $(document).ready( function () {
         $('#myTable').DataTable();
+
     } );
 
 
 
     var map = /*[[${logs}]]*/ [];
+
+
+
+
+    $('#generateReport').click(function () {
+        var pdf = new jsPDF('p', 'pt');
+
+        var elem = document.getElementById("table_id");
+        var res = pdf.autoTableHtmlToJson(elem);
+        pdf.text(7, 15, "St Marks Attendance Logs");
+        pdf.autoTable(res.columns, res.data);
+        pdf.save('test.pdf');
+    });
 
     function downloadCSV(args) {
         var data, filename, link;
