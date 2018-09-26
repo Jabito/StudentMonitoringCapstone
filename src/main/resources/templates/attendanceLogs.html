@@ -16,7 +16,8 @@
     <script>
         $(document).ready(function () {
             $('#table_id').DataTable({
-                "order":[[0, "desc"]]
+                "order":[[0, "desc"]],
+                "searching": false
             });
         });
     </script>
@@ -44,7 +45,14 @@
             </div>
             <!-- /.col-lg-12 -->
         </div>
-
+        <form th:object="${attendanceParams}" th:action="@{/attendanceLogs}" method="GET">
+        <p id="date_filter">
+            <span id="date-label-from" class="date-label">Date From: </span><input th:field="*{dateFrom}" class="date_range_filter date" type="datetime-local" id="datepicker_from" />
+            <span id="date-label-to" class="date-label">Date To:</span><input th:field="*{dateTo}" class="date_range_filter date" type="datetime-local" id="datepicker_to" />
+            Filter By Name: <input th:field="*{searchString}" type="text" id="searchString"/>
+            <button type="submit" id="btnSearch">Filter</button>
+        </p>
+        </form>
         <!-- /.row -->
         <table width="100%" class="table table-striped table-bordered table-hover"
                id="table_id">
@@ -60,7 +68,7 @@
                 <th>Total Cost</th>-->
             </tr>
             </thead>
-            <tbody>
+            <tbody id="tbody">
             <tr class="odd gradeX" th:each="log: ${logs}">
                 <td th:text="${log.logDateTime}"></td>
                 <td th:text="${log.logType}"></td>
@@ -76,6 +84,7 @@
 
 </div>
 <script type="text/javascript" th:inline="javascript">
+    //<![CDATA[
     // Initialize Firebase
 
     //Declaring variables
@@ -83,11 +92,8 @@
     var studId;
 
     $(document).ready( function () {
-        $('#myTable').DataTable();
-
+        $('#table_id').DataTable();
     } );
-
-
 
     var map = /*[[${logs}]]*/ [];
 
@@ -153,7 +159,7 @@
 
         return result;
     }
-
+    //]]>
 </script>
 
 

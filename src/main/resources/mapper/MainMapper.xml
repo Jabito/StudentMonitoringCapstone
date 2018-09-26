@@ -77,8 +77,8 @@
         <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
         <result column="log_datetime" property="logDateTime" jdbcType="VARCHAR"/>
         <result column="fullName" property="fullName" jdbcType="VARCHAR"/>
-        <result column="gradeLevelDesc" property="gradeLevelDesc" jdbcType="VARCHAR" />
-        <result column="sectionDesc" property="sectionDesc" jdbcType="VARCHAR" />
+        <result column="gradeLevelDesc" property="gradeLevelDesc" jdbcType="VARCHAR"/>
+        <result column="sectionDesc" property="sectionDesc" jdbcType="VARCHAR"/>
         <result column="violation" property="violation" jdbcType="BOOLEAN"/>
         <result column="is_active" property="isActive" jdbcType="BOOLEAN"/>
     </resultMap>
@@ -96,7 +96,7 @@
         <result column="updated_on" property="updatedOn" jdbcType="TIMESTAMP"/>
         <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
         <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
-        <result column="user_type" property="userType" jdbcType="VARCHAR" />
+        <result column="user_type" property="userType" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="getLastId" resultType="java.lang.Integer">
@@ -588,6 +588,18 @@ ORDER BY B.log_datetime DESC LIMIT 1
         ORDER BY created_on DESC
     </select>
 
+    <select id="getGuidanceRecordListWithParams" resultMap="GuidanceLogMap" resultType="java.util.List">
+        SELECT A.*, (B.first_name || ' ' || b.middle_name || ' ' || b.last_name) as student_name,
+         (SELECT grade_level from ref_grade_level where id = B.grade_level_id) AS gradeLevel,
+         (SELECT section FROM ref_section where id = CAST(B.section AS INTEGER)) AS sectionName
+        FROM log_guidance A JOIN data_students B
+        ON A.student_id = B.id
+        WHERE A.created_on &gt; #{dateFrom}
+        AND A.created_on &lt; #{dateTo}
+        AND ((B.first_name || ' ' || b.middle_name || ' ' || b.last_name) LIKE #{searchString})
+        ORDER BY created_on DESC
+    </select>
+
     <resultMap id="PictureObjectMap" type="com.capstone.jmt.data.PictureObject">
         <result column="userid" property="studentId" jdbcType="VARCHAR"/>
         <result column="original_file_name" property="originalFileName" jdbcType="VARCHAR"/>
@@ -599,7 +611,7 @@ ORDER BY B.log_datetime DESC LIMIT 1
     </select>
 
 
-    <select id="getAnnouncementsByUserId" resultMap="MessageMap" resultType="com.capstone.jmt.data.MessageJson">
+    <select id="getAnnouncementsByUserId" resultMap="MessageMap" resultType="list">
         SELECT * FROM log_messages A
 WHERE posted_by = #{userId}
 OR message_type = 3
@@ -622,6 +634,34 @@ AND #{userId} IN (
 OR(message_type = 0
 AND A.message_target LIKE '%' || #{userId} || '%'
 )ORDER BY date_posted DESC
+    </select>
+
+    <select id="getFilteredAnnouncements" resultMap="MessageMap" resultType="list">
+      SELECT * FROM log_messages A
+      WHERE posted_by = #{userId}
+      OR message_type = 3
+      OR(message_type = 2
+      AND #{userId} IN (
+      SELECT id FROM data_parents B WHERE parent_of IN (
+      SELECT id from data_students C WHERE A.message_target LIKE '%' || C.section || '%'
+      AND C.is_active = true
+        )
+      )
+  )
+  OR(message_type = 1
+  AND #{userId} IN (
+    SELECT id FROM data_parents B WHERE parent_of IN(
+      SELECT id from data_students D WHERE A.message_target LIKE '%' || CAST(D.grade_level_id AS VARCHAR) || '%'
+      AND D.is_active = true
+    )
+  )
+)
+OR(message_type = 0
+AND A.message_target LIKE '%' || #{userId} || '%'
+)
+AND date_posted &gt; #{dateFrom}
+AND date_posted &lt; #{dateTo}
+ORDER BY date_posted DESC
     </select>
 
     <select id="getStudentsBySearchString" resultMap="StudentMap" resultType="java.util.List">
@@ -653,12 +693,13 @@ AND A.message_target LIKE '%' || #{userId} || '%'
                 (SELECT id FROM data_students WHERE section = #{sectionId} AND is_active = true)
             </when>
             <when test="gradeLevelId != -1">
-                (SELECT id FROM data_students WHERE grade_level_id = CAST(#{gradeLevelId} AS INTEGER) AND is_active = true)
+                (SELECT id FROM data_students WHERE grade_level_id = CAST(#{gradeLevelId} AS INTEGER) AND is_active =
+                true)
             </when>
         </choose>
     </select>
 
-    <select id="getStudentContactNumbersBySectionId"  resultType="string">
+    <select id="getStudentContactNumbersBySectionId" resultType="string">
         Select id from data_students where "section" = #{id} IS NOT NULL
         and is_active = true
     </select>
@@ -674,6 +715,15 @@ AND A.message_target LIKE '%' || #{userId} || '%'
     <select id="getTapAllTopLogs" resultMap="TapLogMap" resultType="java.util.List">
         SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
         ON A.rfid = B.rfid
+        ORDER BY A.log_datetime DESC
+    </select>
+
+    <select id="getFilteredTapLogs" resultMap="TapLogMap" resultType="list">
+        SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
+        ON A.rfid = B.rfid
+        AND A.log_datetime &gt; #{dateFrom}
+        AND A.log_datetime &lt; #{dateTo}
+        AND UPPER(B.first_name || ' ' || B.last_name) LIKE UPPER(#{searchString})
         ORDER BY A.log_datetime DESC
     </select>
 
@@ -708,6 +758,16 @@ AND A.message_target LIKE '%' || #{userId} || '%'
         SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
         ON A.rfid = B.rfid
         WHERE B.id = (SELECT parent_of FROM data_parents WHERE id = #{parentId})
+        ORDER BY A.log_datetime DESC
+    </select>
+
+    <select id="getFilteredTapLogsByParentId" resultMap="TapLogMap" resultType="list">
+        SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
+        ON A.rfid = B.rfid
+        WHERE B.id = (SELECT parent_of FROM data_parents WHERE id = #{parentId})
+        AND A.log_datetime &gt; #{dateFrom}
+        AND A.log_datetime &lt; #{dateTo}
+        AND (B.first_name || ' ' || B.last_name) LIKE #{searchString}
         ORDER BY A.log_datetime DESC
     </select>
 

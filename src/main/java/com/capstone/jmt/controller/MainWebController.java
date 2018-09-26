@@ -8,6 +8,7 @@ import com.capstone.jmt.entity.User;
 import com.capstone.jmt.service.AndroidPushNotificationsService;
 import com.capstone.jmt.service.MainService;
 import com.capstone.jmt.service.StorageService;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.api.Http;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -32,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import javax.xml.ws.Response;
 import java.io.IOException;
 import java.io.InputStream;
@@ -394,7 +396,7 @@ public class MainWebController {
         if (null != stud) {
             mainService.tapStudent(rfid);
             Parent parent = mainService.getParentByStudentId(stud.getId());
-            if(null != parent)
+            if (null != parent)
                 contactNo = parent.getOfficeNo();
             tap = (TapLog) mainService.getLastTapEntry(stud.getId()).get("tapDetails");
         }
@@ -411,43 +413,102 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
-    public String shopInventory(@ModelAttribute("appUser") User user, Model model) {
+    public String shopInventory(@ModelAttribute("appUser") User user, @ModelAttribute("attendanceParams") AttendanceParams attParams, Model model) {
+
+        if (null == attParams)
+            attParams = new AttendanceParams();
         user = setUserRole(user, model);
-        List<MessageJson> messages = (List<MessageJson>) mainService.getAnnouncements(user.getId()).get("announcements");
+        if (null == user || null == user.getUsername())
+            return "redirect:/login";
+
+        List<MessageJson> messages = mainService.getFilteredAnnouncements(attParams);
 
         model.addAttribute("messages", messages);
         return null == user ? "redirect:/login" : "inventory";
     }
 
     @RequestMapping(value = "/attendanceLogs", method = RequestMethod.GET)
-    public String showSales(@ModelAttribute("appUser") User user, Model model) {
+    public String showSales(@ModelAttribute("appUser") User user, @ModelAttribute("attendanceParams") AttendanceParams attParams, Model model) {
+        if (null == attParams)
+            attParams = new AttendanceParams();
+
         user = setUserRole(user, model);
         if (null == user || null == user.getUsername())
             return "redirect:/login";
-        List<TapLog> tapLogs = mainService.getTapAllTopLogs();
-        if (tapLogs.isEmpty()) {
-            user = setUserRole(user, model);
-            return "redirect:/login";
-        } else {
-            if (user.getUserTypeId() != 2)
-                model.addAttribute("logs", tapLogs);
-            else
-                model.addAttribute("logs", mainService.getTapLogsByParentId(user.getId()));
-            return "attendanceLogs";
+        if (attParams.getDateFrom().equals(""))
+            attParams.setDateFrom("2015-01-01 00:00");
+        else {
+            String[] arr = attParams.getDateFrom().split("T");
+            attParams.setDateFrom(String.join(" ", arr));
         }
-    }
+        if (attParams.getDateTo().equals(""))
+            attParams.setDateTo("2019-01-01 23:59");
+        else {
+            String[] arr = attParams.getDateTo().split("T");
+            attParams.setDateFrom(String.join(" ", arr));
+        }
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date dateF = new Date();
+        Date dateT = new Date();
+        try {
+            dateF = sdf.parse(attParams.getDateFrom());
+            dateT = sdf.parse(attParams.getDateTo());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        List<TapLog> tapLogs = mainService.getFilteredTapLogs(dateF, dateT, attParams.getSearchString());
+        if (user.getUserTypeId() != 2)
+            model.addAttribute("logs", tapLogs);
+        else
+            model.addAttribute("logs", mainService.getFilteredTapLogsByParentId(dateF, dateT, attParams.getSearchString(), user.getId()));
+
+
+        return "attendanceLogs";
+    }
 
     @RequestMapping(value = "/guidanceReport", method = RequestMethod.GET)
     public String guidanceReport(@ModelAttribute("appUser") User user, Model model) {
         user = setUserRole(user, model);
-        return null == user || null == user.getUsername()? "redirect:/login" : "guidanceReport";
+        return null == user || null == user.getUsername() ? "redirect:/login" : "guidanceReport";
     }
 
     @RequestMapping(value = "/summaryReport", method = RequestMethod.GET)
-    public String summaryReport(@ModelAttribute("appUser") User user, Model model) {
+    public String summaryReport(@ModelAttribute("appUser") User user, @ModelAttribute("attendanceParams") AttendanceParams attParams, Model model) {
+        if (null == attParams)
+            attParams = new AttendanceParams();
+
         user = setUserRole(user, model);
-        model.addAttribute("summaryList", mainService.getGuidanceRecordList());
+        if (null == user || null == user.getUsername())
+            return "redirect:/login";
+        if (attParams.getDateFrom().equals(""))
+            attParams.setDateFrom("2015-01-01 00:00");
+        else {
+            String[] arr = attParams.getDateFrom().split("T");
+            attParams.setDateFrom(String.join(" ", arr));
+        }
+        if (attParams.getDateTo().equals(""))
+            attParams.setDateTo("2019-01-01 23:59");
+        else {
+            String[] arr = attParams.getDateTo().split("T");
+            attParams.setDateFrom(String.join(" ", arr));
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date dateF = new Date();
+        Date dateT = new Date();
+        try {
+            dateF = sdf.parse(attParams.getDateFrom());
+            dateT = sdf.parse(attParams.getDateTo());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        List<GuidanceRecord> tapLogs = mainService.getGuidanceRecordListWithParams(dateF, dateT, attParams.getSearchString());
+        model.addAttribute("summaryList", tapLogs);
+
+
         return null == user || null == user.getUsername() ? "redirect:/login" : "summaryReport";
     }
 
@@ -475,7 +536,7 @@ public class MainWebController {
                 try {
                     System.out.println("SMS GET NOTIF: " + parent.getSmsNotif());
                     System.out.println("SMS NO: " + parent.getOfficeNo());
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -497,8 +558,9 @@ public class MainWebController {
         message += "Please come to the Guidance Office.";
         message += "Ref Id: " + id;
         try {
-            message +=  " Date: " + new SimpleDateFormat("MMM dd, yyyy HH:mm").format(new Date());
-        }catch(Exception e){}
+            message += " Date: " + new SimpleDateFormat("MMM dd, yyyy HH:mm").format(new Date());
+        } catch (Exception e) {
+        }
         message += "** This message is free. Please do not reply.";
         response.put("message", message);
         response.put("responseCode", 200);
@@ -677,20 +739,19 @@ public class MainWebController {
                     try {
                         if (parentsNumber.getOfficeNo() == null) {
                             System.out.println("null");
-                        }else {
+                        } else {
                             numbersList.add(parentsNumber.getOfficeNo());
                             smsNotif.add(parentsNumber.getSmsNotif());
                         }
-                    }catch(Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-
 
 
                 }
             }
             response.put("numbers", numbersList);
-            response.put("toggleNotif",smsNotif);
+            response.put("toggleNotif", smsNotif);
             response.put("responseDesc", "Success.");
 
         } else {
@@ -705,7 +766,7 @@ public class MainWebController {
                 for (String studId : studentIds) {
                     Parent parentsNumber = mainService.getParentNumberByStudentId(studId);
                     //Adding parentNumber to the list
-                    if(null != parentsNumber) {
+                    if (null != parentsNumber) {
                         numberListForSelectedSection.add(parentsNumber.getOfficeNo());
                         smsNotif.add(parentsNumber.getSmsNotif());
                     }
@@ -719,7 +780,7 @@ public class MainWebController {
                 List<Boolean> smsNotif = new ArrayList<>();
 
                 Parent parentNumber = mainService.getParentNumberByStudentId(studentId);
-                if(null != parentNumber) {
+                if (null != parentNumber) {
                     parentNumberList.add(parentNumber.getOfficeNo());
                     smsNotif.add(parentNumber.getSmsNotif());
                 }
@@ -766,7 +827,7 @@ public class MainWebController {
             student = mainService.getStudentById(id);
         System.out.println("SID " + student.getId());
         model.addAttribute("gradeLevel", mainService.getGradeLevelList());
-        model.addAttribute("section", mainService.getSectionList(null != student.getGradeLvlId()?student.getGradeLvlId():0));
+        model.addAttribute("section", mainService.getSectionList(null != student.getGradeLvlId() ? student.getGradeLvlId() : 0));
         if (null == student) {
             return "studentInfo";
         } else {
@@ -899,7 +960,7 @@ public class MainWebController {
             InputStream in = file.getInputStream();
             byte[] media = IOUtils.toByteArray(in);
 //            headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-            headers.setContentType(file.getFilename().contains(".png")? MediaType.IMAGE_PNG: MediaType.IMAGE_JPEG);
+            headers.setContentType(file.getFilename().contains(".png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG);
             return new ResponseEntity<byte[]>(Base64.getEncoder().encode(media), headers, HttpStatus.OK);
         } catch (IOException e) {
             System.out.println("ERROR LOADING IMAGE");
@@ -918,37 +979,37 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/postMessage", method = RequestMethod.POST)
-    public ResponseEntity<?> postMessage(@RequestBody MsgJson messageJson, @ModelAttribute("appUser") User user){
+    public ResponseEntity<?> postMessage(@RequestBody MsgJson messageJson, @ModelAttribute("appUser") User user) {
         MessageJson mj = new MessageJson();
         mj.setMessage(messageJson.getMessage());
         mj.setPostedBy(user.getId());
         ArrayList<String> toSend = new ArrayList<>();
 
-        if(messageJson.getStudentId().equals("-1")){
-            if(messageJson.getSectionId().equals("-1")){
-                if(messageJson.getGradeLevelId().equals("-1")){
+        if (messageJson.getStudentId().equals("-1")) {
+            if (messageJson.getSectionId().equals("-1")) {
+                if (messageJson.getGradeLevelId().equals("-1")) {
                     //All GradeLevels
                     mj.setMessageTypeId(3);
-                }else{
+                } else {
                     //List of Sections for selected GradeLevel
                     mj.setMessageTypeId(2);
                     List<RefSection> sectionList = mainService.getSectionListByGradeLevel(messageJson.getGradeLevelId());
-                    if(null != sectionList){
+                    if (null != sectionList) {
                         for (RefSection refSection : sectionList) {
                             toSend.add(String.valueOf(refSection.getId()));
                         }
                     }
                 }
-            }else{
+            } else {
                 //Just add one section
                 mj.setMessageTarget("1");
                 toSend.add(messageJson.getSectionId());
             }
-        }else{
+        } else {
             //Specific Parent selected
             mj.setMessageTypeId(0);
             Parent par = mainService.getParentByStudentId(messageJson.getStudentId());
-            if(null != par)
+            if (null != par)
                 toSend.add(par.getId());
             else
                 toSend.add("");
@@ -956,6 +1017,6 @@ public class MainWebController {
         mj.setTargetIds(toSend.toArray(new String[toSend.size()]));
         mainService.postAnnouncement(mj);
 
-        return new ResponseEntity<>( HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
