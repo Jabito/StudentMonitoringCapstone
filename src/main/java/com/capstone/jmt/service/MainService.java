@@ -599,7 +599,7 @@ public class MainService {
         return mainMapper.getParentIdsBySectionId(sectionId);
     }
 
-    public List<MessageJson> getFilteredAnnouncements(AttendanceParams attParams) {
+    public List<MessageJson> getFilteredAnnouncements(AttendanceParams attParams, String userId) {
         if (attParams.getDateFrom().equals(""))
             attParams.setDateFrom("2015-01-01 00:00");
         else {
@@ -621,6 +621,6 @@ public class MainService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return mainMapper.getFilteredAnnouncements(dateF, dateT);
+        return mainMapper.getFilteredAnnouncements(dateF, dateT, userId);
     }
 }

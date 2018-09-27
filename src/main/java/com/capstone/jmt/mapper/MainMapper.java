@@ -163,5 +163,5 @@ public interface MainMapper {
 
     void updatePassword(@Param("email") String email,@Param("tempPassword") String tempPassword);
 
-    List<MessageJson> getFilteredAnnouncements(@Param("dateFrom") Date dateForm, @Param("dateTo") Date dateTo);
+    List<MessageJson> getFilteredAnnouncements(@Param("dateFrom") Date dateForm, @Param("dateTo") Date dateTo, @Param("userId") String userId);
 }

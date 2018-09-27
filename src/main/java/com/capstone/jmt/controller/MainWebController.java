@@ -421,7 +421,7 @@ public class MainWebController {
         if (null == user || null == user.getUsername())
             return "redirect:/login";
 
-        List<MessageJson> messages = mainService.getFilteredAnnouncements(attParams);
+        List<MessageJson> messages = mainService.getFilteredAnnouncements(attParams, user.getId());
 
         model.addAttribute("messages", messages);
         return null == user ? "redirect:/login" : "inventory";

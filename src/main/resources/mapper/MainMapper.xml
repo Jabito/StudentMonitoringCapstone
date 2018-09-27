@@ -638,7 +638,10 @@ AND A.message_target LIKE '%' || #{userId} || '%'
 
     <select id="getFilteredAnnouncements" resultMap="MessageMap" resultType="list">
       SELECT * FROM log_messages A
-      WHERE posted_by = #{userId}
+      WHERE date_posted &gt; #{dateFrom}
+AND date_posted &lt; #{dateTo}
+
+AND (posted_by = #{userId}
       OR message_type = 3
       OR(message_type = 2
       AND #{userId} IN (
@@ -654,13 +657,12 @@ AND A.message_target LIKE '%' || #{userId} || '%'
       SELECT id from data_students D WHERE A.message_target LIKE '%' || CAST(D.grade_level_id AS VARCHAR) || '%'
       AND D.is_active = true
     )
+    )
   )
 )
 OR(message_type = 0
 AND A.message_target LIKE '%' || #{userId} || '%'
 )
-AND date_posted &gt; #{dateFrom}
-AND date_posted &lt; #{dateTo}
 ORDER BY date_posted DESC
     </select>
 
