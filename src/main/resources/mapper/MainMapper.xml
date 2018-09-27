@@ -596,7 +596,7 @@ ORDER BY B.log_datetime DESC LIMIT 1
         ON A.student_id = B.id
         WHERE A.created_on &gt; #{dateFrom}
         AND A.created_on &lt; #{dateTo}
-        AND ((B.first_name || ' ' || b.middle_name || ' ' || b.last_name) LIKE #{searchString})
+        AND (UPPER(B.first_name || ' ' || b.middle_name || ' ' || b.last_name) LIKE UPPER(#{searchString}))
         ORDER BY created_on DESC
     </select>
 
@@ -769,7 +769,7 @@ ORDER BY date_posted DESC
         WHERE B.id = (SELECT parent_of FROM data_parents WHERE id = #{parentId})
         AND A.log_datetime &gt; #{dateFrom}
         AND A.log_datetime &lt; #{dateTo}
-        AND (B.first_name || ' ' || B.last_name) LIKE #{searchString}
+        AND UPPER(B.first_name || ' ' || B.last_name) LIKE UPPER(#{searchString})
         ORDER BY A.log_datetime DESC
     </select>
 

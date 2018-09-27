@@ -106,15 +106,40 @@
         $('#myTable').DataTable();
     } );
 
+    //Image on PDF
+    function getImgFromUrl(logo_url, callback) {
+        var img = new Image();
+        img.src = logo_url;
+        img.onload = function () {
+            callback(img);
+        };
+    }
 
-    $('#generateReport').click(function () {
+    function generatePDF(img){
+        // var options = {orientation: 'p', unit: 'mm', format: custom};
+        // var doc = new jsPDF(options);
+        // doc.addImage(img, 'JPEG', 0, 0, 100, 50);
         var pdf = new jsPDF('p', 'pt');
 
         var elem = document.getElementById("summaryReportId");
         var res = pdf.autoTableHtmlToJson(elem);
-        pdf.text(7, 15, "St Marks Guidance Summary Report");
-        pdf.autoTable(res.columns, res.data);
+        pdf.addImage(img, 'PNG', 0, 0, pdf.internal.pageSize.width, 60);
+        // pdf.text(7, 150, "St Marks Guidance Summary Report");
+        pdf.autoTable(res.columns, res.data, {margin: {top:80}});
         pdf.save('summary_report.pdf');
+    }
+
+    //END NEW CODE
+
+    $('#generateReport').click(function () {
+
+        //TEST
+        var logo_url = "/static/images/banner.png";
+        getImgFromUrl(logo_url, function (img) {
+            generatePDF(img);
+        });
+        //END TEST
+
     });
 
     var map = /*[[${summaryList}]]*/ [];
