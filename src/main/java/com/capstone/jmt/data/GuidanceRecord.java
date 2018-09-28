@@ -47,6 +47,12 @@ public class GuidanceRecord implements Serializable{
     private String gradeAndSection;
     @JsonProperty("violation")
     private String violation;
+    @JsonProperty("firstName")
+    private String firstName;
+    @JsonProperty("lastName")
+    private String lastName;
+    @JsonProperty("middleName")
+    private String middleName;
 
     public String getId() {
         return id;
@@ -182,5 +188,29 @@ public class GuidanceRecord implements Serializable{
 
     public void setViolation(String violation) {
         this.violation = violation;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 }

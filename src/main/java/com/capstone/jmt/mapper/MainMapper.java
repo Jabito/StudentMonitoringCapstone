@@ -97,7 +97,7 @@ public interface MainMapper {
     List<GuidanceRecord> getGuidanceRecordList();
 
     List<GuidanceRecord> getGuidanceRecordListWithParams(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo,
-                                                         @Param("searchString") String searchString);
+                                                         @Param("searchString") String searchString, @Param("sid") String sid);
 
     void saveImage(@Param("imageHolder") PictureObject imageHolder);
 

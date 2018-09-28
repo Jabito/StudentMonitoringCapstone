@@ -461,7 +461,7 @@ public class MainService {
     public List<GuidanceRecord> getGuidanceRecordListWithParams(Date dateF, Date dateT, String searchString){
         System.out.println(dateF);
         System.out.println(dateT);
-        List<GuidanceRecord> list = mainMapper.getGuidanceRecordListWithParams(dateF, dateT, "%" + searchString + "%");
+        List<GuidanceRecord> list = mainMapper.getGuidanceRecordListWithParams(dateF, dateT, "%" + searchString + "%", searchString);
         for (GuidanceRecord guidanceRecord : list) {
             guidanceRecord.setGradeAndSection((null != guidanceRecord.getGradeLevel()? guidanceRecord.getGradeLevel():"")
                     + " - " + (null != guidanceRecord.getSectionName()? guidanceRecord.getSectionName():""));
