@@ -16,7 +16,8 @@
         $(document).ready(function () {
             $('#summaryReportId').DataTable({
                 "order":[[0, "desc"]],
-                "searching": false
+                "searching": false,
+                "autoWidth": true
             });
         });
     </script>
@@ -61,7 +62,9 @@
                 <th>Reference Number</th>
                 <th>Date</th>
                 <th>Offense Type</th>
-                <th>Student Name</th>
+                <th>Student Last Name</th>
+                <th>Student First Name</th>
+                <th>Student Middle Name</th>
                 <th>Grade/Section</th>
                 <th>Parent/Guardian</th>
                 <th>Guidance Counselor</th>
@@ -78,7 +81,9 @@
                 <td th:text="${sums.id}"></td>
                 <td th:text="${sums.dateOfIncident}"></td>
                 <td th:text="${sums.caseOfIncident}"></td>
-                <td th:text="${sums.studentName}"></td>
+                <td th:text="${sums.lastName}"></td>
+                <td th:text="${sums.firstName}"></td>
+                <td th:text="${sums.middleName}"></td>
                 <td th:text="${sums.gradeAndSection}"></td>
                 <td th:text="${sums.nameOfGuardian}"></td>
                 <td th:text="${sums.createdBy}"></td>

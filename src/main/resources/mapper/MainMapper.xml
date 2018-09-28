@@ -536,6 +536,9 @@ ORDER BY B.log_datetime DESC LIMIT 1
         <result column="student_name" property="studentName" jdbcType="VARCHAR"/>
         <result column="gradeLevel" property="gradeLevel" jdbcType="VARCHAR"/>
         <result column="sectionName" property="sectionName" jdbcType="VARCHAR"/>
+        <result column="first_name" property="firstName" jdbcType="VARCHAR" />
+        <result column="last_name" property="lastName" jdbcType="VARCHAR" />
+        <result column="middle_name" property="middleName" jdbcType="VARCHAR" />
     </resultMap>
 
     <insert id="addGuidanceRecord">
@@ -589,14 +592,15 @@ ORDER BY B.log_datetime DESC LIMIT 1
     </select>
 
     <select id="getGuidanceRecordListWithParams" resultMap="GuidanceLogMap" resultType="java.util.List">
-        SELECT A.*, (B.first_name || ' ' || b.middle_name || ' ' || b.last_name) as student_name,
+        SELECT A.*, B.first_name,b.middle_name,b.last_name,
          (SELECT grade_level from ref_grade_level where id = B.grade_level_id) AS gradeLevel,
          (SELECT section FROM ref_section where id = CAST(B.section AS INTEGER)) AS sectionName
         FROM log_guidance A JOIN data_students B
         ON A.student_id = B.id
         WHERE A.created_on &gt; #{dateFrom}
         AND A.created_on &lt; #{dateTo}
-        AND (UPPER(B.first_name || ' ' || b.middle_name || ' ' || b.last_name) LIKE UPPER(#{searchString}))
+        AND ((UPPER(B.first_name || ' ' || b.middle_name || ' ' || b.last_name) LIKE UPPER(#{searchString})
+        OR UPPER(B.id) = UPPER(#{sid})))
         ORDER BY created_on DESC
     </select>
 
