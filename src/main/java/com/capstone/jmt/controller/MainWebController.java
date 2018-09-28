@@ -445,7 +445,7 @@ public class MainWebController {
             attParams.setDateTo("2019-01-01 23:59");
         else {
             String[] arr = attParams.getDateTo().split("T");
-            attParams.setDateFrom(String.join(" ", arr));
+            attParams.setDateTo(String.join(" ", arr));
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
