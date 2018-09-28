@@ -120,12 +120,17 @@
         // var doc = new jsPDF(options);
         // doc.addImage(img, 'JPEG', 0, 0, 100, 50);
         var pdf = new jsPDF('p', 'pt');
+        var dateCreated = new Date();
 
         var elem = document.getElementById("summaryReportId");
         var res = pdf.autoTableHtmlToJson(elem);
         pdf.addImage(img, 'PNG', 0, 0, pdf.internal.pageSize.width, 60);
         // pdf.text(7, 150, "St Marks Guidance Summary Report");
         pdf.autoTable(res.columns, res.data, {margin: {top:80}});
+        let finalY = pdf.autoTable.previous.finalY; // The y position on the page
+
+        pdf.text(20,finalY + 30, "Printed By: " + user.username);
+        pdf.text(20, finalY + 60, "Date: " + formatDate(dateCreated));
         pdf.save('summary_report.pdf');
     }
 

@@ -766,7 +766,7 @@ ORDER BY date_posted DESC
     <select id="getFilteredTapLogsByParentId" resultMap="TapLogMap" resultType="list">
         SELECT A.*, B.first_name, B.last_name FROM log_taps A JOIN data_students B
         ON A.rfid = B.rfid
-        WHERE B.id = (SELECT parent_of FROM data_parents WHERE id = #{parentId})
+        WHERE B.id = (SELECT parent_of FROM data_parents WHERE id = #{id})
         AND A.log_datetime &gt; #{dateFrom}
         AND A.log_datetime &lt; #{dateTo}
         AND UPPER(B.first_name || ' ' || B.last_name) LIKE UPPER(#{searchString})

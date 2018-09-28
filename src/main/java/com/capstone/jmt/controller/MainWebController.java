@@ -458,10 +458,15 @@ public class MainWebController {
             e.printStackTrace();
         }
         List<TapLog> tapLogs = mainService.getFilteredTapLogs(dateF, dateT, attParams.getSearchString());
-        if (user.getUserTypeId() != 2)
+        if (user.getUserTypeId() != 2){
             model.addAttribute("logs", tapLogs);
-        else
+            model.addAttribute("user",user);
+        }
+        else{
             model.addAttribute("logs", mainService.getFilteredTapLogsByParentId(dateF, dateT, attParams.getSearchString(), user.getId()));
+            model.addAttribute("user",user);
+        }
+
 
 
         return "attendanceLogs";
@@ -507,6 +512,7 @@ public class MainWebController {
 
         List<GuidanceRecord> tapLogs = mainService.getGuidanceRecordListWithParams(dateF, dateT, attParams.getSearchString());
         model.addAttribute("summaryList", tapLogs);
+        model.addAttribute("user",user);
 
 
         return null == user || null == user.getUsername() ? "redirect:/login" : "summaryReport";
