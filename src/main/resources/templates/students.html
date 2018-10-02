@@ -35,6 +35,17 @@
             <!-- /.col-lg-12 -->
         </div>
 
+        <form th:object="${attendanceParams}" th:action="@{/getStudents}" method="GET">
+            <input th:field="*{dateFrom}" th:hidden="true"/>
+            <input th:field="*{searchString}" th:hidden="true"/>
+            <p id="date_filter">
+                Year: <select th:field="*{dateTo}">
+                <option th:text="2018" th:value="2018"></option>
+                <option th:text="2019" th:value="2019"></option>
+            </select>
+                <button type="submit" id="btnSearch">Filter</button>
+            </p>
+        </form>
         <!-- /.row -->
 
         <table width="100%" class="table table-striped table-bordered table-hover"
@@ -83,12 +94,13 @@
     // Initialize Firebase
 
     function archiveAllStudents(){
+        var year = $("#dateTo").val()
         var r = confirm("Are you sure you want to archive ALL Students?")
         if(r){
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                url: '/archiveAllStudents' ,
+                url: '/archiveAllStudents?date=' + year ,
                 success: function (response) {
                     alert("Successfully Archived.")
                 }

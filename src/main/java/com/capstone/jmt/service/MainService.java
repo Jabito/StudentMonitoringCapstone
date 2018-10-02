@@ -268,10 +268,12 @@ public class MainService {
         return response;
     }
 
-    public HashMap<String, Object> archiveAllStudents(){
+    public HashMap<String, Object> archiveAllStudents(String date){
+        if(null == date || date.equals(""))
+            date = "2018";
         HashMap<String, Object> response = new HashMap<>();
         System.out.println("ARCHIVING ALL STUDENTS.");
-        mainMapper.archiveAllStudents();
+        mainMapper.archiveAllStudents(date + "-01-01", date + "-12-30");
         return response;
     }
 
@@ -481,8 +483,12 @@ public class MainService {
         return mainMapper.retrieveImage(fileId);
     }
 
-    public List<Student> getStudentList() {
-        return mainMapper.getStudentList();
+    public List<Student> getStudentList(String date) {
+        if(null == date || date.equals(""))
+            date = "2018";
+        String dateFrom = date + "-01-01";
+        String dateTo = date + "-12-30";
+        return mainMapper.getStudentList(dateFrom, dateTo);
     }
 
     public List<Student> getArchivedStudentList(String date) {
@@ -500,6 +506,10 @@ public class MainService {
 
     public Student getStudentById(String id) {
         return mainMapper.getStudentById(id);
+    }
+
+    public Student findStudentByFnameLname(String fname, String lname){
+        return mainMapper.findStudentByFnameLname(fname, lname);
     }
 
     public Parent getParentById(String id) {

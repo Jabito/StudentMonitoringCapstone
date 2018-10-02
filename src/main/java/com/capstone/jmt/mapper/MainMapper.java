@@ -28,7 +28,7 @@ public interface MainMapper {
 
     void deleteStudentById(@Param("id") String id);
 
-    void archiveAllStudents();
+    void archiveAllStudents(@Param("dateFrom") String dateF, @Param("dateTo") String dateT);
 
     void unArchiveAllStudents(@Param("dateFrom") String dateF, @Param("dateTo") String dateT);
 
@@ -105,13 +105,15 @@ public interface MainMapper {
 
     PictureObject retrieveImage(@Param("userId") String fileId);
 
-    List<Student> getStudentList();
+    List<Student> getStudentList(@Param("dateFrom") String dateFr, @Param("dateTo") String dateTo);
 
     List<Student> getArchivedStudentList(@Param("dateFrom") String dateFr, @Param("dateTo") String dateTo);
 
     List<Parent> getParentList();
 
     Student getStudentById(@Param("id") String id);
+
+    Student findStudentByFnameLname(@Param("fname") String fname, @Param("lname") String lname);
 
     List<MessageJson> getAnnouncementsByUserId(@Param("userId") String userId);
 

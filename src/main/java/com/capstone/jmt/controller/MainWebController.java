@@ -604,17 +604,18 @@ public class MainWebController {
 //        }
 //        response.put("tapLogList", returnList);
         return new ResponseEntity<>((List<TapLog>) mainService.getTapLogOfStudent(studId).get("tapListDetails"), HttpStatus.OK);
-
     }
 
     @RequestMapping(value = "/getStudents", method = RequestMethod.GET)
-    public String getStudentList(@ModelAttribute("appUser") User user, Model model) {
+    public String getStudentList(@ModelAttribute("appUser") User user, @ModelAttribute("attendanceParams") AttendanceParams attParams, Model model) {
         model.addAttribute("student", getStudent());
+        if(null == attParams)
+            attParams = new AttendanceParams();
         user = setUserRole(user, model);
         if (null == user || null == user.getUsername())
             return "redirect:/login";
 
-        List<Student> studentList = mainService.getStudentList();
+        List<Student> studentList = mainService.getStudentList(attParams.getDateTo());
         if (null == studentList) {
             return "redirect:/login";
         } else {
@@ -812,13 +813,22 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getStudentByStudId", method = RequestMethod.GET)
-    public ResponseEntity<?> getStudentByStudId(@RequestParam(value = "id") String id) {
+    public ResponseEntity<?> getStudentByStudId(@RequestParam(value = "id") String id,
+                                                @RequestParam(value = "fname") String fname,
+                                                @RequestParam(value = "lname") String lname) {
         HashMap<String, Object> response = new HashMap<>();
         System.out.println("SELECTED USER TYPE " + id);
 
         Student student = mainService.getStudentById(id.toUpperCase());
         if (null == student) {
-            response.put("responseCode", 404);
+            Student stud = mainService.findStudentByFnameLname(fname, lname);
+            if(null == stud)
+                response.put("responseCode", 404);
+            else{
+                response.put("stud", stud);
+                Parent parent = mainService.getParentNumberByStudentId(stud.getId());
+                response.put("guardianName", parent.getParentName());
+            }
         } else {
             response.put("stud", student);
             Parent parent = mainService.getParentNumberByStudentId(student.getId());
@@ -889,8 +899,8 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/archiveAllStudents", method = RequestMethod.GET)
-    public ResponseEntity<?> deleteAllStudents(@ModelAttribute("appStudent") Student student, Model model) {
-        return new ResponseEntity<>(mainService.archiveAllStudents(), HttpStatus.OK);
+    public ResponseEntity<?> deleteAllStudents(@ModelAttribute("appStudent") Student student, @RequestParam("date") String date, Model model) {
+        return new ResponseEntity<>(mainService.archiveAllStudents(date), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/unArchiveAllStudents", method = RequestMethod.GET)

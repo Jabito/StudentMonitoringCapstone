@@ -51,10 +51,19 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        <h5>Name:</h5>
+                        <h5>First Name:</h5>
                     </div>
                     <div class="col-md-8">
-                        <input disabled="disabled" class="form-control" placeholder="Input Student Name" id="studName"
+                        <input class="form-control" placeholder="Input First Name" id="studFName" onkeypress="return runScript(event)"
+                               th:required="required"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>Last Name:</h5>
+                    </div>
+                    <div class="col-md-8">
+                        <input class="form-control" placeholder="Input Last Name" id="studLName" onkeypress="return runScript(event)"
                                th:required="required"/>
                     </div>
                 </div>
@@ -158,23 +167,27 @@
 
 
 <script type="text/javascript">
-    // Initialize Firebase
+    //<![CDATA[
 
     //    var from = "63"+ document.getElementById('from').value;
     //    var sentTo = pref + to;
     function runScript(e) {
         if (e.keyCode == 13) {
             var studId = $("#studId").val();
+            var fname = $("#studFName").val();
+            var lname = $("#studLName").val();
             $.ajax({
                 type: 'GET',
                 dataType: 'json',
                 contentType: 'application/json',
-                url: '/getStudentByStudId?id=' + studId,
+                url: '/getStudentByStudId?id=' + studId + "&fname=" + fname + "&lname=" + lname,
                 success: function (response) {
                     if(response.responseCode == 404)
                         alert('Student does not exist.');
                     else {
-                        $("#studName").val(response.stud.firstName + ' ' + response.stud.lastName);
+                        $("#studId").val(response.stud.id);
+                        $("#studFName").val(response.stud.firstName);
+                        $("#studLName").val(response.stud.lastName);
                         $("#studYear").val(response.stud.gradeLvlId);
                         $("#studGuardian").val(response.guardianName);
                     }
@@ -324,6 +337,7 @@
     //            x.style.display = "block";
     //        }
     //    }
+    //]]>
 </script>
 </body>
 </html>
