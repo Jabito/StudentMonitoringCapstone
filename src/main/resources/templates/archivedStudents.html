@@ -98,7 +98,7 @@
 
     function archiveAllStudents(){
         var r = confirm("Are you sure you want to recover ALL Students for this year?")
-        var year = $("#dateTo").val()
+        var year = $("#dateTo").val();
         if(r){
             $.ajax({
                 type: 'GET',
