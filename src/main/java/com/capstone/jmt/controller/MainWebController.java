@@ -618,13 +618,15 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getArchivedStudents", method = RequestMethod.GET)
-    public String getArchivedStudents(@ModelAttribute("appUser") User user, Model model) {
+    public String getArchivedStudents(@ModelAttribute("appUser") User user, @ModelAttribute("attendanceParams") AttendanceParams attParams, Model model) {
         model.addAttribute("student", getStudent());
+        if (null == attParams)
+            attParams = new AttendanceParams();
         user = setUserRole(user, model);
         if (null == user || null == user.getUsername())
             return "redirect:/login";
 
-        List<Student> studentList = mainService.getArchivedStudentList();
+        List<Student> studentList = mainService.getArchivedStudentList(attParams.getDateTo());
         if (null == studentList) {
             return "redirect:/login";
         } else {
@@ -883,6 +885,11 @@ public class MainWebController {
     @RequestMapping(value = "/archiveAllStudents", method = RequestMethod.GET)
     public ResponseEntity<?> deleteAllStudents(@ModelAttribute("appStudent") Student student, Model model) {
         return new ResponseEntity<>(mainService.archiveAllStudents(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/unArchiveAllStudents", method = RequestMethod.GET)
+    public ResponseEntity<?> unArchiveAllStudents(@ModelAttribute("appStudent") Student student, @RequestParam("date") String date, Model model) {
+        return new ResponseEntity<>(mainService.unArchiveAllStudents(date), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/unDeleteStudent", method = RequestMethod.GET)

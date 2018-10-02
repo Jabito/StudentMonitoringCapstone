@@ -30,13 +30,23 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header"> Student Records </h1>
+                <h1 class="page-header"> Archived Students Records </h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
 
         <!-- /.row -->
-
+        <form th:object="${attendanceParams}" th:action="@{/getArchivedStudents}" method="GET">
+            <input th:field="*{dateFrom}" th:hidden="true"/>
+            <input th:field="*{searchString}" th:hidden="true"/>
+            <p id="date_filter">
+                Year: <select th:field="*{dateTo}">
+                <option th:text="2018" th:value="2018"></option>
+                <option th:text="2019" th:value="2019"></option>
+            </select>
+                <button type="submit" id="btnSearch">Filter</button>
+            </p>
+        </form>
 
 
         <table width="100%" class="table table-striped table-bordered table-hover"
@@ -74,6 +84,10 @@
         </table>
 
 
+        <button type="submit" onclick="archiveAllStudents()" class="btn btn-primary">
+            RECOVER ALL STUDENTS of selected year
+        </button>
+
         <!-- /.row -->
     </div>
     <!-- /#page-wrapper -->
@@ -82,6 +96,22 @@
 <script type="text/javascript">
     // Initialize Firebase
 
+    function archiveAllStudents(){
+        var r = confirm("Are you sure you want to recover ALL Students for this year?")
+        var year = $(".date_filter").val()
+        if(r){
+            $.ajax({
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                url: '/unArchiveAllStudents?date=' + year,
+                success: function (response) {
+                    alert("Successfully Archived.")
+                }
+            });
+            window.location.href = "/getStudents"
+        }
+    }
+
     function deleteStud(id) {
         console.log(id);
         var r = confirm("Do you want to recover this student?");
@@ -89,12 +119,12 @@
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
-                url: '/deleteStudent?id='+ id ,
+                url: '/unDeleteStudent?id='+ id ,
                 success: function (response) {
                     alert("Success")
                 }
             });
-            window.location.href = "/getStudents"
+            window.location.href = "/getArchivedStudents"
         }
         else {
 
