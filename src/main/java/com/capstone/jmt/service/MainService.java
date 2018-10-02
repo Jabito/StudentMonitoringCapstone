@@ -502,6 +502,10 @@ public class MainService {
         return mainMapper.getStudentById(id);
     }
 
+    public Student findStudentByFnameLname(String fname, String lname){
+        return mainMapper.findStudentByFnameLname(fname, lname);
+    }
+
     public Parent getParentById(String id) {
         return mainMapper.getParent(id);
     }

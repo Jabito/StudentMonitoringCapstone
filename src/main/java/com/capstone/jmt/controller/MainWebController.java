@@ -806,13 +806,22 @@ public class MainWebController {
     }
 
     @RequestMapping(value = "/getStudentByStudId", method = RequestMethod.GET)
-    public ResponseEntity<?> getStudentByStudId(@RequestParam(value = "id") String id) {
+    public ResponseEntity<?> getStudentByStudId(@RequestParam(value = "id") String id,
+                                                @RequestParam(value = "fname") String fname,
+                                                @RequestParam(value = "lname") String lname) {
         HashMap<String, Object> response = new HashMap<>();
         System.out.println("SELECTED USER TYPE " + id);
 
         Student student = mainService.getStudentById(id.toUpperCase());
         if (null == student) {
-            response.put("responseCode", 404);
+            Student stud = mainService.findStudentByFnameLname(fname, lname);
+            if(null == stud)
+                response.put("responseCode", 404);
+            else{
+                response.put("stud", stud);
+                Parent parent = mainService.getParentNumberByStudentId(stud.getId());
+                response.put("guardianName", parent.getParentName());
+            }
         } else {
             response.put("stud", student);
             Parent parent = mainService.getParentNumberByStudentId(student.getId());

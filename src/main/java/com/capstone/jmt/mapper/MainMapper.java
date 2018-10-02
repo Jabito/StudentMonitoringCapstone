@@ -113,6 +113,8 @@ public interface MainMapper {
 
     Student getStudentById(@Param("id") String id);
 
+    Student findStudentByFnameLname(@Param("fname") String fname, @Param("lname") String lname);
+
     List<MessageJson> getAnnouncementsByUserId(@Param("userId") String userId);
 
     List<Student> getStudentsBySearchString(@Param("searchString") String searchString);

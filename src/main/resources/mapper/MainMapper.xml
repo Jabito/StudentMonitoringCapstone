@@ -344,9 +344,16 @@
         ORDER BY log_datetime DESC
     </select>
 
-    <select id="getStudentById" resultMap="StudentMap" resultType="com.capstone.jmt.data.TapLog">
+    <select id="getStudentById" resultMap="StudentMap" resultType="com.capstone.jmt.entity.Student">
         SELECT * FROM data_students
         WHERE id = #{id}
+    </select>
+
+    <select id="findStudentByFnameLname" resultMap="StudentMap" resultType="com.capstone.jmt.entity.Student">
+        SELECT * FROM data_students
+        WHERE UPPER(first_name) = UPPER(#{fname})
+        AND UPPER(last_name) = UPPER(#{lname})
+        LIMIT 1
     </select>
 
     <select id="getGradelevelStringById" resultType="string">
