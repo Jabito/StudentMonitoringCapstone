@@ -275,6 +275,14 @@ public class MainService {
         return response;
     }
 
+    public HashMap<String, Object> unArchiveAllStudents(String date){
+        HashMap<String, Object> response = new HashMap<>();
+        System.out.println("RECOVERING ALL STUDENTS.");
+
+        mainMapper.unArchiveAllStudents(date + "-01-01", date + "-12-30");
+        return response;
+    }
+
     public HashMap<String, Object> unDeleteStudent(String id){
         HashMap<String, Object> response = new HashMap<>();
         mainMapper.unDeleteStudent(id);
@@ -477,8 +485,13 @@ public class MainService {
         return mainMapper.getStudentList();
     }
 
-    public List<Student> getArchivedStudentList() {
-        return mainMapper.getArchivedStudentList();
+    public List<Student> getArchivedStudentList(String date) {
+        if(null == date || date.equals(""))
+            date = "2018";
+        String dateFrom = date + "-01-01";
+        String dateTo = date + "-12-30";
+
+        return mainMapper.getArchivedStudentList(dateFrom, dateTo);
     }
 
     public List<Parent> getParentList() {

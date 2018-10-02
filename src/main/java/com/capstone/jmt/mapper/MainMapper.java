@@ -30,6 +30,8 @@ public interface MainMapper {
 
     void archiveAllStudents();
 
+    void unArchiveAllStudents(@Param("dateFrom") String dateF, @Param("dateTo") String dateT);
+
     void unDeleteStudent(@Param("id") String id);
 
     void deleteParentById(@Param("id") String id);
@@ -105,7 +107,7 @@ public interface MainMapper {
 
     List<Student> getStudentList();
 
-    List<Student> getArchivedStudentList();
+    List<Student> getArchivedStudentList(@Param("dateFrom") String dateFr, @Param("dateTo") String dateTo);
 
     List<Parent> getParentList();
 

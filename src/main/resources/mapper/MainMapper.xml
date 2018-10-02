@@ -150,18 +150,29 @@
 
     <update id="deleteStudentById" flushCache="true">
         UPDATE data_students
-        SET is_active = false
+        SET is_active = false,
+        date_archived = CAST(now() AS DATE)
         WHERE id = #{id}
     </update>
 
     <update id="archiveAllStudents" flushCache="true">
         UPDATE data_students
-        SET is_active = false
+        SET is_active = false,
+        date_archived = CAST(now() AS DATE)
+    </update>
+
+    <update id="unArchiveAllStudents" flushCache="true">
+        UPDATE data_students
+        SET is_active = true,
+        date_archived = null
+        WHERE date_archived &gt; CAST(#{dateFrom} AS DATE)
+        AND date_archived &lt; CAST(#{dateTo} AS DATE)
     </update>
 
     <update id="unDeleteStudent" flushCache="true">
         UPDATE data_students
-        SET is_active = true
+        SET is_active = true,
+        date_archived = null
         WHERE id = #{id}
     </update>
 
@@ -458,6 +469,8 @@ ORDER BY B.log_datetime DESC LIMIT 1
         SELECT A.*, l.grade_level as gradeLevelDesc, section2.section as sectionDesc FROM data_students A LEFT JOIN ref_grade_level l on A.grade_level_id = l.id
         LEFT JOIN ref_section section2 on CAST(A.section AS INTEGER) = section2.id
         WHERE A.is_active = false
+        AND A.date_archived &gt; CAST(#{dateFrom} AS DATE)
+        AND A.date_archived &lt; CAST(#{dateTo} AS DATE)
     </select>
 
     <select id="getParentList" resultMap="ParentMap" resultType="java.util.List">
