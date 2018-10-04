@@ -469,15 +469,14 @@ ORDER BY B.log_datetime DESC LIMIT 1
     <select id="getStudentList" resultMap="StudentMap" resultType="java.util.List">
         SELECT A.*, l.grade_level as gradeLevelDesc, section2.section as sectionDesc FROM data_students A LEFT JOIN ref_grade_level l on A.grade_level_id = l.id
         LEFT JOIN ref_section section2 on l.id = section2.ref_grade_level_id
-        WHERE A.is_active = true
+        WHERE A.school_year = #{date}
     </select>
 
     <select id="getArchivedStudentList" resultMap="StudentMap" resultType="java.util.List">
         SELECT A.*, l.grade_level as gradeLevelDesc, section2.section as sectionDesc FROM data_students A LEFT JOIN ref_grade_level l on A.grade_level_id = l.id
         LEFT JOIN ref_section section2 on CAST(A.section AS INTEGER) = section2.id
         WHERE A.is_active = false
-        AND A.date_archived &gt; CAST(#{dateFrom} AS DATE)
-        AND A.date_archived &lt; CAST(#{dateTo} AS DATE)
+        AND A.school_year = #{date}
     </select>
 
     <select id="getParentList" resultMap="ParentMap" resultType="java.util.List">

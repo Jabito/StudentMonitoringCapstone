@@ -615,7 +615,7 @@ public class MainWebController {
         if (null == user || null == user.getUsername())
             return "redirect:/login";
 
-        List<Student> studentList = mainService.getStudentList(attParams.getDateTo());
+        List<Student> studentList = mainService.getStudentList(attParams.getDateYear());
         if (null == studentList) {
             return "redirect:/login";
         } else {
@@ -633,7 +633,7 @@ public class MainWebController {
         if (null == user || null == user.getUsername())
             return "redirect:/login";
 
-        List<Student> studentList = mainService.getArchivedStudentList(attParams.getDateTo());
+        List<Student> studentList = mainService.getArchivedStudentList(attParams.getDateYear());
         if (null == studentList) {
             return "redirect:/login";
         } else {

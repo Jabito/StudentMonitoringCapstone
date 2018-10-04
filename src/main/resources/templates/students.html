@@ -39,8 +39,9 @@
             <input th:field="*{dateFrom}" th:hidden="true"/>
             <input th:field="*{searchString}" th:hidden="true"/>
             <p id="date_filter">
-                Year: <select th:field="*{dateTo}">
-                <option th:text="2018" th:value="2018"></option>
+                Year: <select th:field="*{dateYear}">
+                <option th:value="2017">SY 2017-2018</option>
+                <option th:value="2018">SY 2018-2019</option>
                 <!--<option th:text="2019" th:value="2019"></option>-->
             </select>
                 <button type="submit" id="btnSearch">Filter</button>

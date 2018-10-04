@@ -105,9 +105,9 @@ public interface MainMapper {
 
     PictureObject retrieveImage(@Param("userId") String fileId);
 
-    List<Student> getStudentList(@Param("dateFrom") String dateFr, @Param("dateTo") String dateTo);
+    List<Student> getStudentList(@Param("date") int date);
 
-    List<Student> getArchivedStudentList(@Param("dateFrom") String dateFr, @Param("dateTo") String dateTo);
+    List<Student> getArchivedStudentList(@Param("date") int date);
 
     List<Parent> getParentList();
 

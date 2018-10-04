@@ -483,21 +483,12 @@ public class MainService {
         return mainMapper.retrieveImage(fileId);
     }
 
-    public List<Student> getStudentList(String date) {
-        if(null == date || date.equals(""))
-            date = "2018";
-        String dateFrom = date + "-01-01";
-        String dateTo = date + "-12-30";
-        return mainMapper.getStudentList(dateFrom, dateTo);
+    public List<Student> getStudentList(int date) {
+        return mainMapper.getStudentList(date);
     }
 
-    public List<Student> getArchivedStudentList(String date) {
-        if(null == date || date.equals(""))
-            date = "2018";
-        String dateFrom = date + "-01-01";
-        String dateTo = date + "-12-30";
-
-        return mainMapper.getArchivedStudentList(dateFrom, dateTo);
+    public List<Student> getArchivedStudentList(int date) {
+        return mainMapper.getArchivedStudentList(date);
     }
 
     public List<Parent> getParentList() {

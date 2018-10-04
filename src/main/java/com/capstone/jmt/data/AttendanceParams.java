@@ -4,6 +4,7 @@ public class AttendanceParams {
 
     private String dateFrom;
     private String dateTo;
+    private int dateYear;
     private String searchString;
 
     public AttendanceParams() {
@@ -25,6 +26,14 @@ public class AttendanceParams {
 
     public void setDateTo(String dateTo) {
         this.dateTo = dateTo;
+    }
+
+    public int getDateYear() {
+        return dateYear;
+    }
+
+    public void setDateYear(int dateYear) {
+        this.dateYear = dateYear;
     }
 
     public String getSearchString() {
