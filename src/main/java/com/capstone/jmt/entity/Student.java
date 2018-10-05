@@ -76,8 +76,6 @@ public class Student implements Serializable {
     private Boolean violation;
     @JsonProperty("isActive")
     private Boolean isActive;
-    @JsonProperty("yearLevel")
-    private String yearLevel;
 
     public Student(AddStudentJson sj) {
         this.firstName = sj.getFirstName();
@@ -328,13 +326,5 @@ public class Student implements Serializable {
 
     public void setActive(Boolean active) {
         isActive = active;
-    }
-
-    public String getYearLevel() {
-        return yearLevel;
-    }
-
-    public void setYearLevel(String yearLevel) {
-        this.yearLevel = yearLevel;
     }
 }
