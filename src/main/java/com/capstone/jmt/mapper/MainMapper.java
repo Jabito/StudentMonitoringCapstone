@@ -28,9 +28,9 @@ public interface MainMapper {
 
     void deleteStudentById(@Param("id") String id);
 
-    void archiveAllStudents(@Param("dateFrom") String dateF, @Param("dateTo") String dateT);
+    void archiveAllStudents(@Param("date") String date);
 
-    void unArchiveAllStudents(@Param("dateFrom") String dateF, @Param("dateTo") String dateT);
+    void unArchiveAllStudents(@Param("date") String date);
 
     void unDeleteStudent(@Param("id") String id);
 

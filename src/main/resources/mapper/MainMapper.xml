@@ -159,14 +159,14 @@
         UPDATE data_students
         SET is_active = false,
         date_archived = CAST(now() AS DATE)
+        WHERE school_year = CAST(#{date} AS INT)
     </update>
 
     <update id="unArchiveAllStudents" flushCache="true">
         UPDATE data_students
         SET is_active = true,
         date_archived = null
-        WHERE date_archived &gt; CAST(#{dateFrom} AS DATE)
-        AND date_archived &lt; CAST(#{dateTo} AS DATE)
+        WHERE school_year = CAST(#{date} AS INT)
     </update>
 
     <update id="unDeleteStudent" flushCache="true">

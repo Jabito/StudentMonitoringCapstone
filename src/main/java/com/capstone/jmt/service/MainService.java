@@ -273,7 +273,7 @@ public class MainService {
             date = "2018";
         HashMap<String, Object> response = new HashMap<>();
         System.out.println("ARCHIVING ALL STUDENTS.");
-        mainMapper.archiveAllStudents(date + "-01-01", date + "-12-30");
+        mainMapper.archiveAllStudents(date);
         return response;
     }
 
@@ -281,7 +281,7 @@ public class MainService {
         HashMap<String, Object> response = new HashMap<>();
         System.out.println("RECOVERING ALL STUDENTS.");
 
-        mainMapper.unArchiveAllStudents(date + "-01-01", date + "-12-30");
+        mainMapper.unArchiveAllStudents(date);
         return response;
     }
 
