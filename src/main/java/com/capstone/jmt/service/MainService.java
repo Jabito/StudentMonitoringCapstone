@@ -277,6 +277,14 @@ public class MainService {
         return response;
     }
 
+    public HashMap<String, Object> promoteStudents(String date){
+        if(null == date || date.equals(""))
+            date = "2018";
+        HashMap<String, Object> response = new HashMap<>();
+        mainMapper.promoteStudents(date);
+        return response;
+    }
+
     public HashMap<String, Object> unArchiveAllStudents(String date){
         HashMap<String, Object> response = new HashMap<>();
         System.out.println("RECOVERING ALL STUDENTS.");

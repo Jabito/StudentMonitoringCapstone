@@ -30,6 +30,8 @@ public interface MainMapper {
 
     void archiveAllStudents(@Param("date") String date);
 
+    void promoteStudents(@Param("date") String date);
+
     void unArchiveAllStudents(@Param("date") String date);
 
     void unDeleteStudent(@Param("id") String id);

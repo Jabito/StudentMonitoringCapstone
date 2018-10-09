@@ -903,6 +903,11 @@ public class MainWebController {
         return new ResponseEntity<>(mainService.archiveAllStudents(date), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/promoteStudents", method = RequestMethod.GET)
+    public ResponseEntity<?> promoteStudents(@ModelAttribute("appStudent") Student student, @RequestParam("date") String date, Model model) {
+        return new ResponseEntity<>(mainService.promoteStudents(date), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/unArchiveAllStudents", method = RequestMethod.GET)
     public ResponseEntity<?> unArchiveAllStudents(@ModelAttribute("appStudent") Student student, @RequestParam("date") String date, Model model) {
         return new ResponseEntity<>(mainService.unArchiveAllStudents(date), HttpStatus.OK);

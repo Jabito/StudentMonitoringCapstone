@@ -162,6 +162,12 @@
         WHERE school_year = CAST(#{date} AS INT)
     </update>
 
+    <update id="promoteStudents" flushCache="true">
+        UPDATE data_students
+        SET school_year = CAST(#{date} AS INT) + 1
+        WHERE school_year = CAST(#{date} AS INT)
+    </update>
+
     <update id="unArchiveAllStudents" flushCache="true">
         UPDATE data_students
         SET is_active = true,
