@@ -283,6 +283,7 @@ public class MainService {
         if(null == date || date.equals(""))
             date = "2018";
         HashMap<String, Object> response = new HashMap<>();
+        mainMapper.archiveAllStudents(date);
         mainMapper.promoteStudents(date);
         return response;
     }
