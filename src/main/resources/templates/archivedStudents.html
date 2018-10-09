@@ -88,6 +88,9 @@
             RECOVER ALL STUDENTS of selected year
         </button>
 
+        <button type="submit" onclick="promoteStudents()" class="btn btn-danger">
+            PROMOTE STUDENTS
+        </button>
         <!-- /.row -->
     </div>
     <!-- /#page-wrapper -->
@@ -106,6 +109,22 @@
                 url: '/unArchiveAllStudents?date=' + year,
                 success: function (response) {
                     alert("Successfully Restored..")
+                }
+            });
+            window.location.href = "/getStudents"
+        }
+    }
+
+    function promoteStudents(){
+        var year = $("#dateTo").val()
+        var r = confirm("Are you sure you want to promote this year's Students by one year?")
+        if(r){
+            $.ajax({
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                url: '/promoteStudents?date=' + year ,
+                success: function (response) {
+                    alert("Successfully Promoted.")
                 }
             });
             window.location.href = "/getStudents"
