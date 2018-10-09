@@ -264,6 +264,7 @@ public class MainService {
 
     public HashMap<String, Object> deleteStudentById(String id) {
         HashMap<String, Object> response = new HashMap<>();
+        mainMapper.archiveStudentById(id);
         mainMapper.deleteStudentById(id);
         return response;
     }
@@ -273,6 +274,7 @@ public class MainService {
             date = "2018";
         HashMap<String, Object> response = new HashMap<>();
         System.out.println("ARCHIVING ALL STUDENTS.");
+        mainMapper.transferAllToArchived(date);
         mainMapper.archiveAllStudents(date);
         return response;
     }
@@ -289,12 +291,14 @@ public class MainService {
         HashMap<String, Object> response = new HashMap<>();
         System.out.println("RECOVERING ALL STUDENTS.");
 
+        mainMapper.deleteAllFromArchive(date);
         mainMapper.unArchiveAllStudents(date);
         return response;
     }
 
     public HashMap<String, Object> unDeleteStudent(String id){
         HashMap<String, Object> response = new HashMap<>();
+        mainMapper.unArchiveStudent(id);
         mainMapper.unDeleteStudent(id);
         return response;
     }

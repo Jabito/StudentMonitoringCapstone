@@ -155,12 +155,22 @@
         WHERE id = #{id}
     </update>
 
+    <insert id="archiveStudentById" flushCache="true">
+        INSERT INTO data_archive
+        SELECT * FROM data_students WHERE id = #{id}
+    </insert>
+
     <update id="archiveAllStudents" flushCache="true">
         UPDATE data_students
         SET is_active = false,
         date_archived = CAST(now() AS DATE)
         WHERE school_year = CAST(#{date} AS INT)
     </update>
+
+    <insert id="transferAllToArchived" flushCache="true">
+        INSERT INTO data_archive
+        SELECT * FROM data_students WHERE school_year = CAST(#{date} AS INT)
+    </insert>
 
     <update id="promoteStudents" flushCache="true">
         UPDATE data_students
@@ -174,6 +184,16 @@
         date_archived = null
         WHERE school_year = CAST(#{date} AS INT)
     </update>
+
+    <delete id="deleteAllFromArchive" flushCache="true">
+        DELETE FROM data_archive
+        WHERE school_year = CAST(#{date} AS INT)
+    </delete>
+
+    <delete id="unArchiveStudent" flushCache="true">
+        DELETE FROM data_archive
+        WHERE id = #{id}
+    </delete>
 
     <update id="unDeleteStudent" flushCache="true">
         UPDATE data_students
@@ -416,7 +436,7 @@
     </select>
 
     <select id="getAllArchivedStudents" resultMap="StudentMap" resultType="java.util.List">
-        SELECT * FROM data_students WHERE is_active = false
+        SELECT * FROM data_archive
     </select>
 
     <update id="toggleSMS" flushCache="true">
@@ -482,11 +502,10 @@ ORDER BY B.log_datetime DESC LIMIT 1
     </select>
 
     <select id="getArchivedStudentList" resultMap="StudentMap" resultType="java.util.List">
-        SELECT A.*, l.grade_level as gradeLevelDesc, section2.section as sectionDesc FROM data_students A LEFT JOIN ref_grade_level l on A.grade_level_id = l.id
+        SELECT A.*, l.grade_level as gradeLevelDesc, section2.section as sectionDesc FROM data_archive A LEFT JOIN ref_grade_level l on A.grade_level_id = l.id
         LEFT JOIN ref_section section2 on CAST(A.section AS INTEGER) = section2.id
-        WHERE A.is_active = false
         <if test="date != ''">
-        AND A.school_year = #{date}
+            WHERE A.school_year = #{date}
         </if>
     </select>
 

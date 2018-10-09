@@ -28,13 +28,21 @@ public interface MainMapper {
 
     void deleteStudentById(@Param("id") String id);
 
+    void archiveStudentById(@Param("id") String id);
+
+    void transferAllToArchived(@Param("date") String date);
+
     void archiveAllStudents(@Param("date") String date);
 
     void promoteStudents(@Param("date") String date);
 
     void unArchiveAllStudents(@Param("date") String date);
 
+    void deleteAllFromArchive(@Param("date") String date);
+
     void unDeleteStudent(@Param("id") String id);
+
+    void unArchiveStudent(@Param("id") String id);
 
     void deleteParentById(@Param("id") String id);
 
